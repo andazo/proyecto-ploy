@@ -1,9 +1,9 @@
 /*
- * @(#)ChessGUI.java
+ * @(#)PloyGUI.java
  *
  *
  * @author 
- * @version 1.00 2016/11/2
+ * @version 
  */
 
 import javax.swing.*;
@@ -21,49 +21,37 @@ public class PloyGUI {
 	JTextArea textOutput;
 	JScrollPane textScroll;
 	JSpinner depthSpinner;
-	int boardSize=600;
+	int boardSize = 600;
 	
 	Color boardColorPurple = new Color(65, 11, 153);
 	Color boardColorThistle = new Color(200, 184, 219);
 	Color boardColorPurpleHighlight = new Color(213,198,70);
 	Color boardColorBlackHighlight = new Color(184,164,35);
 	Color boardColorSnow = new Color(249, 244, 245);
+	Color boardColorHighlight = new Color(129, 92, 173);
 	
 	final String chipFolderNames [] = {"chips_red/", "chips_blue/", "chips_green/", "chips_yellow/"};
 	final String chipNames [] = {"comm", "lance_1", "lance_2", "lance_3", "probe_1","probe_2","probe_3","probe_4", "shield"}; 
+	final int pieceOrder[] = {1,2,3,0,3,2,1,7,5,6,5,4};
+	final int pieceOrder2[] = {1,2,3,0,3,2,1,4,5,6,5,7};
 	
 	ImageIcon redIcons[] = new ImageIcon[9];
-	ImageIcon blueIcons[] = new ImageIcon[9];;
-	ImageIcon yellowIcons[] = new ImageIcon[9];;
-	ImageIcon greenIcons []= new ImageIcon[9];;
-	
-	int[][] board;
-	boolean moving;
+	ImageIcon blueIcons[] = new ImageIcon[9];
+	ImageIcon yellowIcons[] = new ImageIcon[9];
+	ImageIcon greenIcons []= new ImageIcon[9];
+	int currentPlayer;
+	boolean pieceActive = false;
 	int lastI;
 	int lastJ;
-	boolean checkmate;
+	
+	int[][] board;
 	boolean gameOver;
-	int currentSide;
-	int[] coords = new int[4];
-	int turnCount=1;
-	static final int StandardBoard[][] = {
-			{28,22,23,25,29,23,22,28},
-			{21,21,21,21,21,21,21,21},
-			{00,00,00,00,00,00,00,00},
-			{00,00,00,00,00,00,00,00},
-			{00,00,00,00,00,00,00,00},
-			{00,00,00,00,00,00,00,00},
-			{11,11,11,11,11,11,11,11},
-			{18,12,13,15,19,13,12,18}
-	};
-	static final int reset[][]=StandardBoard;
 
 	public static void main(String[] args) {
-		PloyGUI gui = new PloyGUI(false,true);
+		PloyGUI gui = new PloyGUI();
 	}
 	
-	public PloyGUI(boolean whiteIsAI, boolean blackIsAI) {
-		currentSide=3;
+	public PloyGUI() {
 		makeGUI();
 		loadImages();
 		populateBoard(0);
@@ -96,8 +84,6 @@ public class PloyGUI {
 				squaresPanels[i][j].setFont(new Font("Segoe UI Symbol", squaresPanels[i][j].getFont().getStyle(), 70));
 				squaresPanels[i][j].setForeground(Color.BLACK);
 				squaresPanels[i][j].setBackground(boardColorPurple);
-				//TODO: Event listeners para todas las labels
-				/*
 				final int tempI = i;
 				final int tempJ = j;
 				squaresPanels[i][j].addMouseListener(new java.awt.event.MouseAdapter() {
@@ -106,12 +92,10 @@ public class PloyGUI {
 					public void mouseClicked(java.awt.event.MouseEvent evt) {
 						clickedOn(myI,myJ);
 					}
-				});
-				*/
+				});	
 				boardPanel.add(squaresPanels[i][j]);
 			}
 		}
-		
 		
 		ployInterface.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
@@ -218,7 +202,7 @@ public class PloyGUI {
 	//TODO: funcionalidad de varios jugadores y de escoger colores
 	private void populateBoard(int mode) {
 		switch(mode) {
-	  case 0:
+	  case 0: // 1v1
 	  	populateBoard1v1("red", 1);
 	  	populateBoard1v1("blue", 2);
 	    break;
@@ -230,6 +214,7 @@ public class PloyGUI {
 	    break;
 		}
 	}
+	
 	private ImageIcon[] getIconArray(String color) {
 		switch(color) {
 	  case "red":
@@ -246,86 +231,78 @@ public class PloyGUI {
 	} 
 	
 	private void populateBoard1v1(String color, int playerNum) {
+		int orderArrayIndex = 0;
 		if(playerNum == 1) {
-			//TODO: meter los numeros de icono en un arreglo y recorrerlo con un for
-			//TODO: rotar las piezas segun el jugador
-			squaresPanels[0][1].setIcon(getIconArray(color)[1]);
-			squaresPanels[0][2].setIcon(getIconArray(color)[2]);
-			squaresPanels[0][3].setIcon(getIconArray(color)[3]);
-			squaresPanels[0][4].setIcon(getIconArray(color)[0]);
-			squaresPanels[0][5].setIcon(getIconArray(color)[3]);
-			squaresPanels[0][6].setIcon(getIconArray(color)[2]);
-			squaresPanels[0][7].setIcon(getIconArray(color)[1]);
-			
-			squaresPanels[1][2].setIcon(getIconArray(color)[7]);
-			squaresPanels[1][3].setIcon(getIconArray(color)[5]);
-			squaresPanels[1][4].setIcon(getIconArray(color)[6]);
-			squaresPanels[1][5].setIcon(getIconArray(color)[5]);
-			squaresPanels[1][6].setIcon(getIconArray(color)[4]);
-			for(int i = 3; i < 6; i++){
+			for(int i = 1; i < 8; i++) {
+				squaresPanels[0][i].setIcon(getIconArray(color)[pieceOrder[orderArrayIndex]]);
+				squaresPanels[0][i].setName(color);
+				orderArrayIndex++;
+			}
+			for(int i = 2; i < 7; i++) {
+				squaresPanels[1][i].setIcon(getIconArray(color)[pieceOrder[orderArrayIndex]]);
+				squaresPanels[1][i].setName(color);
+				orderArrayIndex++;
+			}
+			for(int i = 3; i < 6; i++) {
 				squaresPanels[2][i].setIcon(getIconArray(color)[8]);
+				squaresPanels[2][i].setName(color);
 			}
 		} else {
-			squaresPanels[8][1].setIcon(getIconArray(color)[1]);
-			squaresPanels[8][2].setIcon(getIconArray(color)[2]);
-			squaresPanels[8][3].setIcon(getIconArray(color)[3]);
-			squaresPanels[8][4].setIcon(getIconArray(color)[0]);
-			squaresPanels[8][5].setIcon(getIconArray(color)[3]);
-			squaresPanels[8][6].setIcon(getIconArray(color)[2]);
-			squaresPanels[8][7].setIcon(getIconArray(color)[1]);
-			
-			squaresPanels[7][2].setIcon(getIconArray(color)[7]);
-			squaresPanels[7][3].setIcon(getIconArray(color)[5]);
-			squaresPanels[7][4].setIcon(getIconArray(color)[6]);
-			squaresPanels[7][5].setIcon(getIconArray(color)[5]);
-			squaresPanels[7][6].setIcon(getIconArray(color)[4]);
-			for(int i = 3; i < 6; i++){
-				squaresPanels[6][i].setIcon(getIconArray(color)[8]);
+			for(int i = 1; i < 8; i++) {
+				RotatedIcon ri = new RotatedIcon(getIconArray(color)[pieceOrder2[orderArrayIndex]], 180.0, true);
+				squaresPanels[8][i].setIcon(ri);
+				squaresPanels[8][i].setName(color);
+				orderArrayIndex++;
+			}
+			for(int i = 2; i < 7; i++) {
+				RotatedIcon ri = new RotatedIcon(getIconArray(color)[pieceOrder2[orderArrayIndex]], 180.0, true);
+				squaresPanels[7][i].setIcon(ri);
+				squaresPanels[7][i].setName(color);
+				orderArrayIndex++;
+			}
+			for(int i = 3; i < 6; i++) {
+				RotatedIcon ri = new RotatedIcon(getIconArray(color)[8], 180.0, true);
+				squaresPanels[6][i].setIcon(ri);
+				squaresPanels[6][i].setName(color);
 			}
 		}
 	}
 
+	//TODO: logica de turnos
+	//TODO: logica de movidas legales (Etapa 2)
+	//TODO: desplegar las piezas que han salido del juego
 	private void clickedOn(int i, int j) {
-		if((moving||(board[i][j]/10==currentSide||board[i][j]/10==0))&&!checkmate) {
+		  if(!pieceActive) {
+		  	//TODO: activar opcion para escoger si quiere girar la pieza
+		  	if(squaresPanels[i][j].getIcon() != null) {
+		  		pieceActive = true;
+		  		squaresPanels[i][j].setBackground(boardColorHighlight);
+		  		lastI = i;
+		  		lastJ = j;
+		  		guiPrintLine("pieza activa");
+		  	}
+		  } else {
+		    squaresPanels[i][j].setIcon(squaresPanels[lastI][lastJ].getIcon());
+		    squaresPanels[lastI][lastJ].setIcon(null);
+		    squaresPanels[lastI][lastJ].setBackground(boardColorPurple);
+		    pieceActive = false;
+		    guiPrintLine("pieza movida");
+		  }
+		//}
+		/*if((moving||(board[i][j]/10==currentSide||board[i][j]/10==0))&&!checkmate) {
 			if(!moving) {
 				lastI=i;
 				lastJ=j;
 				moving = true;
 			} else {
 				moving = false;
-				//if(legalMoves(lastI,lastJ,board)[i][j]!=0){
+				if(legalMoves(lastI,lastJ,board)[i][j]!=0){
 					highlightMoves(new int[8][8]);
 					updatePieceDisplay();
 					currentSide=currentSide%2+1;
-
-					/*
-					if(WHITE_AI||BLACK_AI){
-						//int[] coords = ChessAI.aiMiniMax(board,currentSide,depth);
-
-						if(coords[3]==-1){
-							if(WHITE_AI){
-								guiPrintLine("Black wins!");
-							}
-							if(BLACK_AI){
-								guiPrintLine("White wins!");
-							}
-							checkmate=true;
-						} else if(coords[3]==-2){
-							guiPrintLine("Stalemate!");
-							checkmate=true;
-						} else if(coords[3]>=0){
-							printMove(makeMove(coords[0],coords[1],coords[2],coords[3],board));
-						}
-						updatePieceDisplay();
-						currentSide=currentSide%2+1;
-					}
-				//} else {
-					highlightMoves(new int[8][8]);
-				//}
-				 * 
-				 */
+				}
 			}
-		}
+		 */
 	}
 
 	private void highlightMoves(int[][] legals){
