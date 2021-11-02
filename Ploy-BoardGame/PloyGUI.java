@@ -31,7 +31,7 @@ public class PloyGUI {
 	Color boardColorHighlight = new Color(129, 92, 173);
 	
 	final String chipFolderNames [] = {"chips_red/", "chips_blue/", "chips_green/", "chips_yellow/"};
-	final String chipNames [] = {"comm", "lance_1", "lance_2", "lance_3", "probe_1","probe_2","probe_3","probe_4", "shield"}; 
+	final String chipNames [] = {"comm", "lance_1", "lance_2", "lance_3", "probe_1", "probe_2", "probe_3", "probe_4", "shield"}; 
 	final int pieceOrder[] = {1,2,3,0,3,2,1,7,5,6,5,4};
 	final int pieceOrder2[] = {1,2,3,0,3,2,1,4,5,6,5,7};
 	
@@ -47,9 +47,9 @@ public class PloyGUI {
 	int[][] board;
 	boolean gameOver;
 
-	public static void main(String[] args) {
-		PloyGUI gui = new PloyGUI();
-	}
+	//public static void main(String[] args) {
+		//PloyGUI gui = new PloyGUI();
+	//}
 	
 	public PloyGUI() {
 		makeGUI();
@@ -120,7 +120,6 @@ public class PloyGUI {
 		c.gridx = 1;
 		c.gridy = 0;
 		ployInterface.add(textScroll,c);
-		
 
 		JPanel newGameButtons = new JPanel();
 		newGameButtons.setLayout(new GridLayout(1,5,0,0));
@@ -139,11 +138,10 @@ public class PloyGUI {
 		c.gridy = 1;
 		ployInterface.add(newGameButtons,c);
 
-		
 		ployInterface.setResizable(false);
 
 		try{
-			ployInterface.setIconImage(ImageIO.read(this.getClass().getResource("icon.png")));
+			ployInterface.setIconImage(ImageIO.read(this.getClass().getResource("img/icon.png")));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

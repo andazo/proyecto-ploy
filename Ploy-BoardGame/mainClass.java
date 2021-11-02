@@ -16,7 +16,7 @@ public class mainClass {
         }
 
         //Arreglo de opciones de colores para los jugadores
-        String[] choices = { "Green", "\033[31mRed", "Blue", "Yellow"};
+        String[] choices = { "Green", "Red", "Blue", "Yellow"};
 
         //Caso 2 jugadores
         if (numPlayers == 2) {
@@ -56,6 +56,8 @@ public class mainClass {
             //Display info
             JOptionPane.showMessageDialog(null, "Player1: " + p1.getName() + "\nColor: " + p1.getColor() + "\n\nPlayer2: " +  p2.getName() + "\nColor: " + p2.getColor());
 
+        	PloyGUI gui = new PloyGUI();
+            
         } else if (numPlayers == 4) { //Caso 4 jugadores
 
             //Objeto jugador 1
@@ -134,6 +136,8 @@ public class mainClass {
             //Display info
             JOptionPane.showMessageDialog(null, "Player 1: " + p1.getName() + "\nColor: " + p1.getColor() + "\n\nPlayer 2: " +  p2.getName() + "\nColor: " + p2.getColor() 
             + "\n\nPlayer 3: " +  p3.getName() + "\nColor: " + p3.getColor() + "\n\nPlayer 4: " +  p4.getName() + "\nColor: " + p4.getColor());
+            
+            PloyGUI gui = new PloyGUI();
         }
     }
 }

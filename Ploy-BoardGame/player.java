@@ -1,6 +1,5 @@
 
 public class player {
-
     String name;
     String color;
 
@@ -19,10 +18,4 @@ public class player {
     public String getColor() {
         return color;
     }
-    public static void main(String[] args) {
-        
-    }
-
-
-
 }
