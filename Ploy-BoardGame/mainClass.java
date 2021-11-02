@@ -7,7 +7,9 @@ public class mainClass {
         // Numero de jugadores en la partida, puede ser de 2 o 4
         int numPlayers = 0;
         while (true) {
-            numPlayers = Integer.parseInt(JOptionPane.showInputDialog("Ingrese la cantidad de jugadores para la partida 2 o 4"));
+        	try {
+        		numPlayers = Integer.parseInt(JOptionPane.showInputDialog("Ingrese la cantidad de jugadores para la partida 2 o 4"));
+        	} catch (NumberFormatException e) { }
             if(numPlayers == 2 || numPlayers == 4) {
                 break;
             } else {

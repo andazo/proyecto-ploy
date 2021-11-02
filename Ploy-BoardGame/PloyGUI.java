@@ -70,12 +70,12 @@ public class PloyGUI {
 			System.out.println(players[3].color);
 		}
 		*/
-		makeGUI();
+		makeGUI(numPlayers, players);
 		loadImages();
 		populateBoard(0);
 	}
 	
-	private void makeGUI() {
+	private void makeGUI(int numPlayers, player[] players) {
 		ployInterface = new JFrame();
 		ployInterface.setTitle("Ploy");
 		ployInterface.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -174,8 +174,18 @@ public class PloyGUI {
 		guiPrintLine("Cada pieza se puede mover por el tablero la cantidad de espacios de acuerdo con la cantidad de rayas que posee.");
 		guiPrintLine("En un turno se puede mover una pieza o cambiar su dirección.");
 		guiPrintLine("Los escudos se pueden mover y cambiar de dirección en un mismo turno.");
-		guiPrintLine("Modos de juego: 1v1, 1v1v1v1, 2v2");
-
+		guiPrintLine("Modos de juego: 1v1, 1v1v1v1, 2v2" + "\n");
+		if (numPlayers == 2) {
+			guiPrintLine(players[0].name + ": " + players[0].color);
+			guiPrintLine(players[1].name + ": " + players[1].color);
+		}
+		else {
+			guiPrintLine(players[0].name + ": " + players[0].color);
+			guiPrintLine(players[1].name + ": " + players[1].color);
+			guiPrintLine(players[2].name + ": " + players[2].color);
+			guiPrintLine(players[3].name + ": " + players[3].color);
+		}
+		
 		updatePieceDisplay();
 		textScroll.paintImmediately(new Rectangle(new Point(0,0),textScroll.getSize()));
 		newGameButtons.paintImmediately(new Rectangle(new Point(0,0),newGameButtons.getSize()));
