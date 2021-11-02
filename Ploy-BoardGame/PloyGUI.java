@@ -51,7 +51,25 @@ public class PloyGUI {
 		//PloyGUI gui = new PloyGUI();
 	//}
 	
-	public PloyGUI() {
+	public PloyGUI(int numPlayers, player[] players) {
+		/*
+		if (numPlayers == 2) {
+			System.out.println(players[0].name);
+			System.out.println(players[0].color);
+			System.out.println(players[1].name);
+			System.out.println(players[1].color);
+		}
+		else {
+			System.out.println(players[0].name);
+			System.out.println(players[0].color);
+			System.out.println(players[1].name);
+			System.out.println(players[1].color);
+			System.out.println(players[2].name);
+			System.out.println(players[2].color);
+			System.out.println(players[3].name);
+			System.out.println(players[3].color);
+		}
+		*/
 		makeGUI();
 		loadImages();
 		populateBoard(0);

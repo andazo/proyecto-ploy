@@ -21,25 +21,26 @@ public class mainClass {
         //Caso 2 jugadores
         if (numPlayers == 2) {
 
+        	player[] players = new player[2];
             //Objeto jugador 1
-            player p1 = new player();
+            players[0] = new player();
             //Objeto jugador 2
-            player p2 = new player();
+            players[1] = new player();
 
             //Info jugador 1
 
             //Nombre
             String player1 = JOptionPane.showInputDialog("Nombre jugador 1");
-            p1.setName(player1);
+            players[0].setName(player1);
             //Color
             String color1 = (String) JOptionPane.showInputDialog(null, "Color", "Color para el jugador" + player1, JOptionPane.QUESTION_MESSAGE, null,choices,choices[1]);
-            p1.setColor(color1);
+            players[0].setColor(color1);
 
             //Info jugador 2
 
             //Nombre
             String player2 = JOptionPane.showInputDialog("Nombre jugador 2");
-            p2.setName(player2);
+            players[1].setName(player2);
 
             //Color
             String color2 = "";
@@ -51,39 +52,40 @@ public class mainClass {
                     JOptionPane.showMessageDialog(null, "Color ya fue seleccionado");
                 }
             }
-            p2.setColor(color2);
+            players[1].setColor(color2);
 
             //Display info
-            JOptionPane.showMessageDialog(null, "Player1: " + p1.getName() + "\nColor: " + p1.getColor() + "\n\nPlayer2: " +  p2.getName() + "\nColor: " + p2.getColor());
-
-        	PloyGUI gui = new PloyGUI();
+            JOptionPane.showMessageDialog(null, "Player1: " + players[0].getName() + "\nColor: " + players[0].getColor() + "\n\nPlayer2: " +  players[1].getName() + "\nColor: " + players[1].getColor());
+            
+        	PloyGUI gui = new PloyGUI(numPlayers, players);
             
         } else if (numPlayers == 4) { //Caso 4 jugadores
 
+        	player[] players = new player[4];
             //Objeto jugador 1
-            player p1 = new player();
+            players[0] = new player();
             //Objeto jugador 2
-            player p2 = new player();
+            players[1] = new player();
             //Objeto jugador 3
-            player p3 = new player();
+            players[2] = new player();
             //Objeto jugador 4
-            player p4 = new player();
+            players[3] = new player();
 
             //Info jugador 1
 
             //Nombre
             String player1 = JOptionPane.showInputDialog("Nombre jugador 1");
-            p1.setName(player1);
+            players[0].setName(player1);
 
             //Color
             String color1 = (String) JOptionPane.showInputDialog(null, "Color", "Color para el jugador" + player1, JOptionPane.QUESTION_MESSAGE, null,choices,choices[0]);
-            p1.setColor(color1);
+            players[0].setColor(color1);
 
             //Info jugador 2
 
             //Nombre
             String player2 = JOptionPane.showInputDialog("Nombre jugador 2");
-            p2.setName(player2);
+            players[1].setName(player2);
 
             //Color
             String color2 = "";
@@ -95,13 +97,13 @@ public class mainClass {
                     JOptionPane.showMessageDialog(null, "Color ya fue seleccionado");
                 }
             }
-            p2.setColor(color2);
+            players[1].setColor(color2);
 
             //Info jugador 3
 
             //Nombre
             String player3 = JOptionPane.showInputDialog("Nombre jugador 3");
-            p3.setName(player3);
+            players[2].setName(player3);
 
             //Color
             String color3 = "";
@@ -113,13 +115,13 @@ public class mainClass {
                     JOptionPane.showMessageDialog(null, "Color ya fue seleccionado");
                 }
             }
-            p3.setColor(color3);
+            players[2].setColor(color3);
 
             //Info jugador 4
 
             //Nombre
             String player4 = JOptionPane.showInputDialog("Nombre jugador 4");
-            p4.setName(player4);
+            players[3].setName(player4);
 
             //Color
             String color4 = "";
@@ -131,13 +133,13 @@ public class mainClass {
                     JOptionPane.showMessageDialog(null, "Color ya fue seleccionado");
                 }
             }
-            p4.setColor(color4);
+            players[3].setColor(color4);
 
             //Display info
-            JOptionPane.showMessageDialog(null, "Player 1: " + p1.getName() + "\nColor: " + p1.getColor() + "\n\nPlayer 2: " +  p2.getName() + "\nColor: " + p2.getColor() 
-            + "\n\nPlayer 3: " +  p3.getName() + "\nColor: " + p3.getColor() + "\n\nPlayer 4: " +  p4.getName() + "\nColor: " + p4.getColor());
+            JOptionPane.showMessageDialog(null, "Player 1: " + players[0].getName() + "\nColor: " + players[0].getColor() + "\n\nPlayer 2: " +  players[1].getName() + "\nColor: " + players[1].getColor() 
+            + "\n\nPlayer 3: " +  players[2].getName() + "\nColor: " + players[2].getColor() + "\n\nPlayer 4: " +  players[3].getName() + "\nColor: " + players[3].getColor());
             
-            PloyGUI gui = new PloyGUI();
+            PloyGUI gui = new PloyGUI(numPlayers, players);
         }
     }
 }
