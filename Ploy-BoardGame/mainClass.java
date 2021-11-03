@@ -12,6 +12,9 @@ public class mainClass implements ActionListener {
         gui = null;
     }
 
+    /**
+     * Ejecuta las acciones de los botones.
+     */
     public void actionPerformed(ActionEvent evento)
     {        
         if(evento.getActionCommand().equals("Reglas")){
