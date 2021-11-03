@@ -52,7 +52,7 @@ public class PloyGUI {
 		//PloyGUI gui = new PloyGUI();
 	//}
 	
-	public PloyGUI(mainClass controller, int numPlayers, player[] players) {
+	public PloyGUI(mainClass controller, int numPlayers, player[] players, int mode) {
 		/*
 		if (numPlayers == 2) {
 			System.out.println(players[0].name);
@@ -71,12 +71,12 @@ public class PloyGUI {
 			System.out.println(players[3].color);
 		}
 		*/
-		makeGUI(controller, numPlayers, players);
+		makeGUI(controller, numPlayers, players, mode);
 		loadImages();
-		populateBoard(0);
+		populateBoard(players, mode);
 	}
 	
-	private void makeGUI(mainClass controller, int numPlayers, player[] players) {
+	private void makeGUI(mainClass controller, int numPlayers, player[] players, int mode) {
 		ployInterface = new JFrame();
 		ployInterface.setTitle("Ploy");
 		ployInterface.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -183,6 +183,17 @@ public class PloyGUI {
 		guiPrintLine("En un turno se puede mover una pieza o cambiar su direcci�n.");
 		guiPrintLine("Los escudos se pueden mover y cambiar de direcci�n en un mismo turno.");
 		guiPrintLine("Modos de juego: 1v1, 1v1v1v1, 2v2" + "\n");
+		
+		String modeString = "";
+		if (mode == 0) {
+			modeString = "1v1";
+		} else if (mode == 1) {
+			modeString = "1v1v1v1";
+		} else {
+			modeString = "2v2";
+		}
+		
+		guiPrintLine("Modo elegido: " + modeString);
 		if (numPlayers == 2) {
 			guiPrintLine(players[0].name + ": " + players[0].color);
 			guiPrintLine(players[1].name + ": " + players[1].color);
@@ -234,35 +245,35 @@ public class PloyGUI {
 	}
 	
 	//TODO: funcionalidad de varios jugadores y de escoger colores
-	private void populateBoard(int mode) {
+	private void populateBoard(player[] players, int mode) {
 		switch(mode) {
-	  case 0: // 1v1
-	  	populateBoard1v1("red", 1);
-	  	populateBoard1v1("blue", 2);
-	    break;
-	  case 1: // 1v1v1v1
-	  	
-	    break;
-	  case 2: // 2v2
-	  	
-	    break;
+			case 0: // 1v1
+				populateBoard1v1(players[0].color, 1);
+			  	populateBoard1v1(players[1].color, 2);
+			    break;
+			case 1: // 1v1v1v1
+			  	
+			    break;
+			case 2: // 2v2
+			  	
+			    break;
 		}
 	}
 	
 	private ImageIcon[] getIconArray(String color) {
 		switch(color) {
-	  case "red":
-	  	return this.redIcons;
-	  case "blue":
-	  	return this.blueIcons;
-	  case "green":
-	  	return this.greenIcons;
-		case "yellow":
-			return this.yellowIcons;
-		default:
-			return this.redIcons;
+			case "Red":
+				return this.redIcons;
+			case "Blue":
+				return this.blueIcons;
+			case "Green":
+				return this.greenIcons;
+			case "Yellow":
+				return this.yellowIcons;
+			default:
+				return this.redIcons;
 		}
-	} 
+	}
 	
 	private void populateBoard1v1(String color, int playerNum) {
 		int orderArrayIndex = 0;

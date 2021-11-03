@@ -26,11 +26,17 @@ public class mainClass implements ActionListener {
 
         // Numero de jugadores en la partida, puede ser de 2 o 4
         int numPlayers = 0;
+        String input = "";
         while (true) {
-        	try {
-        		numPlayers = Integer.parseInt(JOptionPane.showInputDialog("Ingrese la cantidad de jugadores para la partida 2 o 4"));
-        	} catch (NumberFormatException e) { }
-            if(numPlayers == 2 || numPlayers == 4) {
+        	input = JOptionPane.showInputDialog("Ingrese la cantidad de jugadores para la partida 2 o 4");
+        	if (input != null) {
+        		try {
+            		numPlayers = Integer.parseInt(input);
+            	} catch (NumberFormatException e) {	}
+        	} else {
+        		System.exit(0);
+        	}
+            if (numPlayers == 2 || numPlayers == 4) {
                 break;
             } else {
                 JOptionPane.showMessageDialog(null, "Numero de jugadores invalido");
@@ -54,15 +60,36 @@ public class mainClass implements ActionListener {
             //Nombre
             String player1 = JOptionPane.showInputDialog("Nombre jugador 1");
             players[0].setName(player1);
+            
+            if (players[0].name == null) {
+            	System.exit(0);
+            }
+            
+            if (players[0].name.isBlank()) {
+            	players[0].name = "Anonimo";
+            }
+            
             //Color
             String color1 = (String) JOptionPane.showInputDialog(null, "Color", "Color para el jugador" + player1, JOptionPane.QUESTION_MESSAGE, null,choices,choices[1]);
             players[0].setColor(color1);
+            
+            if (players[0].color == null) {
+            	System.exit(0);
+            }
 
             //Info jugador 2
 
             //Nombre
             String player2 = JOptionPane.showInputDialog("Nombre jugador 2");
             players[1].setName(player2);
+            
+            if (players[1].name == null) {
+            	System.exit(0);
+            }
+            
+            if (players[1].name.isBlank()) {
+            	players[1].name = "Anonimo";
+            }
 
             //Color
             String color2 = "";
@@ -75,11 +102,17 @@ public class mainClass implements ActionListener {
                 }
             }
             players[1].setColor(color2);
+            
+            if (players[1].color == null) {
+            	System.exit(0);
+            }
 
             //Display info
             JOptionPane.showMessageDialog(null, "Player1: " + players[0].getName() + "\nColor: " + players[0].getColor() + "\n\nPlayer2: " +  players[1].getName() + "\nColor: " + players[1].getColor());
             
-        	gui = new PloyGUI(this, numPlayers, players);
+            int mode = 0;
+            
+        	gui = new PloyGUI(this, numPlayers, players, mode);
             
         } else if (numPlayers == 4) { //Caso 4 jugadores
 
@@ -98,10 +131,22 @@ public class mainClass implements ActionListener {
             //Nombre
             String player1 = JOptionPane.showInputDialog("Nombre jugador 1");
             players[0].setName(player1);
+            
+            if (players[0].name == null) {
+            	System.exit(0);
+            }
+            
+            if (players[0].name.isBlank()) {
+            	players[0].name = "Anonimo";
+            }
 
             //Color
             String color1 = (String) JOptionPane.showInputDialog(null, "Color", "Color para el jugador" + player1, JOptionPane.QUESTION_MESSAGE, null,choices,choices[0]);
             players[0].setColor(color1);
+            
+            if (players[0].color == null) {
+            	System.exit(0);
+            }
 
             //Info jugador 2
 
@@ -109,6 +154,14 @@ public class mainClass implements ActionListener {
             String player2 = JOptionPane.showInputDialog("Nombre jugador 2");
             players[1].setName(player2);
 
+            if (players[1].name == null) {
+            	System.exit(0);
+            }
+            
+            if (players[1].name.isBlank()) {
+            	players[1].name = "Anonimo";
+            }
+            
             //Color
             String color2 = "";
             while (true) {
@@ -120,13 +173,25 @@ public class mainClass implements ActionListener {
                 }
             }
             players[1].setColor(color2);
+            
+            if (players[1].color == null) {
+            	System.exit(0);
+            }
 
             //Info jugador 3
 
             //Nombre
             String player3 = JOptionPane.showInputDialog("Nombre jugador 3");
             players[2].setName(player3);
+            
+            if (players[2].name == null) {
+            	System.exit(0);
+            }
 
+            if (players[2].name.isBlank()) {
+            	players[2].name = "Anonimo";
+            }
+            
             //Color
             String color3 = "";
             while (true) {
@@ -138,12 +203,24 @@ public class mainClass implements ActionListener {
                 }
             }
             players[2].setColor(color3);
+            
+            if (players[2].color == null) {
+            	System.exit(0);
+            }
 
             //Info jugador 4
 
             //Nombre
             String player4 = JOptionPane.showInputDialog("Nombre jugador 4");
             players[3].setName(player4);
+            
+            if (players[3].name == null) {
+            	System.exit(0);
+            }
+            
+            if (players[3].name.isBlank()) {
+            	players[3].name = "Anonimo";
+            }
 
             //Color
             String color4 = "";
@@ -156,12 +233,33 @@ public class mainClass implements ActionListener {
                 }
             }
             players[3].setColor(color4);
+            
+            if (players[3].color == null) {
+            	System.exit(0);
+            }
 
             //Display info
             JOptionPane.showMessageDialog(null, "Player 1: " + players[0].getName() + "\nColor: " + players[0].getColor() + "\n\nPlayer 2: " +  players[1].getName() + "\nColor: " + players[1].getColor() 
             + "\n\nPlayer 3: " +  players[2].getName() + "\nColor: " + players[2].getColor() + "\n\nPlayer 4: " +  players[3].getName() + "\nColor: " + players[3].getColor());
             
-            gui = new PloyGUI(this, numPlayers, players);
+            int mode = 0;
+            while (true) {
+            	input = JOptionPane.showInputDialog("Modo de juego (1 = 1v1v1v1 || 2 = 2v2)");
+            	if (input != null) {
+            		try {
+            			mode = Integer.parseInt(input);
+                	} catch (NumberFormatException e) {	}
+            	} else {
+            		System.exit(0);
+            	}
+                if (mode == 1 || mode == 2) {
+                    break;
+                } else {
+                    JOptionPane.showMessageDialog(null, "Modo invalido");
+                }
+            }
+            
+            gui = new PloyGUI(this, numPlayers, players, mode);
         }
 
     }
