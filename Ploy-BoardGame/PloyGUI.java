@@ -22,6 +22,7 @@ public class PloyGUI {
 	JScrollPane textScroll;
 	JSpinner depthSpinner;
 	int boardSize = 600;
+	JMenuBar menuBar;
 	
 	Color boardColorPurple = new Color(65, 11, 153);
 	Color boardColorThistle = new Color(200, 184, 219);
@@ -51,7 +52,7 @@ public class PloyGUI {
 		//PloyGUI gui = new PloyGUI();
 	//}
 	
-	public PloyGUI(int numPlayers, player[] players) {
+	public PloyGUI(mainClass controller, int numPlayers, player[] players) {
 		/*
 		if (numPlayers == 2) {
 			System.out.println(players[0].name);
@@ -70,18 +71,25 @@ public class PloyGUI {
 			System.out.println(players[3].color);
 		}
 		*/
-		makeGUI(numPlayers, players);
+		makeGUI(controller, numPlayers, players);
 		loadImages();
 		populateBoard(0);
 	}
 	
-	private void makeGUI(int numPlayers, player[] players) {
+	private void makeGUI(mainClass controller, int numPlayers, player[] players) {
 		ployInterface = new JFrame();
 		ployInterface.setTitle("Ploy");
 		ployInterface.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		ployInterface.setFocusable(true);
 		ployInterface.requestFocus();
 		ployInterface.setBackground(Color.black);
+		menuBar = new JMenuBar();
+        ployInterface.setJMenuBar(menuBar);
+		JMenu menu = new JMenu("Opciones");
+        menuBar.add(menu);
+		JMenuItem option = new JMenuItem("Reglas");
+        option.addActionListener(controller);
+        menu.add(option);
 		
 		boardPanel = new JPanel();
 		boardPanel.setLayout(new GridLayout(9,9,5,5));
@@ -172,8 +180,8 @@ public class PloyGUI {
 		guiPrintLine("Bienvenidos a Ploy");
 		guiPrintLine("Para ganar, capture el comandante del oponente o todas las piezas excepto el comandante.");
 		guiPrintLine("Cada pieza se puede mover por el tablero la cantidad de espacios de acuerdo con la cantidad de rayas que posee.");
-		guiPrintLine("En un turno se puede mover una pieza o cambiar su dirección.");
-		guiPrintLine("Los escudos se pueden mover y cambiar de dirección en un mismo turno.");
+		guiPrintLine("En un turno se puede mover una pieza o cambiar su direcciï¿½n.");
+		guiPrintLine("Los escudos se pueden mover y cambiar de direcciï¿½n en un mismo turno.");
 		guiPrintLine("Modos de juego: 1v1, 1v1v1v1, 2v2" + "\n");
 		if (numPlayers == 2) {
 			guiPrintLine(players[0].name + ": " + players[0].color);
