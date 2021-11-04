@@ -75,7 +75,7 @@ public class PloyGUI {
 		boardPanel = new JPanel();
 		boardPanel.setLayout(new GridLayout(9,9,5,5));
 		boardPanel.setBackground(boardColorThistle);
-		boardPanel.setBorder(BorderFactory.createMatteBorder(40, 40, 40, 40, boardColorThistle));
+		boardPanel.setBorder(BorderFactory.createMatteBorder(30, 30, 30, 30, boardColorThistle));
 		int smallSquareSize = boardSize / 10;
 		squaresPanels = new JLabel[9][9];
 		for(int i = 0; i < 9; i++) {
@@ -128,23 +128,28 @@ public class PloyGUI {
 		c.gridy = 0;
 		ployInterface.add(textScroll,c);
 
-		JPanel newGameButtons = new JPanel();
-		newGameButtons.setLayout(new GridLayout(1,5,0,0));
-
-		/*
-		JButton humanDuel = new JButton("Human VS Human");
-		humanDuel.addMouseListener(new java.awt.event.MouseAdapter() {
+		JPanel rotateButtons = new JPanel();
+		rotateButtons.setLayout(new GridLayout(1,5,0,0));
+    
+		JButton rotateLeftBut = new JButton("Girar izq");
+		rotateLeftBut.addMouseListener(new java.awt.event.MouseAdapter() {
 			public void mouseClicked(java.awt.event.MouseEvent evt) {
-				ployInterface.dispose();
-				ChessGUI gui=new ChessGUI(false,false);
+				rotatePieceLeft(lastI, lastJ);
 			}
 		});
-		newGameButtons.add(humanDuel);
-		*/
+		rotateButtons.add(rotateLeftBut);
+    
+    JButton rotateRightBut = new JButton("Girar der");
+		rotateRightBut.addMouseListener(new java.awt.event.MouseAdapter() {
+			public void mouseClicked(java.awt.event.MouseEvent evt) {
+				rotatePieceRight(lastI, lastJ);
+			}
+		});
+		rotateButtons.add(rotateRightBut);
 		
 		c.gridx = 0;
 		c.gridy = 1;
-		ployInterface.add(newGameButtons,c);
+		ployInterface.add(rotateButtons,c);
 
 		ployInterface.setResizable(false);
 
@@ -157,16 +162,14 @@ public class PloyGUI {
 		ployInterface.pack();
 
 		board = new int[9][9];
-  		for (int i = 0; i < 9; i++) {
-  			for (int j = 0; j < 9; j++) {
-  				board[i][j] = -1;
-  			}
-  			System.out.print("\n");
-  		}
-  		
-  		pieceOwner = new int[9][9];
-  		
-		//board = ArrayOps.copyArr8(reset);
+    for (int i = 0; i < 9; i++) {
+      for (int j = 0; j < 9; j++) {
+        board[i][j] = -1;
+      }
+      System.out.print("\n");
+    }
+    
+    pieceOwner = new int[9][9];
 	
 		guiPrintLine("Bienvenidos a Ploy");
 		guiPrintLine("Para ganar, capture el comandante del oponente o todas las piezas excepto el comandante.");
@@ -196,12 +199,10 @@ public class PloyGUI {
 			guiPrintLine(players[3].name + ": " + players[3].color);
 		}
 		
-		updatePieceDisplay();
 		textScroll.paintImmediately(new Rectangle(new Point(0,0),textScroll.getSize()));
-		newGameButtons.paintImmediately(new Rectangle(new Point(0,0),newGameButtons.getSize()));
-		updatePieceDisplay();
+		rotateButtons.paintImmediately(new Rectangle(new Point(0,0),rotateButtons.getSize()));
 		textScroll.paintImmediately(new Rectangle(new Point(0,0),textScroll.getSize()));
-		newGameButtons.paintImmediately(new Rectangle(new Point(0,0),newGameButtons.getSize()));
+		rotateButtons.paintImmediately(new Rectangle(new Point(0,0),rotateButtons.getSize()));
 
 		ployInterface.setVisible(true);
 	}
@@ -561,6 +562,16 @@ public class PloyGUI {
 		}
 	}
 	
+  private void rotatePieceLeft(int x, int y) {
+    RotatedIcon ri = new RotatedIcon(squaresPanels[x][y].getIcon(), 315.0, true);
+    squaresPanels[x][y].setIcon(ri);
+  }
+  
+  private void rotatePieceRight(int x, int y) {
+    RotatedIcon ri = new RotatedIcon(squaresPanels[x][y].getIcon(), 45.0, true);
+    squaresPanels[x][y].setIcon(ri);
+  }
+  
 	//TODO: logica de turnos
 	//TODO: logica de movidas legales (Etapa 2)
 	//TODO: desplegar las piezas que han salido del juego
@@ -597,139 +608,13 @@ public class PloyGUI {
 				guiPrintLine("pieza no movida");
 			}
 		}
-		/*
-		if((moving||(board[i][j]/10==currentSide||board[i][j]/10==0))&&!checkmate) {
-			if(!moving) {
-				lastI=i;
-				lastJ=j;
-				moving = true;
-			} else {
-				moving = false;
-				if(legalMoves(lastI,lastJ,board)[i][j]!=0){
-					highlightMoves(new int[8][8]);
-					updatePieceDisplay();
-					currentSide=currentSide%2+1;
-				}
-			}
-		 */
 	}
 
-	private void highlightMoves(int[][] legals){
-		for(int i=0; i<8; i++){
-			for(int j=0; j<8; j++){
-				if((i%2+j%2)%2==0){
-					if(legals[i][j]>=1){
-						squaresPanels[i][j].setBackground(boardColorPurpleHighlight);
-					} else {
-						squaresPanels[i][j].setBackground(boardColorPurple);
-					}
-				} else {
-					if(legals[i][j]>=1){
-						squaresPanels[i][j].setBackground(boardColorBlackHighlight);
-					} else {
-						//squaresPanels[i][j].setBackground(boardColorBlack);
-					}
-				}
-			}
-		}
-	}
-	
-	private void updatePieceDisplay(){
-		for(int i=0; i<8; i++){
-			for(int j=0; j<8; j++){
-				if(board[i][j]/10==1){
-					//squaresPanels[i][j].setIcon(pieceSprites[0][board[i][j]%10]);
-					//squaresPanels[i][j].setForeground(Color.white);
-				} else if(board[i][j]/10==2){
-					//squaresPanels[i][j].setIcon(pieceSprites[1][board[i][j]%10]);
-					//squaresPanels[i][j].setForeground(Color.black);
-				} else {
-					squaresPanels[i][j].setIcon(null);
-				}
-				squaresPanels[i][j].paintImmediately(0,0,boardSize/8+1,boardSize/8+1);
-			}
-		}
-	}
-
-	/*private String makeMove(int i1 ,int j1 ,int i2 ,int j2 , int[][] boardArr){
+	private void highlightMoves() {
 		
-		boolean captureBool = boardArr[i2][j2]!=0;
-		String pieceStr = pieceStrArr[boardArr[i1][j1]%10];
-		    	if (captureBool&&boardArr[i1][j1]%10==1){
-		    		pieceStr = colStr[j1];
-		    	}
-		String squareStr = colStr[j2]+(8-i2);
-		String moveStr = pieceStr+colStr[j1];
-		if (captureBool){
-			moveStr+="x";
-		}
-		moveStr+=squareStr;
-
-		boardArr[i2][j2] = boardArr[i1][j1];
-		boardArr[i1][j1] = 0;
-		if(boardArr[i2][j2]==11&&i2==0){
-			boardArr[i2][j2]=15;
-			moveStr+="=Q";
-		}else if(boardArr[i2][j2]==21&&i2==7){
-			boardArr[i2][j2]=25;
-			moveStr+="=Q";
-		}
-		if(boardArr[i2][j2]==19){
-			boardArr[i2][j2]=16;
-			if(j2==6){
-				boardArr[7][5]=14;
-				boardArr[7][7]=0;
-				moveStr="O-O";
-			} else if(j2==2){
-				boardArr[7][3]=14;
-				boardArr[7][0]=0;
-				moveStr="O-O-O";
-			}
-		}else if(boardArr[i2][j2]==29){
-			boardArr[i2][j2]=26;
-			if(j2==6){
-				boardArr[0][5]=24;
-				boardArr[0][7]=0;
-				moveStr="O-O";
-			} else if(j2==2){
-				boardArr[0][3]=24;
-				boardArr[0][0]=0;
-				moveStr="O-O-O";
-			}
-		}
-		if(boardArr[i2][j2]==18){
-			boardArr[i2][j2]=14;
-		}else if(boardArr[i2][j2]==28){
-			boardArr[i2][j2]=24;
-		}
-
-		int side=boardArr[i2][j2]/10;
-		for(int a=0; a<8; a++){
-			for(int b=0; b<8; b++){
-				if(boardArr[a][b]/10==(side%2+1)&&boardArr[a][b]%10==7){
-					boardArr[a][b]=(side%2+1)*10+1;
-				}
-			}
-		}
-
-		if(boardArr[i2][j2]==11&&i1==6&&i2==4){
-			boardArr[i2][j2]=17;
-		} else if(boardArr[i2][j2]==21&&i1==1&&i2==3){
-			boardArr[i2][j2]=27;
-		}
-		if(boardArr[i2][j2]==11&&j1-j2!=0&&!captureBool){//boardArr[i2+1][j2]%10==7){
-			boardArr[i2+1][j2]=0;
-			//moveStr+="e.p.";
-		}
-		if(boardArr[i2][j2]==21&&j1-j2!=0&&!captureBool){//boardArr[i2+1][j2]%10==7){
-			boardArr[i2-1][j2]=0;
-			//moveStr+="e.p.";
-		}
-		return moveStr;
 	}
-	*/
 	
-	private void guiPrintLine(String str){
+	private void guiPrintLine(String str) {
 		System.out.println(str);
 		textOutput.append(str+"\n");
 		textOutput.setCaretPosition(textOutput.getDocument().getLength());
