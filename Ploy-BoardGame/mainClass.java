@@ -6,10 +6,12 @@ import java.awt.event.ActionEvent;
 public class mainClass implements ActionListener {
 
 	private PloyGUI gui;
-	private final String GAME_RULES = "Para 2 jugadores:\nEl objetivo es capturar al Comandante del oponente o todas sus piezas excepto el Comandante.\nEn el juego de dos jugadores solo se utilizan los conjuntos de color rojo y verde, ya que los conjuntos amarillo y azul\ntienen un número diferente de piezas para adaptarse a la menor cantidad de piezas utilizadas en el juego de cuatro jugadores.\nEl jugador verde va primero. En cada turno un jugador, puede realizar un movimiento o un cambio de dirección.\nEl Comandante se puede desplazar 1 espacio. Las Lanzas se pueden desplazar 1,2 o 3 espacios. Las Probes 1 o 2 espacios.\nLos Escudos 1 espacio.\n\nCon 4 jugadores 1v1v1v1:\nEl objetivo es ser el último jugador en pie después de que los demás hayan sido eliminados.\nEn el turno de un jugador, puede realizar un movimiento o un cambio de dirección. Si el Comandante de un jugador es capturado,\nlas piezas restantes quedan bajo el mando del jugador que lo captura. Si todas las piezas de un jugador, excepto el Comandante,\nhan sido capturadas, el Comandante se retira del juego y el jugador queda fuera del juego. El juego continúa en el sentido de las\nagujas del reloj hasta que quede un jugador.\n\nCon 4 jugadores 2v2:\nUna vez que el comandante de un jugador es absorbido, su compañero de equipo se hace cargo de todas sus piezas restantes.\nEl compañero también toma el turno de su compañero de equipo y puede usar todas las piezas del equipo para sus movimientos.";
+    private Message msg;
+	private final String GAME_RULES = "Para 2 jugadores:\nEl objetivo es capturar al Comandante del oponente o todas sus piezas excepto el Comandante.\nEn el juego de dos jugadores solo se utilizan los conjuntos de color rojo y verde, ya que los conjuntos amarillo y azul\ntienen un nï¿½mero diferente de piezas para adaptarse a la menor cantidad de piezas utilizadas en el juego de cuatro jugadores.\nEl jugador verde va primero. En cada turno un jugador, puede realizar un movimiento o un cambio de direcciï¿½n.\nEl Comandante se puede desplazar 1 espacio. Las Lanzas se pueden desplazar 1,2 o 3 espacios. Las Probes 1 o 2 espacios.\nLos Escudos 1 espacio.\n\nCon 4 jugadores 1v1v1v1:\nEl objetivo es ser el ï¿½ltimo jugador en pie despuï¿½s de que los demï¿½s hayan sido eliminados.\nEn el turno de un jugador, puede realizar un movimiento o un cambio de direcciï¿½n. Si el Comandante de un jugador es capturado,\nlas piezas restantes quedan bajo el mando del jugador que lo captura. Si todas las piezas de un jugador, excepto el Comandante,\nhan sido capturadas, el Comandante se retira del juego y el jugador queda fuera del juego. El juego continï¿½a en el sentido de las\nagujas del reloj hasta que quede un jugador.\n\nCon 4 jugadores 2v2:\nUna vez que el comandante de un jugador es absorbido, su compaï¿½ero de equipo se hace cargo de todas sus piezas restantes.\nEl compaï¿½ero tambiï¿½n toma el turno de su compaï¿½ero de equipo y puede usar todas las piezas del equipo para sus movimientos.";
 
 	public mainClass() {
 		gui = null;
+        msg = new Message();
     }
 
     /**
@@ -17,7 +19,7 @@ public class mainClass implements ActionListener {
      */
     public void actionPerformed(ActionEvent evento) {        
         if(evento.getActionCommand().equals("Reglas")){
-            JOptionPane.showMessageDialog(null, GAME_RULES, "Reglas del juego", -1, null);
+            msg.printMessageWithTitle(GAME_RULES, "Reglas del juego");
         }
     }
 
@@ -26,7 +28,7 @@ public class mainClass implements ActionListener {
         int numPlayers = 0;
         String input = "";
         while (true) {
-        	input = JOptionPane.showInputDialog("Ingrese la cantidad de jugadores para la partida 2 o 4");
+        	input = msg.inputMessage("Ingrese la cantidad de jugadores para la partida 2 o 4");
         	if (input != null) {
         		try {
             		numPlayers = Integer.parseInt(input);
@@ -37,7 +39,7 @@ public class mainClass implements ActionListener {
             if (numPlayers == 2 || numPlayers == 4) {
                 break;
             } else {
-                JOptionPane.showMessageDialog(null, "Numero de jugadores invalido");
+                msg.printMessage("Numero de jugadores invalido");
             }
         }
 
@@ -56,7 +58,7 @@ public class mainClass implements ActionListener {
             //Info jugador 1
 
             //Nombre
-            String player1 = JOptionPane.showInputDialog("Nombre jugador 1");
+            String player1 = msg.inputMessage("Nombre jugador 1");
             players[0].setName(player1);
             
             if (players[0].name == null) {
@@ -64,11 +66,11 @@ public class mainClass implements ActionListener {
             }
             
             if (players[0].name.isBlank()) {
-            	players[0].name = "Anónimo";
+            	players[0].name = "Anï¿½nimo";
             }
             
             //Color
-            String color1 = (String) JOptionPane.showInputDialog(null, "Color", "Color para el jugador" + player1, JOptionPane.QUESTION_MESSAGE, null, choices, choices[0]);
+            String color1 = msg.inputQuestionMessage("Color", "Color para el jugador" + player1, choices, choices[0]);
             players[0].setColor(color1);
             
             if (players[0].color == null) {
@@ -78,7 +80,7 @@ public class mainClass implements ActionListener {
             //Info jugador 2
 
             //Nombre
-            String player2 = JOptionPane.showInputDialog("Nombre jugador 2");
+            String player2 = msg.inputMessage("Nombre jugador 2");
             players[1].setName(player2);
             
             if (players[1].name == null) {
@@ -86,17 +88,17 @@ public class mainClass implements ActionListener {
             }
             
             if (players[1].name.isBlank()) {
-            	players[1].name = "Anónimo";
+            	players[1].name = "Anï¿½nimo";
             }
 
             //Color
             String color2 = "";
             while (true) {
-                color2 = (String) JOptionPane.showInputDialog(null, "Color", "Color para el jugador" + player1, JOptionPane.QUESTION_MESSAGE, null, choices, choices[1]);
+                color2 = msg.inputQuestionMessage("Color", "Color para el jugador" + player2, choices, choices[1]);
                 if (color2 != color1) {
                     break;
                 } else {
-                    JOptionPane.showMessageDialog(null, "Color ya fue seleccionado");
+                    msg.printMessage("Color ya fue seleccionado");
                 }
             }
             players[1].setColor(color2);
@@ -106,7 +108,7 @@ public class mainClass implements ActionListener {
             }
 
             //Display info
-            JOptionPane.showMessageDialog(null, "Player1: " + players[0].getName() + "\nColor: " + players[0].getColor() + "\n\nPlayer2: " +  players[1].getName() + "\nColor: " + players[1].getColor());
+            msg.printMessage("Player1: " + players[0].getName() + "\nColor: " + players[0].getColor() + "\n\nPlayer2: " +  players[1].getName() + "\nColor: " + players[1].getColor());
             
             int mode = 0;
             
@@ -127,7 +129,7 @@ public class mainClass implements ActionListener {
             //Info jugador 1
 
             //Nombre
-            String player1 = JOptionPane.showInputDialog("Nombre jugador 1");
+            String player1 = msg.inputMessage("Nombre jugador 1");
             players[0].setName(player1);
             
             if (players[0].name == null) {
@@ -139,7 +141,7 @@ public class mainClass implements ActionListener {
             }
 
             //Color
-            String color1 = (String) JOptionPane.showInputDialog(null, "Color", "Color para el jugador" + player1, JOptionPane.QUESTION_MESSAGE, null, choices, choices[0]);
+            String color1 = msg.inputQuestionMessage("Color", "Color para el jugador" + player1, choices, choices[0]);
             players[0].setColor(color1);
             
             if (players[0].color == null) {
@@ -149,7 +151,7 @@ public class mainClass implements ActionListener {
             //Info jugador 2
 
             //Nombre
-            String player2 = JOptionPane.showInputDialog("Nombre jugador 2");
+            String player2 = msg.inputMessage("Nombre jugador 2");
             players[1].setName(player2);
 
             if (players[1].name == null) {
@@ -163,11 +165,11 @@ public class mainClass implements ActionListener {
             //Color
             String color2 = "";
             while (true) {
-                color2 = (String) JOptionPane.showInputDialog(null, "Color", "Color para el jugador" + player2, JOptionPane.QUESTION_MESSAGE, null, choices, choices[0]);
+                color2 = msg.inputQuestionMessage("Color", "Color para el jugador" + player2, choices, choices[1]);
                 if (color2 != color1) {
                     break;
                 } else {
-                    JOptionPane.showMessageDialog(null, "Color ya fue seleccionado");
+                    msg.printMessage("Color ya fue seleccionado");
                 }
             }
             players[1].setColor(color2);
@@ -179,7 +181,7 @@ public class mainClass implements ActionListener {
             //Info jugador 3
 
             //Nombre
-            String player3 = JOptionPane.showInputDialog("Nombre jugador 3");
+            String player3 = msg.inputMessage("Nombre jugador 3");
             players[2].setName(player3);
             
             if (players[2].name == null) {
@@ -193,11 +195,11 @@ public class mainClass implements ActionListener {
             //Color
             String color3 = "";
             while (true) {
-                color3 = (String) JOptionPane.showInputDialog(null, "Color", "Color para el jugador" + player3, JOptionPane.QUESTION_MESSAGE, null, choices, choices[0]);
+                color3 = msg.inputQuestionMessage("Color", "Color para el jugador" + player3, choices, choices[2]);
                 if (color3 != color1 && color3 != color2) {
                     break;
                 } else {
-                    JOptionPane.showMessageDialog(null, "Color ya fue seleccionado");
+                    msg.printMessage("Color ya fue seleccionado");
                 }
             }
             players[2].setColor(color3);
@@ -209,7 +211,7 @@ public class mainClass implements ActionListener {
             //Info jugador 4
 
             //Nombre
-            String player4 = JOptionPane.showInputDialog("Nombre jugador 4");
+            String player4 = msg.inputMessage("Nombre jugador 4");
             players[3].setName(player4);
             
             if (players[3].name == null) {
@@ -223,11 +225,11 @@ public class mainClass implements ActionListener {
             //Color
             String color4 = "";
             while (true) {
-                color4 = (String) JOptionPane.showInputDialog(null, "Color", "Color para el jugador" + player4, JOptionPane.QUESTION_MESSAGE, null, choices, choices[0]);
+                color4 = msg.inputQuestionMessage("Color", "Color para el jugador" + player4, choices, choices[3]);
                 if (color4 != color1 && color4 != color2 && color4 != color3) {
                     break;
                 } else {
-                    JOptionPane.showMessageDialog(null, "Color ya fue seleccionado");
+                    msg.printMessage("Color ya fue seleccionado");
                 }
             }
             players[3].setColor(color4);
@@ -237,12 +239,12 @@ public class mainClass implements ActionListener {
             }
 
             //Display info
-            JOptionPane.showMessageDialog(null, "Player 1: " + players[0].getName() + "\nColor: " + players[0].getColor() + "\n\nPlayer 2: " +  players[1].getName() + "\nColor: " + players[1].getColor() 
+            msg.printMessage("Player 1: " + players[0].getName() + "\nColor: " + players[0].getColor() + "\n\nPlayer 2: " +  players[1].getName() + "\nColor: " + players[1].getColor() 
             + "\n\nPlayer 3: " +  players[2].getName() + "\nColor: " + players[2].getColor() + "\n\nPlayer 4: " +  players[3].getName() + "\nColor: " + players[3].getColor());
             
             int mode = 0;
             while (true) {
-            	input = JOptionPane.showInputDialog("Modo de juego (1 = 1v1v1v1 || 2 = 2v2)");
+            	input = msg.inputMessage("Modo de juego (1 = 1v1v1v1 || 2 = 2v2)");
             	if (input != null) {
             		try {
             			mode = Integer.parseInt(input);
@@ -253,7 +255,7 @@ public class mainClass implements ActionListener {
                 if (mode == 1 || mode == 2) {
                     break;
                 } else {
-                    JOptionPane.showMessageDialog(null, "Modo invalido");
+                    msg.printMessage("Modo invalido");
                 }
             }
             
