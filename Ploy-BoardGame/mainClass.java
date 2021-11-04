@@ -9,7 +9,28 @@ public class mainClass implements ActionListener {
 	private PloyGUI gui;
     private Message msg;
     private player[] players;
-	private final String GAME_RULES = "Para 2 jugadores:\nEl objetivo es capturar al Comandante del oponente o todas sus piezas excepto el Comandante.\nEn el juego de dos jugadores solo se utilizan los conjuntos de color rojo y verde, ya que los conjuntos amarillo y azul\ntienen un n�mero diferente de piezas para adaptarse a la menor cantidad de piezas utilizadas en el juego de cuatro jugadores.\nEl jugador verde va primero. En cada turno un jugador, puede realizar un movimiento o un cambio de direcci�n.\nEl Comandante se puede desplazar 1 espacio. Las Lanzas se pueden desplazar 1,2 o 3 espacios. Las Probes 1 o 2 espacios.\nLos Escudos 1 espacio.\n\nCon 4 jugadores 1v1v1v1:\nEl objetivo es ser el �ltimo jugador en pie despu�s de que los dem�s hayan sido eliminados.\nEn el turno de un jugador, puede realizar un movimiento o un cambio de direcci�n. Si el Comandante de un jugador es capturado,\nlas piezas restantes quedan bajo el mando del jugador que lo captura. Si todas las piezas de un jugador, excepto el Comandante,\nhan sido capturadas, el Comandante se retira del juego y el jugador queda fuera del juego. El juego contin�a en el sentido de las\nagujas del reloj hasta que quede un jugador.\n\nCon 4 jugadores 2v2:\nUna vez que el comandante de un jugador es absorbido, su compa�ero de equipo se hace cargo de todas sus piezas restantes.\nEl compa�ero tambi�n toma el turno de su compa�ero de equipo y puede usar todas las piezas del equipo para sus movimientos.";
+	private final String GAME_RULES = "Para 2 jugadores:\nEl objetivo es capturar al "
+			+ "Comandante del oponente o todas sus piezas excepto el Comandante.\n"
+			+ "En el juego de dos jugadores solo se utilizan los conjuntos de color "
+			+ "rojo y verde, ya que los conjuntos amarillo y azul\ntienen un numero "
+			+ "diferente de piezas para adaptarse a la menor cantidad de piezas "
+			+ "utilizadas en el juego de cuatro jugadores.\nEl jugador verde va "
+			+ "primero. En cada turno un jugador, puede realizar un movimiento o "
+			+ "un cambio de direccion.\nEl Comandante se puede desplazar 1 espacio. "
+			+ "Las Lanzas se pueden desplazar 1, 2 o 3 espacios. Las Probes 1 o 2 "
+			+ "espacios.\nLos Escudos 1 espacio.\n\nCon 4 jugadores 1v1v1v1:\nEl "
+			+ "objetivo es ser el ultimo jugador en pie despues de que los demas hayan "
+			+ "sido eliminados.\nEn el turno de un jugador, puede realizar un "
+			+ "movimiento o un cambio de direccion. Si el Comandante de un jugador es "
+			+ "capturado,\nlas piezas restantes quedan bajo el mando del jugador que lo "
+			+ "captura. Si todas las piezas de un jugador, excepto el Comandante,\nhan "
+			+ "sido capturadas, el Comandante se retira del juego y el jugador queda "
+			+ "fuera del juego. El juego continua en el sentido de las\nagujas del reloj "
+			+ "hasta que quede un jugador.\n\nCon 4 jugadores 2v2:\nUna vez que el "
+			+ "comandante de un jugador es absorbido, su companero de equipo se hace "
+			+ "cargo de todas sus piezas restantes.\nEl companero tambien toma el turno "
+			+ "de su companero de equipo y puede usar todas las piezas del equipo para "
+			+ "sus movimientos.";
 
 	public mainClass() {
 		gui = null;
@@ -118,7 +139,8 @@ public class mainClass implements ActionListener {
             }
 
             //Display info
-            msg.printMessage("Player1: " + players[0].getName() + "\nColor: " + players[0].getColor() + "\n\nPlayer2: " +  players[1].getName() + "\nColor: " + players[1].getColor());
+            msg.printMessage("Player1: " + players[0].getName() + "\nColor: " + players[0].getColor() + "\n\nPlayer2: "
+            +  players[1].getName() + "\nColor: " + players[1].getColor());
             
             int mode = 0;
             
@@ -249,8 +271,9 @@ public class mainClass implements ActionListener {
             }
 
             //Display info
-            msg.printMessage("Player 1: " + players[0].getName() + "\nColor: " + players[0].getColor() + "\n\nPlayer 2: " +  players[1].getName() + "\nColor: " + players[1].getColor() 
-            + "\n\nPlayer 3: " +  players[2].getName() + "\nColor: " + players[2].getColor() + "\n\nPlayer 4: " +  players[3].getName() + "\nColor: " + players[3].getColor());
+            msg.printMessage("Player 1: " + players[0].getName() + "\nColor: " + players[0].getColor() + "\n\nPlayer 2: "
+            +  players[1].getName() + "\nColor: " + players[1].getColor() + "\n\nPlayer 3: " +  players[2].getName()
+            + "\nColor: " + players[2].getColor() + "\n\nPlayer 4: " +  players[3].getName() + "\nColor: " + players[3].getColor());
             
             int mode = 0;
             while (true) {
