@@ -66,7 +66,7 @@ public class mainClass implements ActionListener {
             }
             
             if (players[0].name.isBlank()) {
-            	players[0].name = "An�nimo";
+            	players[0].name = "Anonimo";
             }
             
             //Color
@@ -88,7 +88,7 @@ public class mainClass implements ActionListener {
             }
             
             if (players[1].name.isBlank()) {
-            	players[1].name = "An�nimo";
+            	players[1].name = "Anonimo";
             }
 
             //Color

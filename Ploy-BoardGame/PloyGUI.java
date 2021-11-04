@@ -17,6 +17,9 @@ import java.awt.Graphics;
 public class PloyGUI {
 	JFrame ployInterface;
 	JPanel boardPanel;
+	JPanel rotateButtons;
+	JButton rotateLeftBut;
+	JButton rotateRightBut;
 	JLabel squaresPanels[][];
 	JTextArea textOutput;
 	JScrollPane textScroll;
@@ -46,9 +49,9 @@ public class PloyGUI {
 	boolean pieceActive = false;
 	int lastI;
 	int lastJ;
+	int originalDirection;
 	
-	int[][] board;
-	int[][] pieceOwner;
+	PieceInfo[][] board;
 	boolean gameOver;
 	
 	public PloyGUI(mainClass controller, int numPlayers, player[] players, int mode) {
@@ -128,10 +131,10 @@ public class PloyGUI {
 		c.gridy = 0;
 		ployInterface.add(textScroll,c);
 
-		JPanel rotateButtons = new JPanel();
+		rotateButtons = new JPanel();
 		rotateButtons.setLayout(new GridLayout(1,5,0,0));
     
-		JButton rotateLeftBut = new JButton("Girar izq");
+		rotateLeftBut = new JButton("Girar izq");
 		rotateLeftBut.addMouseListener(new java.awt.event.MouseAdapter() {
 			public void mouseClicked(java.awt.event.MouseEvent evt) {
 				rotatePieceLeft(lastI, lastJ);
@@ -139,13 +142,16 @@ public class PloyGUI {
 		});
 		rotateButtons.add(rotateLeftBut);
     
-    JButton rotateRightBut = new JButton("Girar der");
+		rotateRightBut = new JButton("Girar der");
 		rotateRightBut.addMouseListener(new java.awt.event.MouseAdapter() {
 			public void mouseClicked(java.awt.event.MouseEvent evt) {
 				rotatePieceRight(lastI, lastJ);
 			}
 		});
 		rotateButtons.add(rotateRightBut);
+		
+		rotateLeftBut.setEnabled(false);
+		rotateRightBut.setEnabled(false);
 		
 		c.gridx = 0;
 		c.gridy = 1;
@@ -161,21 +167,18 @@ public class PloyGUI {
 		
 		ployInterface.pack();
 
-		board = new int[9][9];
-    for (int i = 0; i < 9; i++) {
-      for (int j = 0; j < 9; j++) {
-        board[i][j] = -1;
-      }
-      System.out.print("\n");
-    }
-    
-    pieceOwner = new int[9][9];
+		board = new PieceInfo[9][9];
+		for (int i = 0; i < 9; i++) {
+			for (int j = 0; j < 9; j++) {
+				board[i][j] = new PieceInfo(-1, 0, 0);
+			}
+		}
 	
 		guiPrintLine("Bienvenidos a Ploy");
-		guiPrintLine("Para ganar, capture el comandante del oponente o todas las piezas excepto el comandante.");
-		guiPrintLine("Cada pieza se puede mover por el tablero la cantidad de espacios de acuerdo con la cantidad de rayas que posee.");
-		guiPrintLine("En un turno se puede mover una pieza o cambiar su direcci�n.");
-		guiPrintLine("Los escudos se pueden mover y cambiar de direcci�n en un mismo turno.");
+		guiPrintLine("Para ganar, capture el comandante del oponente o todas las piezas\nexcepto el comandante.");
+		guiPrintLine("Cada pieza se puede mover por el\ntablero la cantidad de espacios de\nacuerdo con la cantidad de rayas\nque posee.");
+		guiPrintLine("En un turno se puede mover una\npieza o cambiar su direccion.");
+		guiPrintLine("Los escudos se pueden mover y\ncambiar de direccion en un mismo\nturno.");
 		guiPrintLine("Modos de juego: 1v1, 1v1v1v1, 2v2" + "\n");
 		
 		String modeString = "";
@@ -279,45 +282,51 @@ public class PloyGUI {
 				RotatedIcon ri = new RotatedIcon(getIconArray(color)[pieceOrder1v1P1[orderArrayIndex]], 180.0, true);
 				squaresPanels[8][i].setIcon(ri);
 				squaresPanels[8][i].setName(color);
-				board[8][i] = pieceOrder1v1P1[orderArrayIndex];
-				pieceOwner[8][i] = 1;
+				board[8][i].setType(pieceOrder1v1P1[orderArrayIndex]);
+				board[8][i].setOwner(1);
+				board[8][i].setDirection(180);
 				orderArrayIndex++;
 			}
 			for (int i = 2; i < 7; i++) {
 				RotatedIcon ri = new RotatedIcon(getIconArray(color)[pieceOrder1v1P1[orderArrayIndex]], 180.0, true);
 				squaresPanels[7][i].setIcon(ri);
 				squaresPanels[7][i].setName(color);
-				board[7][i] = pieceOrder1v1P1[orderArrayIndex];
-				pieceOwner[7][i] = 1;
+				board[7][i].setType(pieceOrder1v1P1[orderArrayIndex]);
+				board[7][i].setOwner(1);
+				board[7][i].setDirection(180);
 				orderArrayIndex++;
 			}
 			for (int i = 3; i < 6; i++) {
 				RotatedIcon ri = new RotatedIcon(getIconArray(color)[8], 180.0, true);
 				squaresPanels[6][i].setIcon(ri);
 				squaresPanels[6][i].setName(color);
-				board[6][i] = 8;
-				pieceOwner[6][i] = 1;
+				board[6][i].setType(8);
+				board[6][i].setOwner(1);
+				board[6][i].setDirection(180);
 			}
 		} else {
 			for (int i = 1; i < 8; i++) {
 				squaresPanels[0][i].setIcon(getIconArray(color)[pieceOrder1v1P2[orderArrayIndex]]);
 				squaresPanels[0][i].setName(color);
-				board[0][i] = pieceOrder1v1P2[orderArrayIndex];
-				pieceOwner[0][i] = 2;
+				board[0][i].setType(pieceOrder1v1P2[orderArrayIndex]);
+				board[0][i].setOwner(2);
+				board[0][i].setDirection(0);
 				orderArrayIndex++;
 			}
 			for (int i = 2; i < 7; i++) {
 				squaresPanels[1][i].setIcon(getIconArray(color)[pieceOrder1v1P2[orderArrayIndex]]);
 				squaresPanels[1][i].setName(color);
-				board[1][i] = pieceOrder1v1P2[orderArrayIndex];
-				pieceOwner[1][i] = 2;
+				board[1][i].setType(pieceOrder1v1P2[orderArrayIndex]);
+				board[1][i].setOwner(2);
+				board[1][i].setDirection(0);
 				orderArrayIndex++;
 			}
 			for (int i = 3; i < 6; i++) {
 				squaresPanels[2][i].setIcon(getIconArray(color)[8]);
 				squaresPanels[2][i].setName(color);
-				board[2][i] = 8;
-				pieceOwner[2][i] = 2;
+				board[2][i].setType(8);
+				board[2][i].setOwner(2);
+				board[2][i].setDirection(0);
 			}
 		}
 	}
@@ -326,142 +335,162 @@ public class PloyGUI {
 		int orderArrayIndex = 0;
 		if (playerNum == 1) {
 			for (int i = 0; i < 3; i++) {
-				RotatedIcon ri;
+				int direction = 0;
 				if (i != 2) {
-					ri = new RotatedIcon(getIconArray(color)[pieceOrder1v1v1v1[orderArrayIndex]], 225.0, true);
+					direction = 225;
 				} else {
-					ri = new RotatedIcon(getIconArray(color)[pieceOrder1v1v1v1[orderArrayIndex]], 180.0, true);
+					direction = 180;
 				}
+				RotatedIcon ri = new RotatedIcon(getIconArray(color)[pieceOrder1v1v1v1[orderArrayIndex]], direction, true);
 				squaresPanels[8][i].setIcon(ri);
 				squaresPanels[8][i].setName(color);
-				board[8][i] = pieceOrder1v1v1v1[orderArrayIndex];
-				pieceOwner[8][i] = 1;
+				board[8][i].setType(pieceOrder1v1v1v1[orderArrayIndex]);
+				board[8][i].setOwner(1);
+				board[8][i].setDirection(direction);
 				orderArrayIndex++;
 			}
 			for (int i = 0; i < 3; i++) {
 				RotatedIcon ri = new RotatedIcon(getIconArray(color)[pieceOrder1v1v1v1[orderArrayIndex]], 225.0, true);
 				squaresPanels[7][i].setIcon(ri);
 				squaresPanels[7][i].setName(color);
-				board[7][i] = pieceOrder1v1v1v1[orderArrayIndex];
-				pieceOwner[7][i] = 1;
+				board[7][i].setType(pieceOrder1v1v1v1[orderArrayIndex]);
+				board[7][i].setOwner(1);
+				board[7][i].setDirection(225);
 				orderArrayIndex++;
 			}
 			for (int i = 0; i < 3; i++) {
-				RotatedIcon ri;
+				int direction = 0;
 				if (i == 0) {
-					ri = new RotatedIcon(getIconArray(color)[pieceOrder1v1v1v1[orderArrayIndex]], 270.0, true);
+					direction = 270;
 				} else {
-					ri = new RotatedIcon(getIconArray(color)[pieceOrder1v1v1v1[orderArrayIndex]], 225.0, true);
+					direction = 225;
 				}
+				RotatedIcon ri = new RotatedIcon(getIconArray(color)[pieceOrder1v1v1v1[orderArrayIndex]], direction, true);
 				squaresPanels[6][i].setIcon(ri);
 				squaresPanels[6][i].setName(color);
-				board[6][i] = pieceOrder1v1v1v1[orderArrayIndex];
-				pieceOwner[6][i] = 1;
+				board[6][i].setType(pieceOrder1v1v1v1[orderArrayIndex]);
+				board[6][i].setOwner(1);
+				board[6][i].setDirection(direction);
 				orderArrayIndex++;
 			}
 		} else if (playerNum == 2) {
 			for (int i = 0; i < 3; i++) {
-				RotatedIcon ri;
+				int direction = 0;
 				if (i != 2) {
-					ri = new RotatedIcon(getIconArray(color)[pieceOrder1v1v1v1[orderArrayIndex]], 315.0, true);
+					direction = 315;
 				} else {
-					ri = new RotatedIcon(getIconArray(color)[pieceOrder1v1v1v1[orderArrayIndex]], 270.0, true);
+					direction = 270;
 				}
+				RotatedIcon ri = new RotatedIcon(getIconArray(color)[pieceOrder1v1v1v1[orderArrayIndex]], direction, true);
 				squaresPanels[i][0].setIcon(ri);
 				squaresPanels[i][0].setName(color);
-				board[i][0] = pieceOrder1v1v1v1[orderArrayIndex];
-				pieceOwner[i][0] = 2;
+				board[i][0].setType(pieceOrder1v1v1v1[orderArrayIndex]);
+				board[i][0].setOwner(2);
+				board[i][0].setDirection(direction);
 				orderArrayIndex++;
 			}
 			for (int i = 0; i < 3; i++) {
 				RotatedIcon ri = new RotatedIcon(getIconArray(color)[pieceOrder1v1v1v1[orderArrayIndex]], 315.0, true);
 				squaresPanels[i][1].setIcon(ri);
 				squaresPanels[i][1].setName(color);
-				board[i][1] = pieceOrder1v1v1v1[orderArrayIndex];
-				pieceOwner[i][1] = 2;
+				board[i][1].setType(pieceOrder1v1v1v1[orderArrayIndex]);
+				board[i][1].setOwner(2);
+				board[i][1].setDirection(315);
 				orderArrayIndex++;
 			}
 			for (int i = 0; i < 3; i++) {
-				RotatedIcon ri;
+				int direction = 0;
 				if (i == 0) {
-					ri = new RotatedIcon(getIconArray(color)[pieceOrder1v1v1v1[orderArrayIndex]], 0.0, true);
+					direction = 0;
 				} else {
-					ri = new RotatedIcon(getIconArray(color)[pieceOrder1v1v1v1[orderArrayIndex]], 315.0, true);
+					direction = 315;
 				}
+				RotatedIcon ri = new RotatedIcon(getIconArray(color)[pieceOrder1v1v1v1[orderArrayIndex]], direction, true);
 				squaresPanels[i][2].setIcon(ri);
 				squaresPanels[i][2].setName(color);
-				board[i][2] = pieceOrder1v1v1v1[orderArrayIndex];
-				pieceOwner[i][2] = 2;
+				board[i][2].setType(pieceOrder1v1v1v1[orderArrayIndex]);
+				board[i][2].setOwner(2);
+				board[i][2].setDirection(direction);
 				orderArrayIndex++;
 			}
 		} else if (playerNum == 3) {
 			for (int i = 8; i > 5; i--) {
-				RotatedIcon ri;
+				int direction = 0;
 				if (i != 6) {
-					ri = new RotatedIcon(getIconArray(color)[pieceOrder1v1v1v1[orderArrayIndex]], 45.0, true);
+					direction = 45;
 				} else {
-					ri = new RotatedIcon(getIconArray(color)[pieceOrder1v1v1v1[orderArrayIndex]], 0.0, true);
+					direction = 0;
 				}
+				RotatedIcon ri = new RotatedIcon(getIconArray(color)[pieceOrder1v1v1v1[orderArrayIndex]], direction, true);
 				squaresPanels[0][i].setIcon(ri);
 				squaresPanels[0][i].setName(color);
-				board[0][i] = pieceOrder1v1v1v1[orderArrayIndex];
-				pieceOwner[0][i] = 3;
+				board[0][i].setType(pieceOrder1v1v1v1[orderArrayIndex]);
+				board[0][i].setOwner(3);
+				board[0][i].setDirection(direction);
 				orderArrayIndex++;
 			}
 			for (int i = 8; i > 5; i--) {
 				RotatedIcon ri = new RotatedIcon(getIconArray(color)[pieceOrder1v1v1v1[orderArrayIndex]], 45.0, true);
 				squaresPanels[1][i].setIcon(ri);
 				squaresPanels[1][i].setName(color);
-				board[1][i] = pieceOrder1v1v1v1[orderArrayIndex];
-				pieceOwner[1][i] = 3;
+				board[1][i].setType(pieceOrder1v1v1v1[orderArrayIndex]);
+				board[1][i].setOwner(3);
+				board[1][i].setDirection(45);
 				orderArrayIndex++;
 			}
 			for (int i = 8; i > 5; i--) {
-				RotatedIcon ri;
+				int direction = 0;
 				if (i == 8) {
-					ri = new RotatedIcon(getIconArray(color)[pieceOrder1v1v1v1[orderArrayIndex]], 90.0, true);
+					direction = 90;
 				} else {
-					ri = new RotatedIcon(getIconArray(color)[pieceOrder1v1v1v1[orderArrayIndex]], 45.0, true);
+					direction = 45;
 				}
+				RotatedIcon ri = new RotatedIcon(getIconArray(color)[pieceOrder1v1v1v1[orderArrayIndex]], direction, true);
 				squaresPanels[2][i].setIcon(ri);
 				squaresPanels[2][i].setName(color);
-				board[2][i] = pieceOrder1v1v1v1[orderArrayIndex];
-				pieceOwner[2][i] = 3;
+				board[2][i].setType(pieceOrder1v1v1v1[orderArrayIndex]);
+				board[2][i].setOwner(3);
+				board[2][i].setDirection(direction);
 				orderArrayIndex++;
 			}
 		} else {
 			for (int i = 8; i > 5; i--) {
-				RotatedIcon ri;
+				int direction = 0;
 				if (i != 6) {
-					ri = new RotatedIcon(getIconArray(color)[pieceOrder1v1v1v1[orderArrayIndex]], 135.0, true);
+					direction = 135;
 				} else {
-					ri = new RotatedIcon(getIconArray(color)[pieceOrder1v1v1v1[orderArrayIndex]], 90.0, true);
+					direction = 90;
 				}
+				RotatedIcon ri = new RotatedIcon(getIconArray(color)[pieceOrder1v1v1v1[orderArrayIndex]], direction, true);
 				squaresPanels[i][8].setIcon(ri);
 				squaresPanels[i][8].setName(color);
-				board[i][8] = pieceOrder1v1v1v1[orderArrayIndex];
-				pieceOwner[i][8] = 4;
+				board[i][8].setType(pieceOrder1v1v1v1[orderArrayIndex]);
+				board[i][8].setOwner(4);
+				board[i][8].setDirection(direction);
 				orderArrayIndex++;
 			}
 			for (int i = 8; i > 5; i--) {
 				RotatedIcon ri = new RotatedIcon(getIconArray(color)[pieceOrder1v1v1v1[orderArrayIndex]], 135.0, true);
 				squaresPanels[i][7].setIcon(ri);
 				squaresPanels[i][7].setName(color);
-				board[i][7] = pieceOrder1v1v1v1[orderArrayIndex];
-				pieceOwner[i][7] = 4;
+				board[i][7].setType(pieceOrder1v1v1v1[orderArrayIndex]);
+				board[i][7].setOwner(4);
+				board[i][7].setDirection(135);
 				orderArrayIndex++;
 			}
 			for (int i = 8; i > 5; i--) {
-				RotatedIcon ri;
+				int direction = 0;
 				if (i == 8) {
-					ri = new RotatedIcon(getIconArray(color)[pieceOrder1v1v1v1[orderArrayIndex]], 180.0, true);
+					direction = 180;
 				} else {
-					ri = new RotatedIcon(getIconArray(color)[pieceOrder1v1v1v1[orderArrayIndex]], 135.0, true);
+					direction = 135;
 				}
+				RotatedIcon ri = new RotatedIcon(getIconArray(color)[pieceOrder1v1v1v1[orderArrayIndex]], direction, true);
 				squaresPanels[i][6].setIcon(ri);
 				squaresPanels[i][6].setName(color);
-				board[i][6] = pieceOrder1v1v1v1[orderArrayIndex];
-				pieceOwner[i][6] = 4;
+				board[i][6].setType(pieceOrder1v1v1v1[orderArrayIndex]);
+				board[i][6].setOwner(4);
+				board[i][6].setDirection(direction);
 				orderArrayIndex++;
 			}
 		}
@@ -474,138 +503,174 @@ public class PloyGUI {
 				RotatedIcon ri = new RotatedIcon(getIconArray(color)[pieceOrder2v2[orderArrayIndex]], 180.0, true);
 				squaresPanels[8][i].setIcon(ri);
 				squaresPanels[8][i].setName(color);
-				board[8][i] = pieceOrder2v2[orderArrayIndex];
-				pieceOwner[8][i] = 1;
+				board[8][i].setType(pieceOrder2v2[orderArrayIndex]);
+				board[8][i].setOwner(1);
+				board[8][i].setDirection(180);
 				orderArrayIndex++;
 			}
 			for(int i = 1; i < 4; i++) {
 				RotatedIcon ri = new RotatedIcon(getIconArray(color)[pieceOrder2v2[orderArrayIndex]], 180.0, true);
 				squaresPanels[7][i].setIcon(ri);
 				squaresPanels[7][i].setName(color);
-				board[7][i] = pieceOrder2v2[orderArrayIndex];
-				pieceOwner[7][i] = 1;
+				board[7][i].setType(pieceOrder2v2[orderArrayIndex]);
+				board[7][i].setOwner(1);
+				board[7][i].setDirection(180);
 				orderArrayIndex++;
 			}
 			for(int i = 1; i < 4; i++) {
 				RotatedIcon ri = new RotatedIcon(getIconArray(color)[8], 180.0, true);
 				squaresPanels[6][i].setIcon(ri);
 				squaresPanels[6][i].setName(color);
-				board[6][i] = 8;
-				pieceOwner[6][i] = 1;
+				board[6][i].setType(8);
+				board[6][i].setOwner(1);
+				board[6][i].setDirection(180);
 			}
 		} else if (playerNum == 2) {
 			for(int i = 1; i < 4; i++) {
 				squaresPanels[0][i].setIcon(getIconArray(color)[pieceOrder2v2[orderArrayIndex]]);
 				squaresPanels[0][i].setName(color);
-				board[0][i] = pieceOrder2v2[orderArrayIndex];
-				pieceOwner[0][i] = 2;
+				board[0][i].setType(pieceOrder2v2[orderArrayIndex]);
+				board[0][i].setOwner(2);
+				board[0][i].setDirection(0);
 				orderArrayIndex++;
 			}
 			for(int i = 3; i > 0; i--) {
 				squaresPanels[1][i].setIcon(getIconArray(color)[pieceOrder2v2[orderArrayIndex]]);
 				squaresPanels[1][i].setName(color);
-				board[1][i] = pieceOrder2v2[orderArrayIndex];
-				pieceOwner[1][i] = 2;
+				board[1][i].setType(pieceOrder2v2[orderArrayIndex]);
+				board[1][i].setOwner(2);
+				board[1][i].setDirection(0);
 				orderArrayIndex++;
 			}
 			for(int i = 1; i < 4; i++) {
 				squaresPanels[2][i].setIcon(getIconArray(color)[8]);
 				squaresPanels[2][i].setName(color);
-				board[2][i] = 8;
-				pieceOwner[2][i] = 2;
+				board[2][i].setType(8);
+				board[2][i].setOwner(2);
+				board[2][i].setDirection(0);
 			}
 		} else if (playerNum == 3) {
 			for(int i = 7; i > 4; i--) {
 				RotatedIcon ri = new RotatedIcon(getIconArray(color)[pieceOrder2v2[orderArrayIndex]], 180.0, true);
 				squaresPanels[8][i].setIcon(ri);
 				squaresPanels[8][i].setName(color);
-				board[8][i] = pieceOrder2v2[orderArrayIndex];
-				pieceOwner[8][i] = 3;
+				board[8][i].setType(pieceOrder2v2[orderArrayIndex]);
+				board[8][i].setOwner(3);
+				board[8][i].setDirection(180);
 				orderArrayIndex++;
 			}
 			for(int i = 5; i < 8; i++) {
 				RotatedIcon ri = new RotatedIcon(getIconArray(color)[pieceOrder2v2[orderArrayIndex]], 180.0, true);
 				squaresPanels[7][i].setIcon(ri);
 				squaresPanels[7][i].setName(color);
-				board[7][i] = pieceOrder2v2[orderArrayIndex];
-				pieceOwner[7][i] = 3;
+				board[7][i].setType(pieceOrder2v2[orderArrayIndex]);
+				board[7][i].setOwner(3);
+				board[7][i].setDirection(180);
 				orderArrayIndex++;
 			}
 			for(int i = 5; i < 8; i++) {
 				RotatedIcon ri = new RotatedIcon(getIconArray(color)[8], 180.0, true);
 				squaresPanels[6][i].setIcon(ri);
 				squaresPanels[6][i].setName(color);
-				board[6][i] = 8;
-				pieceOwner[6][i] = 3;
+				board[6][i].setType(8);
+				board[6][i].setOwner(3);
+				board[6][i].setDirection(180);
 			}
 		} else {
 			for(int i = 7; i > 4; i--) {
 				squaresPanels[0][i].setIcon(getIconArray(color)[pieceOrder2v2[orderArrayIndex]]);
 				squaresPanels[0][i].setName(color);
-				board[0][i] = pieceOrder2v2[orderArrayIndex];
-				pieceOwner[0][i] = 4;
+				board[0][i].setType(pieceOrder2v2[orderArrayIndex]);
+				board[0][i].setOwner(4);
+				board[0][i].setDirection(0);
 				orderArrayIndex++;
 			}
 			for(int i = 7; i > 4; i--) {
 				squaresPanels[1][i].setIcon(getIconArray(color)[pieceOrder2v2[orderArrayIndex]]);
 				squaresPanels[1][i].setName(color);
-				board[1][i] = pieceOrder2v2[orderArrayIndex];
-				pieceOwner[1][i] = 4;
+				board[1][i].setType(pieceOrder2v2[orderArrayIndex]);
+				board[1][i].setOwner(4);
+				board[1][i].setDirection(0);
 				orderArrayIndex++;
 			}
 			for(int i = 5; i < 8; i++) {
 				squaresPanels[2][i].setIcon(getIconArray(color)[8]);
 				squaresPanels[2][i].setName(color);
-				board[2][i] = 8;
-				pieceOwner[2][i] = 4;
+				board[2][i].setType(8);
+				board[2][i].setOwner(4);
+				board[2][i].setDirection(0);
 			}
 		}
 	}
 	
-  private void rotatePieceLeft(int x, int y) {
-    RotatedIcon ri = new RotatedIcon(squaresPanels[x][y].getIcon(), 315.0, true);
-    squaresPanels[x][y].setIcon(ri);
-  }
+	private void rotatePieceLeft(int x, int y) {
+		RotatedIcon ri = new RotatedIcon(squaresPanels[x][y].getIcon(), 315.0, true);
+		squaresPanels[x][y].setIcon(ri);
+		int direction = board[x][y].getDirection() - 45;
+		if (direction < 0) {
+			direction = direction + 360;
+		}
+		board[x][y].setDirection(direction);
+	}
   
-  private void rotatePieceRight(int x, int y) {
-    RotatedIcon ri = new RotatedIcon(squaresPanels[x][y].getIcon(), 45.0, true);
-    squaresPanels[x][y].setIcon(ri);
-  }
+	private void rotatePieceRight(int x, int y) {
+		RotatedIcon ri = new RotatedIcon(squaresPanels[x][y].getIcon(), 45.0, true);
+		squaresPanels[x][y].setIcon(ri);
+		int direction = board[x][y].getDirection() + 45;
+		if (direction >= 360) {
+			direction = direction - 360;
+		}
+		board[x][y].setDirection(direction);
+	}
   
 	//TODO: logica de turnos
 	//TODO: logica de movidas legales (Etapa 2)
 	//TODO: desplegar las piezas que han salido del juego
 	private void clickedOn(int i, int j) {
 		if (!pieceActive) {
-		//TODO: activar opcion para escoger si quiere girar la pieza
 			if (squaresPanels[i][j].getIcon() != null) {
 		  		pieceActive = true;
 		  		squaresPanels[i][j].setBackground(boardColorHighlight);
 		  		lastI = i;
 		  		lastJ = j;
+		  		originalDirection = board[i][j].getDirection();
+		  		rotateLeftBut.setEnabled(true);
+				rotateRightBut.setEnabled(true);
 		  		guiPrintLine("pieza activa");
 			}
 		} else {
 			if (!(lastI == i && lastJ == j)) {
-				if (pieceOwner[i][j] != pieceOwner[lastI][lastJ]) {
-					squaresPanels[i][j].setIcon(squaresPanels[lastI][lastJ].getIcon());
-					squaresPanels[lastI][lastJ].setIcon(null);
-					squaresPanels[lastI][lastJ].setBackground(boardColorPurple);
-					board[i][j] = board[lastI][lastJ];
-					board[lastI][lastJ] = -1;
-					pieceOwner[i][j] = pieceOwner[lastI][lastJ];
-					pieceOwner[lastI][lastJ] = 0;
-					pieceActive = false;
-					guiPrintLine("pieza movida");
+				if (board[lastI][lastJ].getDirection() == originalDirection || board[lastI][lastJ].getType() == 8) {
+					if (board[i][j].getOwner() != board[lastI][lastJ].getOwner()) {
+						squaresPanels[i][j].setIcon(squaresPanels[lastI][lastJ].getIcon());
+						squaresPanels[lastI][lastJ].setIcon(null);
+						squaresPanels[lastI][lastJ].setBackground(boardColorPurple);
+						board[i][j].setType(board[lastI][lastJ].getType());
+						board[lastI][lastJ].setType(-1);
+						board[i][j].setOwner(board[lastI][lastJ].getOwner());
+						board[lastI][lastJ].setOwner(0);
+						board[i][j].setDirection(board[lastI][lastJ].getDirection());
+						board[lastI][lastJ].setDirection(0);
+						pieceActive = false;
+						rotateLeftBut.setEnabled(false);
+						rotateRightBut.setEnabled(false);
+						guiPrintLine("pieza movida");
+					} else {
+						guiPrintLine("pieza pertenece al jugador");
+					}
 				} else {
-					squaresPanels[lastI][lastJ].setBackground(boardColorPurple);
-					pieceActive = false;
-					guiPrintLine("pieza pertenece al jugador");
+					guiPrintLine("pieza rotada, imposible mover");
 				}
 			} else {
 				squaresPanels[lastI][lastJ].setBackground(boardColorPurple);
 				pieceActive = false;
-				guiPrintLine("pieza no movida");
+				rotateLeftBut.setEnabled(false);
+				rotateRightBut.setEnabled(false);
+				if (board[i][j].getDirection() != originalDirection) {
+					guiPrintLine("pieza rotada");
+				} else {
+					guiPrintLine("pieza no movida");
+				}
 			}
 		}
 	}
