@@ -21,6 +21,10 @@ public class PloyGUI {
 	JButton rotateLeftBut;
 	JButton rotateRightBut;
 	JLabel squaresPanels[][];
+	JLabel P1HitPieces[];
+	JLabel P2HitPieces[];
+	JLabel P3HitPieces[];
+	JLabel P4HitPieces[];
 	JTextArea textOutput;
 	JScrollPane textScroll;
 	JSpinner depthSpinner;
@@ -44,12 +48,16 @@ public class PloyGUI {
 	ImageIcon redIcons[] = new ImageIcon[9];
 	ImageIcon blueIcons[] = new ImageIcon[9];
 	ImageIcon yellowIcons[] = new ImageIcon[9];
-	ImageIcon greenIcons []= new ImageIcon[9];
+	ImageIcon greenIcons [] = new ImageIcon[9];
 	int currentPlayer;
 	boolean pieceActive = false;
 	int lastI;
 	int lastJ;
 	int originalDirection;
+	int P1HitPiecesIndex = 0;
+	int P2HitPiecesIndex = 0;
+	int P3HitPiecesIndex = 0;
+	int P4HitPiecesIndex = 0;
 	
 	PieceInfo[][] board;
 	boolean gameOver;
@@ -60,6 +68,36 @@ public class PloyGUI {
 		populateBoard(players, mode);
 	}
 	
+	public void showHitPieces(String player) {
+		int hitPiecesIndex = 0;
+		JLabel[] hitPieces = null;
+		if (player == "p1") {
+			hitPiecesIndex = P1HitPiecesIndex;
+			hitPieces = P1HitPieces;
+		} else if (player == "p2") {
+			hitPiecesIndex = P2HitPiecesIndex;
+			hitPieces = P2HitPieces;
+		} else if (player == "p3") {
+			hitPiecesIndex = P3HitPiecesIndex;
+			hitPieces = P3HitPieces;
+		} else if (player == "p4") {
+			hitPiecesIndex = P4HitPiecesIndex;
+			hitPieces = P4HitPieces;
+		}
+		
+		JPanel hitPiecesPanel = new JPanel(new GridLayout(1,0));
+		for (int i = 0; i < hitPiecesIndex; i++) {
+			hitPiecesPanel.add(new JLabel(hitPieces[i].getIcon()));
+		}
+		if (hitPiecesIndex == 0) {
+			JLabel label = new JLabel("No hay piezas");
+			label.setHorizontalAlignment(SwingConstants.CENTER);
+			JOptionPane.showMessageDialog(null, label, "Piezas eliminadas del jugador 1", JOptionPane.PLAIN_MESSAGE, null);
+		} else {
+			JOptionPane.showMessageDialog(null, hitPiecesPanel, "Piezas eliminadas del jugador 1", JOptionPane.PLAIN_MESSAGE, null);
+		}
+	}
+	
 	private void makeGUI(mainClass controller, int numPlayers, player[] players, int mode) {
 		ployInterface = new JFrame();
 		ployInterface.setTitle("Ploy");
@@ -67,14 +105,35 @@ public class PloyGUI {
 		ployInterface.setFocusable(true);
 		ployInterface.requestFocus();
 		ployInterface.setBackground(Color.black);
+		
 		menuBar = new JMenuBar();
         ployInterface.setJMenuBar(menuBar);
-		JMenu menu = new JMenu("Opciones");
-        menuBar.add(menu);
-		JMenuItem option = new JMenuItem("Reglas");
-        option.addActionListener(controller);
-        menu.add(option);
+        
+		JMenu options = new JMenu("Opciones");
+        menuBar.add(options);
+		JMenuItem reglas = new JMenuItem("Reglas");
+		reglas.addActionListener(controller);
+		options.add(reglas);
+        
+        JMenu hitPieces = new JMenu("Piezas Eliminadas");
+        menuBar.add(hitPieces);
+        
+        JMenuItem hitP1 = new JMenuItem("Jugador 1");
+        hitP1.addActionListener(controller);
+        hitPieces.add(hitP1);
 		
+        JMenuItem hitP2 = new JMenuItem("Jugador 2");
+        hitP2.addActionListener(controller);
+        hitPieces.add(hitP2);
+        
+        JMenuItem hitP3 = new JMenuItem("Jugador 3");
+        hitP3.addActionListener(controller);
+        hitPieces.add(hitP3);
+        
+        JMenuItem hitP4 = new JMenuItem("Jugador 4");
+        hitP4.addActionListener(controller);
+        hitPieces.add(hitP4);
+        
 		boardPanel = new JPanel();
 		boardPanel.setLayout(new GridLayout(9,9,5,5));
 		boardPanel.setBackground(boardColorThistle);
@@ -100,7 +159,7 @@ public class PloyGUI {
 					final int myI = tempI;
 					final int myJ = tempJ;
 					public void mouseClicked(java.awt.event.MouseEvent evt) {
-						clickedOn(myI,myJ);
+						clickedOn(myI, myJ, numPlayers, players);
 					}
 				});	
 				boardPanel.add(squaresPanels[i][j]);
@@ -112,7 +171,7 @@ public class PloyGUI {
 		c.fill = GridBagConstraints.NONE;
 		c.gridx = 0;
 		c.gridy = 0;
-		ployInterface.add(boardPanel,c);
+		ployInterface.add(boardPanel, c);
 		
 		ployInterface.add(boardPanel);
 		
@@ -170,7 +229,7 @@ public class PloyGUI {
 		board = new PieceInfo[9][9];
 		for (int i = 0; i < 9; i++) {
 			for (int j = 0; j < 9; j++) {
-				board[i][j] = new PieceInfo(-1, 0, 0);
+				board[i][j] = new PieceInfo(-1, 0, 0, "");
 			}
 		}
 	
@@ -242,20 +301,20 @@ public class PloyGUI {
 	private void populateBoard(player[] players, int mode) {
 		switch (mode) {
 			case 0: // 1v1
-				populateBoard1v1(players[0].color, 1);
-			  	populateBoard1v1(players[1].color, 2);
+				populateBoard1v1(players[0].getColor(), 1);
+			  	populateBoard1v1(players[1].getColor(), 2);
 			    break;
 			case 1: // 1v1v1v1
-				populateBoard1v1v1v1(players[0].color, 1);
-				populateBoard1v1v1v1(players[1].color, 2);
-				populateBoard1v1v1v1(players[2].color, 3);
-				populateBoard1v1v1v1(players[3].color, 4);
+				populateBoard1v1v1v1(players[0].getColor(), 1);
+				populateBoard1v1v1v1(players[1].getColor(), 2);
+				populateBoard1v1v1v1(players[2].getColor(), 3);
+				populateBoard1v1v1v1(players[3].getColor(), 4);
 			    break;
 			case 2: // 2v2
-				populateBoard2v2(players[0].color, 1);
-			  	populateBoard2v2(players[1].color, 2);
-			  	populateBoard2v2(players[2].color, 3);
-			  	populateBoard2v2(players[3].color, 4);
+				populateBoard2v2(players[0].getColor(), 1);
+			  	populateBoard2v2(players[1].getColor(), 2);
+			  	populateBoard2v2(players[2].getColor(), 3);
+			  	populateBoard2v2(players[3].getColor(), 4);
 			    break;
 		}
 	}
@@ -285,6 +344,7 @@ public class PloyGUI {
 				board[8][i].setType(pieceOrder1v1P1[orderArrayIndex]);
 				board[8][i].setOwner(1);
 				board[8][i].setDirection(180);
+				board[8][i].setColor(color);
 				orderArrayIndex++;
 			}
 			for (int i = 2; i < 7; i++) {
@@ -294,6 +354,7 @@ public class PloyGUI {
 				board[7][i].setType(pieceOrder1v1P1[orderArrayIndex]);
 				board[7][i].setOwner(1);
 				board[7][i].setDirection(180);
+				board[7][i].setColor(color);
 				orderArrayIndex++;
 			}
 			for (int i = 3; i < 6; i++) {
@@ -303,6 +364,11 @@ public class PloyGUI {
 				board[6][i].setType(8);
 				board[6][i].setOwner(1);
 				board[6][i].setDirection(180);
+				board[6][i].setColor(color);
+			}
+			P1HitPieces = new JLabel[15];
+			for (int i = 0; i < 15; i++) {
+				P1HitPieces[i] = new JLabel();
 			}
 		} else {
 			for (int i = 1; i < 8; i++) {
@@ -311,6 +377,7 @@ public class PloyGUI {
 				board[0][i].setType(pieceOrder1v1P2[orderArrayIndex]);
 				board[0][i].setOwner(2);
 				board[0][i].setDirection(0);
+				board[0][i].setColor(color);
 				orderArrayIndex++;
 			}
 			for (int i = 2; i < 7; i++) {
@@ -319,6 +386,7 @@ public class PloyGUI {
 				board[1][i].setType(pieceOrder1v1P2[orderArrayIndex]);
 				board[1][i].setOwner(2);
 				board[1][i].setDirection(0);
+				board[1][i].setColor(color);
 				orderArrayIndex++;
 			}
 			for (int i = 3; i < 6; i++) {
@@ -327,6 +395,11 @@ public class PloyGUI {
 				board[2][i].setType(8);
 				board[2][i].setOwner(2);
 				board[2][i].setDirection(0);
+				board[2][i].setColor(color);
+			}
+			P2HitPieces = new JLabel[15];
+			for (int i = 0; i < 15; i++) {
+				P2HitPieces[i] = new JLabel();
 			}
 		}
 	}
@@ -347,6 +420,7 @@ public class PloyGUI {
 				board[8][i].setType(pieceOrder1v1v1v1[orderArrayIndex]);
 				board[8][i].setOwner(1);
 				board[8][i].setDirection(direction);
+				board[8][i].setColor(color);
 				orderArrayIndex++;
 			}
 			for (int i = 0; i < 3; i++) {
@@ -356,6 +430,7 @@ public class PloyGUI {
 				board[7][i].setType(pieceOrder1v1v1v1[orderArrayIndex]);
 				board[7][i].setOwner(1);
 				board[7][i].setDirection(225);
+				board[7][i].setColor(color);
 				orderArrayIndex++;
 			}
 			for (int i = 0; i < 3; i++) {
@@ -371,7 +446,12 @@ public class PloyGUI {
 				board[6][i].setType(pieceOrder1v1v1v1[orderArrayIndex]);
 				board[6][i].setOwner(1);
 				board[6][i].setDirection(direction);
+				board[6][i].setColor(color);
 				orderArrayIndex++;
+			}
+			P1HitPieces = new JLabel[9];
+			for (int i = 0; i < 9; i++) {
+				P1HitPieces[i] = new JLabel();
 			}
 		} else if (playerNum == 2) {
 			for (int i = 0; i < 3; i++) {
@@ -387,6 +467,7 @@ public class PloyGUI {
 				board[i][0].setType(pieceOrder1v1v1v1[orderArrayIndex]);
 				board[i][0].setOwner(2);
 				board[i][0].setDirection(direction);
+				board[i][0].setColor(color);
 				orderArrayIndex++;
 			}
 			for (int i = 0; i < 3; i++) {
@@ -396,6 +477,7 @@ public class PloyGUI {
 				board[i][1].setType(pieceOrder1v1v1v1[orderArrayIndex]);
 				board[i][1].setOwner(2);
 				board[i][1].setDirection(315);
+				board[i][1].setColor(color);
 				orderArrayIndex++;
 			}
 			for (int i = 0; i < 3; i++) {
@@ -411,7 +493,12 @@ public class PloyGUI {
 				board[i][2].setType(pieceOrder1v1v1v1[orderArrayIndex]);
 				board[i][2].setOwner(2);
 				board[i][2].setDirection(direction);
+				board[i][2].setColor(color);
 				orderArrayIndex++;
+			}
+			P2HitPieces = new JLabel[9];
+			for (int i = 0; i < 9; i++) {
+				P2HitPieces[i] = new JLabel();
 			}
 		} else if (playerNum == 3) {
 			for (int i = 8; i > 5; i--) {
@@ -427,6 +514,7 @@ public class PloyGUI {
 				board[0][i].setType(pieceOrder1v1v1v1[orderArrayIndex]);
 				board[0][i].setOwner(3);
 				board[0][i].setDirection(direction);
+				board[0][i].setColor(color);
 				orderArrayIndex++;
 			}
 			for (int i = 8; i > 5; i--) {
@@ -436,6 +524,7 @@ public class PloyGUI {
 				board[1][i].setType(pieceOrder1v1v1v1[orderArrayIndex]);
 				board[1][i].setOwner(3);
 				board[1][i].setDirection(45);
+				board[1][i].setColor(color);
 				orderArrayIndex++;
 			}
 			for (int i = 8; i > 5; i--) {
@@ -451,7 +540,12 @@ public class PloyGUI {
 				board[2][i].setType(pieceOrder1v1v1v1[orderArrayIndex]);
 				board[2][i].setOwner(3);
 				board[2][i].setDirection(direction);
+				board[2][i].setColor(color);
 				orderArrayIndex++;
+			}
+			P3HitPieces = new JLabel[9];
+			for (int i = 0; i < 9; i++) {
+				P3HitPieces[i] = new JLabel();
 			}
 		} else {
 			for (int i = 8; i > 5; i--) {
@@ -467,6 +561,7 @@ public class PloyGUI {
 				board[i][8].setType(pieceOrder1v1v1v1[orderArrayIndex]);
 				board[i][8].setOwner(4);
 				board[i][8].setDirection(direction);
+				board[i][8].setColor(color);
 				orderArrayIndex++;
 			}
 			for (int i = 8; i > 5; i--) {
@@ -476,6 +571,7 @@ public class PloyGUI {
 				board[i][7].setType(pieceOrder1v1v1v1[orderArrayIndex]);
 				board[i][7].setOwner(4);
 				board[i][7].setDirection(135);
+				board[i][7].setColor(color);
 				orderArrayIndex++;
 			}
 			for (int i = 8; i > 5; i--) {
@@ -491,7 +587,12 @@ public class PloyGUI {
 				board[i][6].setType(pieceOrder1v1v1v1[orderArrayIndex]);
 				board[i][6].setOwner(4);
 				board[i][6].setDirection(direction);
+				board[i][6].setColor(color);
 				orderArrayIndex++;
+			}
+			P4HitPieces = new JLabel[9];
+			for (int i = 0; i < 9; i++) {
+				P4HitPieces[i] = new JLabel();
 			}
 		}
 	}
@@ -506,6 +607,7 @@ public class PloyGUI {
 				board[8][i].setType(pieceOrder2v2[orderArrayIndex]);
 				board[8][i].setOwner(1);
 				board[8][i].setDirection(180);
+				board[8][i].setColor(color);
 				orderArrayIndex++;
 			}
 			for(int i = 1; i < 4; i++) {
@@ -515,6 +617,7 @@ public class PloyGUI {
 				board[7][i].setType(pieceOrder2v2[orderArrayIndex]);
 				board[7][i].setOwner(1);
 				board[7][i].setDirection(180);
+				board[7][i].setColor(color);
 				orderArrayIndex++;
 			}
 			for(int i = 1; i < 4; i++) {
@@ -524,6 +627,11 @@ public class PloyGUI {
 				board[6][i].setType(8);
 				board[6][i].setOwner(1);
 				board[6][i].setDirection(180);
+				board[6][i].setColor(color);
+			}
+			P1HitPieces = new JLabel[9];
+			for (int i = 0; i < 9; i++) {
+				P1HitPieces[i] = new JLabel();
 			}
 		} else if (playerNum == 2) {
 			for(int i = 1; i < 4; i++) {
@@ -532,6 +640,7 @@ public class PloyGUI {
 				board[0][i].setType(pieceOrder2v2[orderArrayIndex]);
 				board[0][i].setOwner(2);
 				board[0][i].setDirection(0);
+				board[0][i].setColor(color);
 				orderArrayIndex++;
 			}
 			for(int i = 3; i > 0; i--) {
@@ -540,6 +649,7 @@ public class PloyGUI {
 				board[1][i].setType(pieceOrder2v2[orderArrayIndex]);
 				board[1][i].setOwner(2);
 				board[1][i].setDirection(0);
+				board[1][i].setColor(color);
 				orderArrayIndex++;
 			}
 			for(int i = 1; i < 4; i++) {
@@ -548,6 +658,11 @@ public class PloyGUI {
 				board[2][i].setType(8);
 				board[2][i].setOwner(2);
 				board[2][i].setDirection(0);
+				board[2][i].setColor(color);
+			}
+			P2HitPieces = new JLabel[9];
+			for (int i = 0; i < 9; i++) {
+				P2HitPieces[i] = new JLabel();
 			}
 		} else if (playerNum == 3) {
 			for(int i = 7; i > 4; i--) {
@@ -557,6 +672,7 @@ public class PloyGUI {
 				board[8][i].setType(pieceOrder2v2[orderArrayIndex]);
 				board[8][i].setOwner(3);
 				board[8][i].setDirection(180);
+				board[8][i].setColor(color);
 				orderArrayIndex++;
 			}
 			for(int i = 5; i < 8; i++) {
@@ -566,6 +682,7 @@ public class PloyGUI {
 				board[7][i].setType(pieceOrder2v2[orderArrayIndex]);
 				board[7][i].setOwner(3);
 				board[7][i].setDirection(180);
+				board[7][i].setColor(color);
 				orderArrayIndex++;
 			}
 			for(int i = 5; i < 8; i++) {
@@ -575,6 +692,11 @@ public class PloyGUI {
 				board[6][i].setType(8);
 				board[6][i].setOwner(3);
 				board[6][i].setDirection(180);
+				board[6][i].setColor(color);
+			}
+			P3HitPieces = new JLabel[9];
+			for (int i = 0; i < 9; i++) {
+				P3HitPieces[i] = new JLabel();
 			}
 		} else {
 			for(int i = 7; i > 4; i--) {
@@ -583,6 +705,7 @@ public class PloyGUI {
 				board[0][i].setType(pieceOrder2v2[orderArrayIndex]);
 				board[0][i].setOwner(4);
 				board[0][i].setDirection(0);
+				board[0][i].setColor(color);
 				orderArrayIndex++;
 			}
 			for(int i = 7; i > 4; i--) {
@@ -591,6 +714,7 @@ public class PloyGUI {
 				board[1][i].setType(pieceOrder2v2[orderArrayIndex]);
 				board[1][i].setOwner(4);
 				board[1][i].setDirection(0);
+				board[1][i].setColor(color);
 				orderArrayIndex++;
 			}
 			for(int i = 5; i < 8; i++) {
@@ -599,6 +723,11 @@ public class PloyGUI {
 				board[2][i].setType(8);
 				board[2][i].setOwner(4);
 				board[2][i].setDirection(0);
+				board[2][i].setColor(color);
+			}
+			P4HitPieces = new JLabel[9];
+			for (int i = 0; i < 9; i++) {
+				P4HitPieces[i] = new JLabel();
 			}
 		}
 	}
@@ -626,7 +755,7 @@ public class PloyGUI {
 	//TODO: logica de turnos
 	//TODO: logica de movidas legales (Etapa 2)
 	//TODO: desplegar las piezas que han salido del juego
-	private void clickedOn(int i, int j) {
+	private void clickedOn(int i, int j, int numPlayers, player[] players) {
 		if (!pieceActive) {
 			if (squaresPanels[i][j].getIcon() != null) {
 		  		pieceActive = true;
@@ -642,6 +771,29 @@ public class PloyGUI {
 			if (!(lastI == i && lastJ == j)) {
 				if (board[lastI][lastJ].getDirection() == originalDirection || board[lastI][lastJ].getType() == 8) {
 					if (board[i][j].getOwner() != board[lastI][lastJ].getOwner()) {
+						if (numPlayers == 2) {
+							if (board[i][j].getColor() == players[0].getColor()) {
+								P1HitPieces[P1HitPiecesIndex].setIcon(squaresPanels[i][j].getIcon());
+								P1HitPiecesIndex++;
+							} else if (board[i][j].getColor() == players[1].getColor()) {
+								P2HitPieces[P2HitPiecesIndex].setIcon(squaresPanels[i][j].getIcon());
+								P2HitPiecesIndex++;
+							}
+						} else {
+							if (board[i][j].getColor() == players[0].getColor()) {
+								P1HitPieces[P1HitPiecesIndex].setIcon(squaresPanels[i][j].getIcon());
+								P1HitPiecesIndex++;
+							} else if (board[i][j].getColor() == players[1].getColor()) {
+								P2HitPieces[P2HitPiecesIndex].setIcon(squaresPanels[i][j].getIcon());
+								P2HitPiecesIndex++;
+							} else if (board[i][j].getColor() == players[2].getColor()) {
+								P3HitPieces[P3HitPiecesIndex].setIcon(squaresPanels[i][j].getIcon());
+								P3HitPiecesIndex++;
+							} else if (board[i][j].getColor() == players[3].getColor()) {
+								P4HitPieces[P4HitPiecesIndex].setIcon(squaresPanels[i][j].getIcon());
+								P4HitPiecesIndex++;
+							}
+						}
 						squaresPanels[i][j].setIcon(squaresPanels[lastI][lastJ].getIcon());
 						squaresPanels[lastI][lastJ].setIcon(null);
 						squaresPanels[lastI][lastJ].setBackground(boardColorPurple);
@@ -651,6 +803,8 @@ public class PloyGUI {
 						board[lastI][lastJ].setOwner(0);
 						board[i][j].setDirection(board[lastI][lastJ].getDirection());
 						board[lastI][lastJ].setDirection(0);
+						board[i][j].setColor(board[lastI][lastJ].getColor());
+						board[lastI][lastJ].setColor("");
 						pieceActive = false;
 						rotateLeftBut.setEnabled(false);
 						rotateRightBut.setEnabled(false);

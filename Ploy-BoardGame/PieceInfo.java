@@ -3,11 +3,13 @@ public class PieceInfo {
     int type;
     int direction;
     int owner;
+    String color;
 
-    public PieceInfo(int type, int direction, int owner) {
+    public PieceInfo(int type, int direction, int owner, String color) {
         this.type = type;
         this.direction = direction;
         this.owner = owner;
+        this.color = color;
     }
 
     public void setType(int type) {
@@ -32,5 +34,13 @@ public class PieceInfo {
 
     public int getOwner() {
         return owner;
+    }
+    
+    public void setColor(String color) {
+    	this.color = color;
+    }
+
+    public String getColor() {
+        return color;
     }
 }

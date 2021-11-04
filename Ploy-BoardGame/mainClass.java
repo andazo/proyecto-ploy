@@ -1,3 +1,4 @@
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import java.awt.Color;
 import java.awt.event.ActionListener;
@@ -7,6 +8,7 @@ public class mainClass implements ActionListener {
 
 	private PloyGUI gui;
     private Message msg;
+    private player[] players;
 	private final String GAME_RULES = "Para 2 jugadores:\nEl objetivo es capturar al Comandante del oponente o todas sus piezas excepto el Comandante.\nEn el juego de dos jugadores solo se utilizan los conjuntos de color rojo y verde, ya que los conjuntos amarillo y azul\ntienen un n�mero diferente de piezas para adaptarse a la menor cantidad de piezas utilizadas en el juego de cuatro jugadores.\nEl jugador verde va primero. En cada turno un jugador, puede realizar un movimiento o un cambio de direcci�n.\nEl Comandante se puede desplazar 1 espacio. Las Lanzas se pueden desplazar 1,2 o 3 espacios. Las Probes 1 o 2 espacios.\nLos Escudos 1 espacio.\n\nCon 4 jugadores 1v1v1v1:\nEl objetivo es ser el �ltimo jugador en pie despu�s de que los dem�s hayan sido eliminados.\nEn el turno de un jugador, puede realizar un movimiento o un cambio de direcci�n. Si el Comandante de un jugador es capturado,\nlas piezas restantes quedan bajo el mando del jugador que lo captura. Si todas las piezas de un jugador, excepto el Comandante,\nhan sido capturadas, el Comandante se retira del juego y el jugador queda fuera del juego. El juego contin�a en el sentido de las\nagujas del reloj hasta que quede un jugador.\n\nCon 4 jugadores 2v2:\nUna vez que el comandante de un jugador es absorbido, su compa�ero de equipo se hace cargo de todas sus piezas restantes.\nEl compa�ero tambi�n toma el turno de su compa�ero de equipo y puede usar todas las piezas del equipo para sus movimientos.";
 
 	public mainClass() {
@@ -18,8 +20,16 @@ public class mainClass implements ActionListener {
      * Ejecuta las acciones de los botones.
      */
     public void actionPerformed(ActionEvent evento) {        
-        if(evento.getActionCommand().equals("Reglas")){
+        if (evento.getActionCommand().equals("Reglas")) {
             msg.printMessageWithTitle(GAME_RULES, "Reglas del juego");
+        } else if (evento.getActionCommand().equals("Jugador 1")) {
+        	gui.showHitPieces("p1");
+        } else if (evento.getActionCommand().equals("Jugador 2")) {
+        	gui.showHitPieces("p2");
+        } else if (evento.getActionCommand().equals("Jugador 3")) {
+        	gui.showHitPieces("p3");
+        } else if (evento.getActionCommand().equals("Jugador 4")) {
+        	gui.showHitPieces("p4");
         }
     }
 
@@ -49,7 +59,7 @@ public class mainClass implements ActionListener {
         //Caso 2 jugadores
         if (numPlayers == 2) {
 
-        	player[] players = new player[2];
+        	players = new player[2];
             //Objeto jugador 1
             players[0] = new player();
             //Objeto jugador 2
@@ -116,7 +126,7 @@ public class mainClass implements ActionListener {
             
         } else if (numPlayers == 4) { //Caso 4 jugadores
 
-        	player[] players = new player[4];
+        	players = new player[4];
             //Objeto jugador 1
             players[0] = new player();
             //Objeto jugador 2
