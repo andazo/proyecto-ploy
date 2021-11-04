@@ -92,9 +92,9 @@ public class PloyGUI {
 		if (hitPiecesIndex == 0) {
 			JLabel label = new JLabel("No hay piezas");
 			label.setHorizontalAlignment(SwingConstants.CENTER);
-			JOptionPane.showMessageDialog(null, label, "Piezas eliminadas del jugador 1", JOptionPane.PLAIN_MESSAGE, null);
+			JOptionPane.showMessageDialog(null, label, "Piezas eliminadas", JOptionPane.PLAIN_MESSAGE, null);
 		} else {
-			JOptionPane.showMessageDialog(null, hitPiecesPanel, "Piezas eliminadas del jugador 1", JOptionPane.PLAIN_MESSAGE, null);
+			JOptionPane.showMessageDialog(null, hitPiecesPanel, "Piezas eliminadas", JOptionPane.PLAIN_MESSAGE, null);
 		}
 	}
 	
