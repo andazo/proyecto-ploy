@@ -35,9 +35,8 @@ public class PloyGUI {
 	final String chipNames [] = {"comm", "lance_1", "lance_2", "lance_3", "probe_1", "probe_2", "probe_3", "probe_4", "shield"}; 
 	final int pieceOrder1v1P1[] = {1,2,3,0,3,2,1,4,5,6,5,7};
 	final int pieceOrder1v1P2[] = {1,2,3,0,3,2,1,7,5,6,5,4};
-	
 	final int pieceOrder1v1v1v1[] = {0,1,7,3,5,8,4,8,8};
-	//final int pieceOrder2v2[] = {0,1,7,3,5,8,4,8,8};
+	final int pieceOrder2v2[] = {1,0,3,4,5,7};
 	
 	ImageIcon redIcons[] = new ImageIcon[9];
 	ImageIcon blueIcons[] = new ImageIcon[9];
@@ -50,30 +49,8 @@ public class PloyGUI {
 	
 	int[][] board;
 	boolean gameOver;
-
-	//public static void main(String[] args) {
-		//PloyGUI gui = new PloyGUI();
-	//}
 	
 	public PloyGUI(mainClass controller, int numPlayers, player[] players, int mode) {
-		/*
-		if (numPlayers == 2) {
-			System.out.println(players[0].name);
-			System.out.println(players[0].color);
-			System.out.println(players[1].name);
-			System.out.println(players[1].color);
-		}
-		else {
-			System.out.println(players[0].name);
-			System.out.println(players[0].color);
-			System.out.println(players[1].name);
-			System.out.println(players[1].color);
-			System.out.println(players[2].name);
-			System.out.println(players[2].color);
-			System.out.println(players[3].name);
-			System.out.println(players[3].color);
-		}
-		*/
 		makeGUI(controller, numPlayers, players, mode);
 		loadImages();
 		populateBoard(players, mode);
@@ -445,55 +422,75 @@ public class PloyGUI {
 	
 	private void populateBoard2v2(String color, int playerNum) {
 		int orderArrayIndex = 0;
-		if(playerNum == 1) {
-			for(int i = 1; i < 8; i++) {
-				RotatedIcon ri = new RotatedIcon(getIconArray(color)[pieceOrder1v1v1v1[orderArrayIndex]], 180.0, true);
+		if (playerNum == 1) {
+			for(int i = 1; i < 4; i++) {
+				RotatedIcon ri = new RotatedIcon(getIconArray(color)[pieceOrder2v2[orderArrayIndex]], 180.0, true);
 				squaresPanels[8][i].setIcon(ri);
 				squaresPanels[8][i].setName(color);
 				orderArrayIndex++;
 			}
-			for(int i = 2; i < 7; i++) {
-				RotatedIcon ri = new RotatedIcon(getIconArray(color)[pieceOrder1v1v1v1[orderArrayIndex]], 180.0, true);
+			for(int i = 1; i < 4; i++) {
+				RotatedIcon ri = new RotatedIcon(getIconArray(color)[pieceOrder2v2[orderArrayIndex]], 180.0, true);
 				squaresPanels[7][i].setIcon(ri);
 				squaresPanels[7][i].setName(color);
 				orderArrayIndex++;
 			}
-			for(int i = 3; i < 6; i++) {
+			for(int i = 1; i < 4; i++) {
+				RotatedIcon ri = new RotatedIcon(getIconArray(color)[8], 180.0, true);
+				squaresPanels[6][i].setIcon(ri);
+				squaresPanels[6][i].setName(color);
+			}
+		} else if (playerNum == 2) {
+			for(int i = 1; i < 4; i++) {
+				squaresPanels[0][i].setIcon(getIconArray(color)[pieceOrder2v2[orderArrayIndex]]);
+				squaresPanels[0][i].setName(color);
+				orderArrayIndex++;
+			}
+			for(int i = 3; i > 0; i--) {
+				squaresPanels[1][i].setIcon(getIconArray(color)[pieceOrder2v2[orderArrayIndex]]);
+				squaresPanels[1][i].setName(color);
+				orderArrayIndex++;
+			}
+			for(int i = 1; i < 4; i++) {
+				squaresPanels[2][i].setIcon(getIconArray(color)[8]);
+				squaresPanels[2][i].setName(color);
+			}
+		} else if (playerNum == 3) {
+			for(int i = 7; i > 4; i--) {
+				RotatedIcon ri = new RotatedIcon(getIconArray(color)[pieceOrder2v2[orderArrayIndex]], 180.0, true);
+				squaresPanels[8][i].setIcon(ri);
+				squaresPanels[8][i].setName(color);
+				orderArrayIndex++;
+			}
+			for(int i = 5; i < 8; i++) {
+				RotatedIcon ri = new RotatedIcon(getIconArray(color)[pieceOrder2v2[orderArrayIndex]], 180.0, true);
+				squaresPanels[7][i].setIcon(ri);
+				squaresPanels[7][i].setName(color);
+				orderArrayIndex++;
+			}
+			for(int i = 5; i < 8; i++) {
 				RotatedIcon ri = new RotatedIcon(getIconArray(color)[8], 180.0, true);
 				squaresPanels[6][i].setIcon(ri);
 				squaresPanels[6][i].setName(color);
 			}
 		} else {
-			for(int i = 1; i < 8; i++) {
-				squaresPanels[0][i].setIcon(getIconArray(color)[pieceOrder1v1P2[orderArrayIndex]]);
+			for(int i = 7; i > 4; i--) {
+				squaresPanels[0][i].setIcon(getIconArray(color)[pieceOrder2v2[orderArrayIndex]]);
 				squaresPanels[0][i].setName(color);
 				orderArrayIndex++;
 			}
-			for(int i = 2; i < 7; i++) {
-				squaresPanels[1][i].setIcon(getIconArray(color)[pieceOrder1v1P2[orderArrayIndex]]);
+			for(int i = 7; i > 4; i--) {
+				squaresPanels[1][i].setIcon(getIconArray(color)[pieceOrder2v2[orderArrayIndex]]);
 				squaresPanels[1][i].setName(color);
 				orderArrayIndex++;
 			}
-			for(int i = 3; i < 6; i++) {
+			for(int i = 5; i < 8; i++) {
 				squaresPanels[2][i].setIcon(getIconArray(color)[8]);
 				squaresPanels[2][i].setName(color);
 			}
 		}
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
 	//TODO: logica de turnos
 	//TODO: logica de movidas legales (Etapa 2)
 	//TODO: desplegar las piezas que han salido del juego
