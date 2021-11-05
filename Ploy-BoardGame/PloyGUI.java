@@ -10,9 +10,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.*;
 import javax.imageio.ImageIO;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import java.awt.Graphics;
 
 public class PloyGUI {
 	JFrame ployInterface;
@@ -829,9 +826,11 @@ public class PloyGUI {
 		}
 	}
 
+	/*
 	private void highlightMoves() {
 		
 	}
+	*/
 	
 	private void guiPrintLine(String str) {
 		System.out.println(str);
