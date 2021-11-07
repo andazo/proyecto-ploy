@@ -5,16 +5,17 @@
 
 ## Integrantes:
 ### Andrés Azofeifa García B90837
-### Gabriel Zúñiga Orozco
+### Gabriel Zúñiga Orozco B98755
 ### Luis Domian B62377
 ### Rodrigo Piedra
 
 ## Juego Desarrollado:
 ### Ploy Boardgame
 
-## Limitaciones
+## Limitaciones:
+Primera iteración - sin limitaciones
 
-## User Stories
+## User Stories:
 
 ### User Story 1
 
@@ -46,3 +47,6 @@ Dentro de la interfáz gráfica donde se encuentra el tablero en tiempo real, se
 Como jugador novato requiero poder consultar las reglas del juego en cualquier momento.
 
 Al igual que en el User Story 6, se implementó una pestaña en la esquina izquierda de la interfáz gráfica donde se pueden consultar las reglas del juego para los jugadores novatos. Dentro de esta se puede encontrar las reglas de 1v1, 2v2 y 1v1v1v1. Junto a esto, en la interfaz se encuntra un segmento donde se encuentra el log de los movimientos que se han dado en la partida, al inicio, en este se pueden ver unas breves reglas sobre el juego.
+
+## Compilación:
+
