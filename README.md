@@ -1,24 +1,22 @@
 # Proyecto I Diseño de Software
 
-## Información:
+## Profesor:
+### Alan Calderón Castro
 
-### Profesor:
-#### Alan Calderón Castro
+## Integrantes:
+### Andrés Azofeifa García B90837
+### Gabriel Zúñiga Orozco
+### Luis Domian B62377
+### Rodrigo Piedra
 
-### Integrantes:
-#### Andrés Azofeifa García B90837
-#### Gabriel Zúñiga Orozco
-#### Luis Domian B62377
-#### Rodrigo Piedra
+## Juego Desarrollado:
+### Ploy Boardgame
 
-### Juego Desarrollado:
-#### Ploy Boardgame
+## Limitaciones
 
-### Limitaciones
+## User Stories
 
-### User Stories
-
-#### User Story 1
+### User Story 1
 
 Como jugador requiero escoger al principio del juego con cuál de los posibles colores de pieza voy a jugar así como mis adversarios. Se requiere asociar cada color con un nombre.
 
@@ -30,4 +28,7 @@ Para el primer user story se realizó una ventana gráfica emergente con la herr
 - En caso de jugar con 4 jugadores, se puede seleccionar el modo de juego 2v2 o 1v1v1v1
 
 Se realizó programación defensiva para ayudar a los jugadores, por lo cual no se puede repetir color ni digitar una cantidad invalida de jugadores
+
+### User Story 2
+
 
