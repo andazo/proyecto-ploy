@@ -1,11 +1,11 @@
 
-public class PieceInfo {
-    int type;
-    int direction;
-    int owner;
-    String color;
+public class BoardSquareInfo {
+	private int type;
+	private int direction;
+	private int owner;
+	private String color;
 
-    public PieceInfo(int type, int direction, int owner, String color) {
+    public BoardSquareInfo(int type, int direction, int owner, String color) {
         this.type = type;
         this.direction = direction;
         this.owner = owner;
