@@ -18,6 +18,7 @@ public class PloyGUI {
 	JPanel rotateButtons;
 	JButton rotateLeftBut;
 	JButton rotateRightBut;
+	JMenuBar menuBar;
 	JLabel squaresPanels[][];
 	JLabel P1HitPieces[];
 	JLabel P2HitPieces[];
@@ -27,7 +28,6 @@ public class PloyGUI {
 	JScrollPane textScroll;
 	JSpinner depthSpinner;
 	int boardSize = 600;
-	JMenuBar menuBar;
 	
 	Color boardColorPurple = new Color(65, 11, 153);
 	Color boardColorThistle = new Color(200, 184, 219);

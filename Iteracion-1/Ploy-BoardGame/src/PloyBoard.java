@@ -316,10 +316,10 @@ public class PloyBoard {
 	
 	// direction = -45 rota hacia la izquierda, direction = 45 rota hacia la derecha
 	public void rotatePiece(int x, int y, int direction) {
-		int newdirection = board.boardSquares[x][y].getDirection() + direction;
-		if (newdirection < 0) {
-			newdirection = newdirection + 360;
+		int newDirection = board.boardSquares[x][y].getDirection() + direction;
+		if (newDirection < 0) {
+			newDirection = newDirection + 360;
 		}
-		board.boardSquares[x][y].setDirection(newdirection);
+		board.boardSquares[x][y].setDirection(newDirection);
 	}
 }
