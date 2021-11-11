@@ -25,10 +25,12 @@ public class FileManager {
 		// Read the content from file
 		try (FileReader fileReader = new FileReader(fileName)) {
 		    int data = fileReader.read();
+		    String buffer = "";
 		    while(data != -1) {
-		        System.out.print((char) data);
+		    	buffer = buffer + (char) data;
 		        data = fileReader.read();
 		    }
+		    System.out.print(buffer);
 		    fileReader.close();
 		} catch (FileNotFoundException e) {
 		    // Exception handling

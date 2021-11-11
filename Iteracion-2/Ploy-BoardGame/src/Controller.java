@@ -4,10 +4,10 @@ import java.awt.event.ActionListener;
 public class Controller implements ActionListener {
 
 	private Message msg;
+	private FileManager fm;
 	private Player[] players;
 	private PloyGUI gui;
 	private PloyBoard board;
-	private FileManager fm;
 	private final String GAME_RULES = "Para 2 jugadores:\nEl objetivo es capturar al "
 			+ "Comandante del oponente o todas sus piezas excepto el Comandante.\n"
 			+ "En el juego de dos jugadores solo se utilizan los conjuntos de color "
@@ -31,18 +31,24 @@ public class Controller implements ActionListener {
 			+ "de su companero de equipo y puede usar todas las piezas del equipo para "
 			+ "sus movimientos.";
 
-	public Controller(Message msg, Player[] players, PloyGUI gui, PloyBoard board, FileManager fm) {
+	public Controller(Message msg, FileManager fm, Player[] players, PloyGUI gui, PloyBoard board) {
         this.msg = msg;
+        this.fm = fm;
         this.players = players;
 		this.gui = gui;
         this.board = board;
-        this.fm = fm;
     }
 	
-	public void startGame(int gameMode) {
+	public void startGame(char newGame, int gameMode) {
 		gui.makeGUI(players, gameMode);
-		gui.populateBoard(players, gameMode);
-		board.populateBoard(players, gameMode);
+		
+		if (newGame == 'Y') {
+			gui.populateBoard(players, gameMode);
+			board.populateBoard(players, gameMode);
+		} else if (newGame == 'N') {
+			
+		}
+		
 		setMenuActions(gameMode);
 		setMouseActions();
 		setButtonActions();

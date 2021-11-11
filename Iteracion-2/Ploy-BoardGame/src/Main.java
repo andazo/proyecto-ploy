@@ -1,25 +1,34 @@
 
 public class Main {
 	
+	private static char getNewGame(Message msg) {
+		String[] options = {"Nueva partida", "Cargar partida"};
+		char newGame = ' ';
+    	int input = -1;
+	    input = msg.inputMessageWithOptions("Seleccione lo que desea hacer", "Nueva partida / Cargar partida", options);
+	    if (input == 0) {
+	    	newGame = 'Y';
+	    } else if (input == 1) {
+	    	newGame = 'N';
+	    } else if (input == -1) {
+	       	System.exit(0);
+	    }
+	    return newGame;
+	}
+	
 	private static int getNumPlayers(Message msg) {
 		// Numero de jugadores en la partida, puede ser de 2 o 4
+		String[] options = {"2", "4"};
 	    int numPlayers = 0;
-	    String input = "";
-	    while (true) {
-	    	input = msg.inputMessage("Ingrese la cantidad de jugadores para la partida 2 o 4");
-	    	if (input != null) {
-	    		try {
-	        		numPlayers = Integer.parseInt(input);
-	        	} catch (NumberFormatException e) {	}
-	    	} else {
-	    		System.exit(0);
-	    	}
-	        if (numPlayers == 2 || numPlayers == 4) {
-	            break;
-	        } else {
-	            msg.printMessage("Numero de jugadores invalido");
-	        }
-	    }
+	    int input = -1;
+	    input = msg.inputMessageWithOptions("Seleccione la cantidad de jugadores para la partida", "Cantidad de jugadores", options);
+	    if (input == 0) {
+	    	numPlayers = 2;
+	    } else if (input == 1) {
+	    	numPlayers = 4;
+	    } else if (input == -1) {
+	   		System.exit(0);
+	   	}
 	    return numPlayers;
 	}
 	
@@ -81,21 +90,15 @@ public class Main {
 	private static int getMode(Message msg, int numPlayers) {
 	    int gameMode = 0;
 	    if (numPlayers == 4) {
-	    	String input = "";
-		    while (true) {
-		    	input = msg.inputMessage("Modo de juego (1 = 1v1v1v1 || 2 = 2v2)");
-		        if (input != null) {
-		        	try {
-		        		gameMode = Integer.parseInt(input);
-		           	} catch (NumberFormatException e) {	}
-		        } else {
-		        	System.exit(0);
-		        }
-		        if (gameMode == 1 || gameMode == 2) {
-		            break;
-		        } else {
-		            msg.printMessage("Modo invalido");
-		        }
+	    	String[] options = {"1v1v1v1", "2v2"};
+	    	int input = -1;
+		    input = msg.inputMessageWithOptions("Seleccione el modo de juego", "Modo de juego", options);
+		    if (input == 0) {
+		       	gameMode = 1;
+		    } else if (input == 1) {
+		       	gameMode = 2;
+		    } else if (input == -1) {
+		       	System.exit(0);
 		    }
 	    }
 		return gameMode;
@@ -103,16 +106,25 @@ public class Main {
 
 	public static void main(String[] args) {
 		Message msg = new Message();
-		int numPlayers = getNumPlayers(msg);
-		Player[] players = getPlayers(msg, numPlayers);
-		int gameMode = getMode(msg, numPlayers);
+		FileManager fm = new FileManager();
+		char newGame = getNewGame(msg);
+		int numPlayers = 0;
+		Player[] players = null;
+		int gameMode = 0;
+		
+		if (newGame == 'Y') {
+			numPlayers = getNumPlayers(msg);
+			players = getPlayers(msg, numPlayers);
+			gameMode = getMode(msg, numPlayers);
+		} else {
+			
+		}
 		
 		PloyGUI gui = new PloyGUI();
 		PloyBoard board = new PloyBoard();
-		FileManager fm = new FileManager();
 		
-		Controller controller = new Controller(msg, players, gui, board, fm);
-		controller.startGame(gameMode);
+		Controller controller = new Controller(msg, fm, players, gui, board);
+		controller.startGame(newGame, gameMode);
 	}
 
 }

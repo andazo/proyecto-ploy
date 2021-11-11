@@ -21,4 +21,8 @@ public class Message {
     public String inputQuestionMessage(String showMessage, String title, Object[] object, Object obj){
         return (String) JOptionPane.showInputDialog(null, showMessage, title, JOptionPane.QUESTION_MESSAGE, null, object, obj);
     }
+    
+    public int inputMessageWithOptions(String showMessage, String title, String[] options) {
+    	return JOptionPane.showOptionDialog(null, showMessage, title, JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+    }
 }
