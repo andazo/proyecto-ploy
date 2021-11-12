@@ -18,7 +18,7 @@ public class BoardInfo {
     	boardSquares = new BoardSquareInfo[9][9];
 		for (int i = 0; i < 9; i++) {
 			for (int j = 0; j < 9; j++) {
-				boardSquares[i][j] = new BoardSquareInfo(-1, 0, 0, "");
+				boardSquares[i][j] = new BoardSquareInfo(-1, 0, 0, "-");
 			}
 		}
     	pieceActive = false;

@@ -116,15 +116,13 @@ public class Main {
 			numPlayers = getNumPlayers(msg);
 			players = getPlayers(msg, numPlayers);
 			gameMode = getMode(msg, numPlayers);
-		} else {
-			
 		}
 		
 		PloyGUI gui = new PloyGUI();
 		PloyBoard board = new PloyBoard();
 		
-		Controller controller = new Controller(msg, fm, players, gui, board);
-		controller.startGame(newGame, gameMode);
+		Controller controller = new Controller(msg, fm, players, gui, board, gameMode);
+		controller.startGame(newGame);
 	}
 
 }

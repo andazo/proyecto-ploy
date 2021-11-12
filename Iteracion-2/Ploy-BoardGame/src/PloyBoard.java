@@ -314,6 +314,10 @@ public class PloyBoard {
 		}
 	}
 	
+	public void loadBoard(Player[] players, int gameMode, String boardData) {
+		
+	}
+	
 	// direction = -45 rota hacia la izquierda, direction = 45 rota hacia la derecha
 	public void rotatePiece(int x, int y, int direction) {
 		int newDirection = getBoardInfo().boardSquares[x][y].getDirection() + direction;

@@ -564,6 +564,10 @@ public class PloyGUI {
 		}
 	}
 	
+	public void loadBoard(Player[] players, int gameMode, String boardData) {
+		
+	}
+	
 	// direction = 315 rota hacia la izquierda, direction = 45 rota hacia la derecha
 	public void rotatePiece(int x, int y, int direction) {
 		RotateIcon ri = new RotateIcon(squaresPanels[x][y].getIcon(), direction, true);
@@ -581,5 +585,9 @@ public class PloyGUI {
 		textOutput.append(str+"\n");
 		textOutput.setCaretPosition(textOutput.getDocument().getLength());
 		textScroll.paintImmediately(new Rectangle(new Point(0,0),textScroll.getSize()));
+	}
+	
+	public void closeWindow() {
+		ployInterface.dispose();
 	}
 }

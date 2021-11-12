@@ -8,6 +8,7 @@ public class Controller implements ActionListener {
 	private Player[] players;
 	private PloyGUI gui;
 	private PloyBoard board;
+	private int gameMode;
 	private final String GAME_RULES = "Para 2 jugadores:\nEl objetivo es capturar al "
 			+ "Comandante del oponente o todas sus piezas excepto el Comandante.\n"
 			+ "En el juego de dos jugadores solo se utilizan los conjuntos de color "
@@ -31,22 +32,27 @@ public class Controller implements ActionListener {
 			+ "de su companero de equipo y puede usar todas las piezas del equipo para "
 			+ "sus movimientos.";
 
-	public Controller(Message msg, FileManager fm, Player[] players, PloyGUI gui, PloyBoard board) {
+	public Controller(Message msg, FileManager fm, Player[] players, PloyGUI gui, PloyBoard board, int gameMode) {
         this.msg = msg;
         this.fm = fm;
         this.players = players;
 		this.gui = gui;
         this.board = board;
+        this.gameMode = gameMode;
     }
 	
-	public void startGame(char newGame, int gameMode) {
-		gui.makeGUI(players, gameMode);
-		
+	public void startGame(char newGame) {
 		if (newGame == 'Y') {
+			gui.makeGUI(players, gameMode);
 			gui.populateBoard(players, gameMode);
 			board.populateBoard(players, gameMode);
 		} else if (newGame == 'N') {
-			
+			fm.loadFile();
+			players = fm.getPlayers();
+			gameMode = fm.getGameMode();
+			gui.makeGUI(players, gameMode);
+			board.loadBoard(players, gameMode, fm.getBoardData());
+			gui.loadBoard(players, gameMode, fm.getBoardData());
 		}
 		
 		setMenuActions(gameMode);
@@ -94,9 +100,10 @@ public class Controller implements ActionListener {
         if (evento.getActionCommand().equals("Reglas")) {
             msg.printMessageWithTitle(GAME_RULES, "Reglas del juego");
         } else if (evento.getActionCommand().equals("Guardar Partida")) {
-        	fm.saveFile();
+        	fm.saveFile(players, gameMode, board.getBoardInfo());
         } else if (evento.getActionCommand().equals("Cargar Partida")) {
-        	fm.loadFile();
+        	gui.closeWindow();
+        	startGame('N');
         } else if (evento.getActionCommand().equals("Jugador 1")) {
         	gui.showHitPieces("p1", board.getBoardInfo().getP1HitPiecesIndex());
         } else if (evento.getActionCommand().equals("Jugador 2")) {
