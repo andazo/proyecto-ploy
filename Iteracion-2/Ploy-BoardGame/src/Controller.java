@@ -53,6 +53,8 @@ public class Controller implements ActionListener {
 			gui.makeGUI(players, gameMode);
 			board.loadBoard(players, gameMode, fm.getBoardData());
 			gui.loadBoard(players, gameMode, fm.getBoardData());
+			board.loadHitPiecesIndexes(fm.getHitPiecesIndexes());
+			board.loadHitPieces(gameMode, fm.getHitPieces());
 		}
 		
 		setMenuActions(gameMode);
@@ -105,13 +107,13 @@ public class Controller implements ActionListener {
         	gui.closeWindow();
         	startGame('N');
         } else if (evento.getActionCommand().equals("Jugador 1")) {
-        	gui.showHitPieces("p1", board.getBoardInfo().getP1HitPiecesIndex());
+        	gui.showHitPieces(board.getBoardInfo().p1HitPieces, board.getBoardInfo().getP1HitPiecesIndex());
         } else if (evento.getActionCommand().equals("Jugador 2")) {
-        	gui.showHitPieces("p2", board.getBoardInfo().getP2HitPiecesIndex());
+        	gui.showHitPieces(board.getBoardInfo().p2HitPieces, board.getBoardInfo().getP2HitPiecesIndex());
         } else if (evento.getActionCommand().equals("Jugador 3")) {
-        	gui.showHitPieces("p3", board.getBoardInfo().getP3HitPiecesIndex());
+        	gui.showHitPieces(board.getBoardInfo().p3HitPieces, board.getBoardInfo().getP3HitPiecesIndex());
         } else if (evento.getActionCommand().equals("Jugador 4")) {
-        	gui.showHitPieces("p4", board.getBoardInfo().getP4HitPiecesIndex());
+        	gui.showHitPieces(board.getBoardInfo().p4HitPieces, board.getBoardInfo().getP4HitPiecesIndex());
         } else if (evento.getActionCommand().equals("Girar izq")) {
         	gui.rotatePiece(board.getBoardInfo().getLastI(), board.getBoardInfo().getLastJ(), 315);
         	board.rotatePiece(board.getBoardInfo().getLastI(), board.getBoardInfo().getLastJ(), -45);
@@ -139,24 +141,30 @@ public class Controller implements ActionListener {
 					if (board.getBoardInfo().boardSquares[i][j].getOwner() != board.getBoardInfo().boardSquares[board.getBoardInfo().getLastI()][board.getBoardInfo().getLastJ()].getOwner()) {
 						if (numPlayers == 2) {
 							if (board.getBoardInfo().boardSquares[i][j].getColor() == players[0].getColor()) {
-								gui.P1HitPieces[board.getBoardInfo().getP1HitPiecesIndex()].setIcon(gui.squaresPanels[i][j].getIcon());
+								board.getBoardInfo().p1HitPieces[board.getBoardInfo().getP1HitPiecesIndex()][0] = Integer.toString(board.getBoardInfo().boardSquares[i][j].getType());
+								board.getBoardInfo().p1HitPieces[board.getBoardInfo().getP1HitPiecesIndex()][1] = board.getBoardInfo().boardSquares[i][j].getColor();
 								board.getBoardInfo().setP1HitPiecesIndex(board.getBoardInfo().getP1HitPiecesIndex() + 1);
 							} else if (board.getBoardInfo().boardSquares[i][j].getColor() == players[1].getColor()) {
-								gui.P2HitPieces[board.getBoardInfo().getP2HitPiecesIndex()].setIcon(gui.squaresPanels[i][j].getIcon());
+								board.getBoardInfo().p2HitPieces[board.getBoardInfo().getP2HitPiecesIndex()][0] = Integer.toString(board.getBoardInfo().boardSquares[i][j].getType());
+								board.getBoardInfo().p2HitPieces[board.getBoardInfo().getP2HitPiecesIndex()][1] = board.getBoardInfo().boardSquares[i][j].getColor();
 								board.getBoardInfo().setP2HitPiecesIndex(board.getBoardInfo().getP2HitPiecesIndex() + 1);
 							}
 						} else {
 							if (board.getBoardInfo().boardSquares[i][j].getColor() == players[0].getColor()) {
-								gui.P1HitPieces[board.getBoardInfo().getP1HitPiecesIndex()].setIcon(gui.squaresPanels[i][j].getIcon());
+								board.getBoardInfo().p1HitPieces[board.getBoardInfo().getP1HitPiecesIndex()][0] = Integer.toString(board.getBoardInfo().boardSquares[i][j].getType());
+								board.getBoardInfo().p1HitPieces[board.getBoardInfo().getP1HitPiecesIndex()][1] = board.getBoardInfo().boardSquares[i][j].getColor();
 								board.getBoardInfo().setP1HitPiecesIndex(board.getBoardInfo().getP1HitPiecesIndex() + 1);
 							} else if (board.getBoardInfo().boardSquares[i][j].getColor() == players[1].getColor()) {
-								gui.P2HitPieces[board.getBoardInfo().getP2HitPiecesIndex()].setIcon(gui.squaresPanels[i][j].getIcon());
+								board.getBoardInfo().p2HitPieces[board.getBoardInfo().getP2HitPiecesIndex()][0] = Integer.toString(board.getBoardInfo().boardSquares[i][j].getType());
+								board.getBoardInfo().p2HitPieces[board.getBoardInfo().getP2HitPiecesIndex()][1] = board.getBoardInfo().boardSquares[i][j].getColor();
 								board.getBoardInfo().setP2HitPiecesIndex(board.getBoardInfo().getP2HitPiecesIndex() + 1);
 							} else if (board.getBoardInfo().boardSquares[i][j].getColor() == players[2].getColor()) {
-								gui.P3HitPieces[board.getBoardInfo().getP3HitPiecesIndex()].setIcon(gui.squaresPanels[i][j].getIcon());
+								board.getBoardInfo().p3HitPieces[board.getBoardInfo().getP3HitPiecesIndex()][0] = Integer.toString(board.getBoardInfo().boardSquares[i][j].getType());
+								board.getBoardInfo().p3HitPieces[board.getBoardInfo().getP3HitPiecesIndex()][1] = board.getBoardInfo().boardSquares[i][j].getColor();
 								board.getBoardInfo().setP3HitPiecesIndex(board.getBoardInfo().getP3HitPiecesIndex() + 1);
 							} else if (board.getBoardInfo().boardSquares[i][j].getColor() == players[3].getColor()) {
-								gui.P4HitPieces[board.getBoardInfo().getP4HitPiecesIndex()].setIcon(gui.squaresPanels[i][j].getIcon());
+								board.getBoardInfo().p4HitPieces[board.getBoardInfo().getP4HitPiecesIndex()][0] = Integer.toString(board.getBoardInfo().boardSquares[i][j].getType());
+								board.getBoardInfo().p4HitPieces[board.getBoardInfo().getP4HitPiecesIndex()][1] = board.getBoardInfo().boardSquares[i][j].getColor();
 								board.getBoardInfo().setP4HitPiecesIndex(board.getBoardInfo().getP4HitPiecesIndex() + 1);
 							}
 						}
@@ -170,7 +178,7 @@ public class Controller implements ActionListener {
 						board.getBoardInfo().boardSquares[i][j].setDirection(board.getBoardInfo().boardSquares[board.getBoardInfo().getLastI()][board.getBoardInfo().getLastJ()].getDirection());
 						board.getBoardInfo().boardSquares[board.getBoardInfo().getLastI()][board.getBoardInfo().getLastJ()].setDirection(0);
 						board.getBoardInfo().boardSquares[i][j].setColor(board.getBoardInfo().boardSquares[board.getBoardInfo().getLastI()][board.getBoardInfo().getLastJ()].getColor());
-						board.getBoardInfo().boardSquares[board.getBoardInfo().getLastI()][board.getBoardInfo().getLastJ()].setColor("");
+						board.getBoardInfo().boardSquares[board.getBoardInfo().getLastI()][board.getBoardInfo().getLastJ()].setColor("-");
 						board.getBoardInfo().setPieceActive(false);
 						gui.rotateLeftBut.setEnabled(false);
 						gui.rotateRightBut.setEnabled(false);

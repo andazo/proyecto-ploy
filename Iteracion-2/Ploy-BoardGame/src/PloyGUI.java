@@ -9,6 +9,8 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.beans.XMLDecoder;
+import java.beans.XMLEncoder;
 import java.io.*;
 import javax.imageio.ImageIO;
 
@@ -20,10 +22,6 @@ public class PloyGUI {
 	JButton rotateRightBut;
 	JMenuBar menuBar;
 	JLabel squaresPanels[][];
-	JLabel P1HitPieces[];
-	JLabel P2HitPieces[];
-	JLabel P3HitPieces[];
-	JLabel P4HitPieces[];
 	JTextArea textOutput;
 	JScrollPane textScroll;
 	JSpinner depthSpinner;
@@ -52,19 +50,15 @@ public class PloyGUI {
 		loadImages();
 	}
 	
-	public void showHitPieces(String player, int hitPiecesIndex) {
-		JLabel[] hitPieces = null;
-		if (player == "p1") {
-			hitPieces = P1HitPieces;
-		} else if (player == "p2") {
-			hitPieces = P2HitPieces;
-		} else if (player == "p3") {
-			hitPieces = P3HitPieces;
-		} else if (player == "p4") {
-			hitPieces = P4HitPieces;
+	public void showHitPieces(String[][] hitPiecesData, int hitPiecesIndex) {
+		JLabel[] hitPieces = new JLabel[hitPiecesIndex];	
+		for (int i = 0; i < hitPiecesIndex; i++) {
+			hitPieces[i] = new JLabel();
 		}
-		
 		JPanel hitPiecesPanel = new JPanel(new GridLayout(1,0));
+		for (int i = 0; i < hitPiecesIndex; i++) {
+			hitPieces[i].setIcon(getIconArray(hitPiecesData[i][1])[Integer.parseInt(hitPiecesData[i][0])]);
+		}
 		for (int i = 0; i < hitPiecesIndex; i++) {
 			hitPiecesPanel.add(new JLabel(hitPieces[i].getIcon()));
 		}
@@ -306,10 +300,6 @@ public class PloyGUI {
 				squaresPanels[6][i].setIcon(ri);
 				squaresPanels[6][i].setName(color);
 			}
-			P1HitPieces = new JLabel[15];
-			for (int i = 0; i < 15; i++) {
-				P1HitPieces[i] = new JLabel();
-			}
 		} else {
 			for (int i = 1; i < 8; i++) {
 				squaresPanels[0][i].setIcon(getIconArray(color)[pieceOrder1v1P2[orderArrayIndex]]);
@@ -324,10 +314,6 @@ public class PloyGUI {
 			for (int i = 3; i < 6; i++) {
 				squaresPanels[2][i].setIcon(getIconArray(color)[8]);
 				squaresPanels[2][i].setName(color);
-			}
-			P2HitPieces = new JLabel[15];
-			for (int i = 0; i < 15; i++) {
-				P2HitPieces[i] = new JLabel();
 			}
 		}
 	}
@@ -365,10 +351,6 @@ public class PloyGUI {
 				squaresPanels[6][i].setName(color);
 				orderArrayIndex++;
 			}
-			P1HitPieces = new JLabel[9];
-			for (int i = 0; i < 9; i++) {
-				P1HitPieces[i] = new JLabel();
-			}
 		} else if (playerNum == 2) {
 			for (int i = 0; i < 3; i++) {
 				int direction = 0;
@@ -399,10 +381,6 @@ public class PloyGUI {
 				squaresPanels[i][2].setIcon(ri);
 				squaresPanels[i][2].setName(color);
 				orderArrayIndex++;
-			}
-			P2HitPieces = new JLabel[9];
-			for (int i = 0; i < 9; i++) {
-				P2HitPieces[i] = new JLabel();
 			}
 		} else if (playerNum == 3) {
 			for (int i = 8; i > 5; i--) {
@@ -435,10 +413,6 @@ public class PloyGUI {
 				squaresPanels[2][i].setName(color);
 				orderArrayIndex++;
 			}
-			P3HitPieces = new JLabel[9];
-			for (int i = 0; i < 9; i++) {
-				P3HitPieces[i] = new JLabel();
-			}
 		} else {
 			for (int i = 8; i > 5; i--) {
 				int direction = 0;
@@ -470,10 +444,6 @@ public class PloyGUI {
 				squaresPanels[i][6].setName(color);
 				orderArrayIndex++;
 			}
-			P4HitPieces = new JLabel[9];
-			for (int i = 0; i < 9; i++) {
-				P4HitPieces[i] = new JLabel();
-			}
 		}
 	}
 	
@@ -497,10 +467,6 @@ public class PloyGUI {
 				squaresPanels[6][i].setIcon(ri);
 				squaresPanels[6][i].setName(color);
 			}
-			P1HitPieces = new JLabel[9];
-			for (int i = 0; i < 9; i++) {
-				P1HitPieces[i] = new JLabel();
-			}
 		} else if (playerNum == 2) {
 			for(int i = 1; i < 4; i++) {
 				squaresPanels[0][i].setIcon(getIconArray(color)[pieceOrder2v2[orderArrayIndex]]);
@@ -515,10 +481,6 @@ public class PloyGUI {
 			for(int i = 1; i < 4; i++) {
 				squaresPanels[2][i].setIcon(getIconArray(color)[8]);
 				squaresPanels[2][i].setName(color);
-			}
-			P2HitPieces = new JLabel[9];
-			for (int i = 0; i < 9; i++) {
-				P2HitPieces[i] = new JLabel();
 			}
 		} else if (playerNum == 3) {
 			for(int i = 7; i > 4; i--) {
@@ -538,10 +500,6 @@ public class PloyGUI {
 				squaresPanels[6][i].setIcon(ri);
 				squaresPanels[6][i].setName(color);
 			}
-			P3HitPieces = new JLabel[9];
-			for (int i = 0; i < 9; i++) {
-				P3HitPieces[i] = new JLabel();
-			}
 		} else {
 			for(int i = 7; i > 4; i--) {
 				squaresPanels[0][i].setIcon(getIconArray(color)[pieceOrder2v2[orderArrayIndex]]);
@@ -557,15 +515,19 @@ public class PloyGUI {
 				squaresPanels[2][i].setIcon(getIconArray(color)[8]);
 				squaresPanels[2][i].setName(color);
 			}
-			P4HitPieces = new JLabel[9];
-			for (int i = 0; i < 9; i++) {
-				P4HitPieces[i] = new JLabel();
-			}
 		}
 	}
 	
-	public void loadBoard(Player[] players, int gameMode, String boardData) {
-		
+	public void loadBoard(Player[] players, int gameMode, String[][][] board) {
+		for (int i = 0; i < 9; i++) {
+			for (int j = 0; j < 9; j++) {
+				if (Integer.parseInt(board[i][j][0]) != -1) {
+					RotateIcon ri = new RotateIcon(getIconArray(board[i][j][3])[Integer.parseInt(board[i][j][0])], Integer.parseInt(board[i][j][1]), true);
+					squaresPanels[i][j].setIcon(ri);
+					squaresPanels[i][j].setName(board[i][j][3]);
+				}
+			}
+		}
 	}
 	
 	// direction = 315 rota hacia la izquierda, direction = 45 rota hacia la derecha

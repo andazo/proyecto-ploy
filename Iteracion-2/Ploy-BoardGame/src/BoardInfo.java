@@ -13,6 +13,11 @@ public class BoardInfo {
 	private int p2HitPiecesIndex;
 	private int p3HitPiecesIndex;
 	private int p4HitPiecesIndex;
+	
+	public String[][] p1HitPieces;
+	public String[][] p2HitPieces;
+	public String[][] p3HitPieces;
+	public String[][] p4HitPieces;
 
     public BoardInfo() {
     	boardSquares = new BoardSquareInfo[9][9];
