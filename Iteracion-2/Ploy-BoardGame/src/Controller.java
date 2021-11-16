@@ -33,13 +33,13 @@ public class Controller implements ActionListener {
 			+ "sus movimientos.";
 
 	public Controller(Message msg, FileManager fm, Player[] players, PloyGUI gui, PloyBoard board, int gameMode) {
-        this.msg = msg;
-        this.fm = fm;
-        this.players = players;
-		this.gui = gui;
-        this.board = board;
-        this.gameMode = gameMode;
-    }
+      this.msg = msg;
+      this.fm = fm;
+      this.players = players;
+      this.gui = gui;
+      this.board = board;
+      this.gameMode = gameMode;
+	}
 	
 	public void startGame(char newGame) {
 		if (newGame == 'Y') {
@@ -127,19 +127,24 @@ public class Controller implements ActionListener {
 		if (!board.getBoardInfo().getPieceActive()) {
 			if (board.getBoardInfo().boardSquares[i][j].getType() != -1) {
 				board.getBoardInfo().setPieceActive(true);
-		  		gui.squaresPanels[i][j].setBackground(gui.boardColorHighlight);
-		  		board.getBoardInfo().setLastI(i);
-		  		board.getBoardInfo().setLastJ(j);
-		  		board.getBoardInfo().setOriginalDirection(board.getBoardInfo().boardSquares[i][j].getDirection());
-		  		gui.rotateLeftBut.setEnabled(true);
+	  		gui.squaresPanels[i][j].setBackground(gui.boardColorHighlight);
+	  		board.getBoardInfo().setLastI(i);
+	  		board.getBoardInfo().setLastJ(j);
+	  		board.getBoardInfo().setOriginalDirection(board.getBoardInfo().boardSquares[i][j].getDirection());
+	  		gui.rotateLeftBut.setEnabled(true);
 				gui.rotateRightBut.setEnabled(true);
-		  		gui.guiPrintLine("pieza activa");
+	  		gui.guiPrintLine("pieza activa");
 			}
 		} else {
 			if (!(board.getBoardInfo().getLastI() == i && board.getBoardInfo().getLastJ() == j)) {
 				if (board.getBoardInfo().boardSquares[board.getBoardInfo().getLastI()][board.getBoardInfo().getLastJ()].getDirection() == board.getBoardInfo().getOriginalDirection() || board.getBoardInfo().boardSquares[board.getBoardInfo().getLastI()][board.getBoardInfo().getLastJ()].getType() == 8) {
 					if (board.getBoardInfo().boardSquares[i][j].getOwner() != board.getBoardInfo().boardSquares[board.getBoardInfo().getLastI()][board.getBoardInfo().getLastJ()].getOwner()) {
 						if (numPlayers == 2) {
+							
+							if(board.getBoardInfo().boardSquares[i][j].getOwner() != 0) {
+								checkGameOver(board.getBoardInfo().boardSquares[i][j]);
+							}
+							
 							if (board.getBoardInfo().boardSquares[i][j].getColor() == players[0].getColor()) {
 								board.getBoardInfo().p1HitPieces[board.getBoardInfo().getP1HitPiecesIndex()][0] = Integer.toString(board.getBoardInfo().boardSquares[i][j].getType());
 								board.getBoardInfo().p1HitPieces[board.getBoardInfo().getP1HitPiecesIndex()][1] = board.getBoardInfo().boardSquares[i][j].getColor();
@@ -202,4 +207,46 @@ public class Controller implements ActionListener {
 			}
 		}
 	}
+    
+    private void checkGameOver(BoardSquareInfo hitInfo) {
+    	if(hitInfo.getType() == 0 || players[hitInfo.getOwner()-1].getNumPieces() == 1) {
+    		playerLost(hitInfo, this.gameMode);
+    	}
+    }
+    
+    private void playerLost(BoardSquareInfo hitInfo, int gameMode) {
+      switch(gameMode) {
+        case 0://1v1
+          //player.lost
+          //lock the board
+          //display game over screen
+        	gui.guiPrintLine("Game Over");
+        	break;
+        case 1: //2v2
+        	/*
+          player.lost
+          check if both players are out
+            if both are out 
+              lock board
+            if only one out
+              lock that player
+              let other player control remaining pieces
+          display game over screen
+          */
+        	gui.guiPrintLine("Game Over 2v2");
+        	break;
+        case 2: //1v1v1v1
+        	/*
+          player.lost
+          if(activePlayers == 1) {
+            lock the board
+          }
+          let other player control remaining pieces
+          display game over screen
+          */ 
+        	gui.guiPrintLine("Game Over 1v1v1v1");
+        	break;
+      }
+   }
+    
 }

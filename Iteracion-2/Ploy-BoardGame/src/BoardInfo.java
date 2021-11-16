@@ -117,4 +117,5 @@ public class BoardInfo {
     public int getP4HitPiecesIndex() {
         return p4HitPiecesIndex;
     }
+
 }
