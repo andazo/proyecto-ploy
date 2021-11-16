@@ -217,6 +217,11 @@ public class Controller implements ActionListener {
     }
     
     private void playerLost(BoardSquareInfo hitInfo, int gameMode) {
+    	// Se podria pasar a una funcion booleana, cuando se meta en el main siempre va a ser false, cuando alguien gana se pasa a true y vuelve al menu inicial
+    	// donde se sale cancelando unicamente
+    	
+    	// Al igual como se agregan fichas a la ventana de piezas eliminadas, si el capitan llega a estar en esta ventana se pierde automaticamente
+    	
       switch(gameMode) {
         case 0://1v1
           //player.lost
