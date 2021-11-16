@@ -1,5 +1,7 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.JOptionPane;
+
 
 public class Controller implements ActionListener {
 
@@ -220,7 +222,10 @@ public class Controller implements ActionListener {
           //player.lost
           //lock the board
           //display game over screen
-        	gui.guiPrintLine("Game Over");
+        	gui.guiPrintLine("Game Over"); 
+        	// Game over en log
+        	JOptionPane.showMessageDialog(null, "Game Over \n" + "El jugador " + "ha ganado");
+        	//Game over en pantalla
         	break;
         case 1: //2v2
         	/*

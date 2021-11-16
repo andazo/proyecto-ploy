@@ -2,15 +2,15 @@
 public class Main {
 	
 	private static char getNewGame(Message msg) {
-		String[] options = {"Nueva partida", "Cargar partida"};
+		String[] options = {"Nueva partida", "Cargar partida","Cancelar"};
 		char newGame = ' ';
     	int input = -1;
-	    input = msg.inputMessageWithOptions("Seleccione lo que desea hacer", "Nueva partida / Cargar partida", options);
+	    input = msg.inputMessageWithOptions("Seleccione lo que desea hacer", "Bienvenido a Ploy BoardGame", options);
 	    if (input == 0) {
 	    	newGame = 'Y';
 	    } else if (input == 1) {
 	    	newGame = 'N';
-	    } else if (input == -1) {
+	    } else if (input == 2) {
 	       	System.exit(0);
 	    }
 	    return newGame;
