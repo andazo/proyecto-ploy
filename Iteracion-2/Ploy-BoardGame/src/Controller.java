@@ -145,29 +145,29 @@ public class Controller implements ActionListener {
 								checkGameOver(board.getBoardInfo().boardSquares[i][j]);
 							}
 							
-							if (board.getBoardInfo().boardSquares[i][j].getColor() == players[0].getColor()) {
+							if (board.getBoardInfo().boardSquares[i][j].getColor().equals(players[0].getColor())) {
 								board.getBoardInfo().p1HitPieces[board.getBoardInfo().getP1HitPiecesIndex()][0] = Integer.toString(board.getBoardInfo().boardSquares[i][j].getType());
 								board.getBoardInfo().p1HitPieces[board.getBoardInfo().getP1HitPiecesIndex()][1] = board.getBoardInfo().boardSquares[i][j].getColor();
 								board.getBoardInfo().setP1HitPiecesIndex(board.getBoardInfo().getP1HitPiecesIndex() + 1);
-							} else if (board.getBoardInfo().boardSquares[i][j].getColor() == players[1].getColor()) {
+							} else if (board.getBoardInfo().boardSquares[i][j].getColor().equals(players[1].getColor())) {
 								board.getBoardInfo().p2HitPieces[board.getBoardInfo().getP2HitPiecesIndex()][0] = Integer.toString(board.getBoardInfo().boardSquares[i][j].getType());
 								board.getBoardInfo().p2HitPieces[board.getBoardInfo().getP2HitPiecesIndex()][1] = board.getBoardInfo().boardSquares[i][j].getColor();
 								board.getBoardInfo().setP2HitPiecesIndex(board.getBoardInfo().getP2HitPiecesIndex() + 1);
 							}
 						} else {
-							if (board.getBoardInfo().boardSquares[i][j].getColor() == players[0].getColor()) {
+							if (board.getBoardInfo().boardSquares[i][j].getColor().equals(players[0].getColor())) {
 								board.getBoardInfo().p1HitPieces[board.getBoardInfo().getP1HitPiecesIndex()][0] = Integer.toString(board.getBoardInfo().boardSquares[i][j].getType());
 								board.getBoardInfo().p1HitPieces[board.getBoardInfo().getP1HitPiecesIndex()][1] = board.getBoardInfo().boardSquares[i][j].getColor();
 								board.getBoardInfo().setP1HitPiecesIndex(board.getBoardInfo().getP1HitPiecesIndex() + 1);
-							} else if (board.getBoardInfo().boardSquares[i][j].getColor() == players[1].getColor()) {
+							} else if (board.getBoardInfo().boardSquares[i][j].getColor().equals(players[1].getColor())) {
 								board.getBoardInfo().p2HitPieces[board.getBoardInfo().getP2HitPiecesIndex()][0] = Integer.toString(board.getBoardInfo().boardSquares[i][j].getType());
 								board.getBoardInfo().p2HitPieces[board.getBoardInfo().getP2HitPiecesIndex()][1] = board.getBoardInfo().boardSquares[i][j].getColor();
 								board.getBoardInfo().setP2HitPiecesIndex(board.getBoardInfo().getP2HitPiecesIndex() + 1);
-							} else if (board.getBoardInfo().boardSquares[i][j].getColor() == players[2].getColor()) {
+							} else if (board.getBoardInfo().boardSquares[i][j].getColor().equals(players[2].getColor())) {
 								board.getBoardInfo().p3HitPieces[board.getBoardInfo().getP3HitPiecesIndex()][0] = Integer.toString(board.getBoardInfo().boardSquares[i][j].getType());
 								board.getBoardInfo().p3HitPieces[board.getBoardInfo().getP3HitPiecesIndex()][1] = board.getBoardInfo().boardSquares[i][j].getColor();
 								board.getBoardInfo().setP3HitPiecesIndex(board.getBoardInfo().getP3HitPiecesIndex() + 1);
-							} else if (board.getBoardInfo().boardSquares[i][j].getColor() == players[3].getColor()) {
+							} else if (board.getBoardInfo().boardSquares[i][j].getColor().equals(players[3].getColor())) {
 								board.getBoardInfo().p4HitPieces[board.getBoardInfo().getP4HitPiecesIndex()][0] = Integer.toString(board.getBoardInfo().boardSquares[i][j].getType());
 								board.getBoardInfo().p4HitPieces[board.getBoardInfo().getP4HitPiecesIndex()][1] = board.getBoardInfo().boardSquares[i][j].getColor();
 								board.getBoardInfo().setP4HitPiecesIndex(board.getBoardInfo().getP4HitPiecesIndex() + 1);
