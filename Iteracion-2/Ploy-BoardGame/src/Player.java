@@ -3,6 +3,8 @@ public class Player {
     private String name;
     private String color;
     private int numPieces;
+    private boolean lost;
+    int friend;
 
     public void setName(String playerName) {
         name = playerName;
@@ -26,5 +28,21 @@ public class Player {
     
     public int getNumPieces() {
     		return numPieces;
+    }
+    
+    public void setLost(boolean cond) {
+    	lost = cond;
+    }
+    
+    public boolean getLost() {
+    	return lost;
+    }
+    
+    public void setFriend(int f) {
+    	friend = f;
+    }
+    
+    public int getFriend() {
+    	return friend;
     }
 }

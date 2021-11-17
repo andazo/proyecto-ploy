@@ -150,12 +150,12 @@ public class Controller implements ActionListener {
 			if (!(board.getBoardInfo().getLastI() == i && board.getBoardInfo().getLastJ() == j)) {
 				if (board.getBoardInfo().boardSquares[board.getBoardInfo().getLastI()][board.getBoardInfo().getLastJ()].getDirection() == board.getBoardInfo().getOriginalDirection() || board.getBoardInfo().boardSquares[board.getBoardInfo().getLastI()][board.getBoardInfo().getLastJ()].getType() == 8) {
 					if (board.getBoardInfo().boardSquares[i][j].getOwner() != board.getBoardInfo().boardSquares[board.getBoardInfo().getLastI()][board.getBoardInfo().getLastJ()].getOwner()) {
+						
+						if(board.getBoardInfo().boardSquares[i][j].getOwner() != 0) {
+							checkGameOver(board.getBoardInfo().boardSquares[i][j], board.getBoardInfo().boardSquares[board.getBoardInfo().getLastI()][board.getBoardInfo().getLastJ()]);
+						}
+						
 						if (numPlayers == 2) {
-							
-							if(board.getBoardInfo().boardSquares[i][j].getOwner() != 0) {
-								checkGameOver(board.getBoardInfo().boardSquares[i][j], board.getBoardInfo().boardSquares[board.getBoardInfo().getLastI()][board.getBoardInfo().getLastJ()]);
-							}
-							
 							if (board.getBoardInfo().boardSquares[i][j].getColor().equals(players[0].getColor())) {
 								board.getBoardInfo().p1HitPieces[board.getBoardInfo().getP1HitPiecesIndex()][0] = Integer.toString(board.getBoardInfo().boardSquares[i][j].getType());
 								board.getBoardInfo().p1HitPieces[board.getBoardInfo().getP1HitPiecesIndex()][1] = board.getBoardInfo().boardSquares[i][j].getColor();
@@ -237,35 +237,35 @@ public class Controller implements ActionListener {
     	
       switch(gameMode) {
         case 0: //1v1
-          //player.lost
+        	players[hitInfo.getOwner()-1].setLost(true);
         	gui.guiPrintLine("Game Over, tablero bloqueado"); 
-        	//JOptionPane.showMessageDialog(null, "Game Over \n" + players[attackerInfo.getOwner()-1].getName() + " ha ganado");
         	msg.printSimpleMessage("Game Over \n" + players[attackerInfo.getOwner()-1].getName() + " ha ganado");
         	removeMouseActions();
         	break;
-        case 1: //2v2
-        	/*
-          player.lost
-          check if both players are out
-            if both are out 
-              lock board
-            if only one out
-              lock that player
-              let other player control remaining pieces
-          display game over screen
-          */
-        	gui.guiPrintLine("Game Over 2v2");
-        	break;
-        case 2: //1v1v1v1
-        	/*
-          player.lost
-          if(activePlayers == 1) {
-            lock the board
+        case 1: //1v1v1v1
+          players[hitInfo.getOwner()-1].setLost(true);
+          board.getBoardInfo().setActivePlayers(board.getBoardInfo().getActivePlayers()-1);
+          if(board.getBoardInfo().getActivePlayers() == 1) {
+            removeMouseActions();
+            msg.printSimpleMessage("Game Over \n" + players[attackerInfo.getOwner()-1].getName() + " ha ganado");
+            gui.guiPrintLine("Game Over 1v1v1v1, tablero bloqueado");
+          } else {
+          	// el jugador que queda controla las piezas que quedan
+            msg.printSimpleMessage(players[hitInfo.getOwner()-1].getName() + " ha perdido");
           }
-          let other player control remaining pieces
-          display game over screen
-          */ 
-        	gui.guiPrintLine("Game Over 1v1v1v1");
+        	break;
+        case 2: //2v2
+        	players[hitInfo.getOwner()-1].setLost(true);
+          int friend = players[(hitInfo.getOwner()-1)].getFriend();
+          msg.printSimpleMessage(friend + "\n");
+          if(players[friend].getLost()) { //si los dos ya perdieron
+            removeMouseActions();
+            msg.printSimpleMessage("Game Over \n" + players[attackerInfo.getOwner()-1].getName() + " han ganado");
+            gui.guiPrintLine("Game Over 2v2, tablero bloqueado");
+          } else {
+          	// el jugador que queda controla las piezas que quedan
+            msg.printSimpleMessage(players[hitInfo.getOwner()-1].getName() + " ha perdido");
+          }
         	break;
       }
    }

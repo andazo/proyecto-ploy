@@ -8,6 +8,7 @@ public class BoardInfo {
 	private int lastI;
 	private int lastJ;
 	private int originalDirection;
+	int activePlayers;
 	
 	private int p1HitPiecesIndex;
 	private int p2HitPiecesIndex;
@@ -116,6 +117,14 @@ public class BoardInfo {
 
     public int getP4HitPiecesIndex() {
         return p4HitPiecesIndex;
+    }
+    
+    public void setActivePlayers(int players) {
+    	activePlayers = players;
+    }
+    
+    public int getActivePlayers() {
+    	return activePlayers;
     }
 
 }

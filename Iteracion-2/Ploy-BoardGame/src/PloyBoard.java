@@ -21,25 +21,29 @@ public class PloyBoard {
 		switch (gameMode) {
 			case 0: // 1v1
 				populateBoard1v1(players[0].getColor(), 1);
-			  	populateBoard1v1(players[1].getColor(), 2);
-			    break;
+		  	populateBoard1v1(players[1].getColor(), 2);
+		  	getBoardInfo().setActivePlayers(2);
+		    break;
 			case 1: // 1v1v1v1
 				populateBoard1v1v1v1(players[0].getColor(), 1);
 				populateBoard1v1v1v1(players[1].getColor(), 2);
 				populateBoard1v1v1v1(players[2].getColor(), 3);
 				populateBoard1v1v1v1(players[3].getColor(), 4);
-			    break;
+				getBoardInfo().setActivePlayers(4);
+		    break;
 			case 2: // 2v2
 				populateBoard2v2(players[0].getColor(), 1);
-			  	populateBoard2v2(players[1].getColor(), 2);
-			  	populateBoard2v2(players[2].getColor(), 3);
-			  	populateBoard2v2(players[3].getColor(), 4);
-			    break;
+		  	populateBoard2v2(players[1].getColor(), 2);
+		  	populateBoard2v2(players[2].getColor(), 3);
+		  	populateBoard2v2(players[3].getColor(), 4);
+		  	getBoardInfo().setActivePlayers(4);
+		    break;
 		}
 	}
     
-    private void populateBoard1v1(String color, int playerNum) {
+  private void populateBoard1v1(String color, int playerNum) {
 		int orderArrayIndex = 0;
+		
 		if (playerNum == 1) {
 			for (int i = 1; i < 8; i++) {
 				getBoardInfo().boardSquares[8][i].setType(pieceOrder1v1P1[orderArrayIndex]);

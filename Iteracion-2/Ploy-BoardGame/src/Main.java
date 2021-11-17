@@ -51,28 +51,29 @@ public class Main {
 		    if (players[i].getName().isBlank()) {
 		    	players[i].setName("Anonimo");
 		    }
-		        
+		    //Estado
+		    players[i].setLost(false);
 		    //Color
 		    String color;
 		    boolean usado = false;
 		    while (true) {
-				color = msg.inputQuestionMessage("Color", "Color para el jugador" + player, choices, choices[i]);
-				for (int j = 0; j < i; j++) {
-					if (color == players[j].getColor()) {
-						msg.printMessage("Color ya fue seleccionado");
-						usado = true;
-						j = i;
-			        }
-				}
-				if (usado == false) {
-		            break;
-		        }
+					color = msg.inputQuestionMessage("Color", "Color para el jugador" + player, choices, choices[i]);
+					for (int j = 0; j < i; j++) {
+						if (color == players[j].getColor()) {
+							msg.printMessage("Color ya fue seleccionado");
+							usado = true;
+							j = i;
+				    }
+					}
+					if (usado == false) {
+            break;
+	        }
 		    }
 		    players[i].setColor(color);
 		    
-			if (players[i].getColor() == null) {
-				System.exit(0);
-			}
+				if (players[i].getColor() == null) {
+					System.exit(0);
+				}
 	    }
 	    
 	    String playersInfo = "";
