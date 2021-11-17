@@ -9,6 +9,10 @@ public class Message {
     public void printMessage(Object message){
         JOptionPane.showMessageDialog(null, message);
     }
+    
+    public void printSimpleMessage(String message){
+      JOptionPane.showMessageDialog(null, message);
+  }
 
     public void printMessageWithTitle(Object message, String title){
         JOptionPane.showMessageDialog(null, message, title, -1, null);

@@ -92,6 +92,15 @@ public class Controller implements ActionListener {
 		}
 	}
 	
+	private void removeMouseActions() {
+		for(int i = 0; i < 9; i++) {
+			for(int j = 0; j < 9; j++) {
+				gui.squaresPanels[i][j].removeMouseListener(gui.squaresPanels[i][j].getMouseListeners()[0]);
+			}
+		}
+	}
+	
+	
 	private void setButtonActions() {
 		gui.rotateLeftBut.addActionListener(this);
 		gui.rotateRightBut.addActionListener(this);
@@ -144,7 +153,7 @@ public class Controller implements ActionListener {
 						if (numPlayers == 2) {
 							
 							if(board.getBoardInfo().boardSquares[i][j].getOwner() != 0) {
-								checkGameOver(board.getBoardInfo().boardSquares[i][j]);
+								checkGameOver(board.getBoardInfo().boardSquares[i][j], board.getBoardInfo().boardSquares[board.getBoardInfo().getLastI()][board.getBoardInfo().getLastJ()]);
 							}
 							
 							if (board.getBoardInfo().boardSquares[i][j].getColor().equals(players[0].getColor())) {
@@ -210,27 +219,29 @@ public class Controller implements ActionListener {
 		}
 	}
     
-    private void checkGameOver(BoardSquareInfo hitInfo) {
+    private void checkGameOver(BoardSquareInfo hitInfo, BoardSquareInfo attackerInfo) {
     	if(hitInfo.getType() == 0 || players[hitInfo.getOwner()-1].getNumPieces() == 1) {
-    		playerLost(hitInfo, this.gameMode);
+    		playerLost(hitInfo, attackerInfo, this.gameMode);
     	}
     }
     
-    private void playerLost(BoardSquareInfo hitInfo, int gameMode) {
-    	// Se podria pasar a una funcion booleana, cuando se meta en el main siempre va a ser false, cuando alguien gana se pasa a true y vuelve al menu inicial
-    	// donde se sale cancelando unicamente
+    private void playerLost(BoardSquareInfo hitInfo, BoardSquareInfo attackerInfo, int gameMode) {
+    	/*
+    	 	Se podria pasar a una funcion booleana, cuando se meta en el main siempre va
+    		a ser false, cuando alguien gana se pasa a true y vuelve al menu inicial
+    	 	donde se sale cancelando unicamente
     	
-    	// Al igual como se agregan fichas a la ventana de piezas eliminadas, si el capitan llega a estar en esta ventana se pierde automaticamente
+    	 	Al igual como se agregan fichas a la ventana de piezas eliminadas, si el capitan llega 
+    	 	a estar en esta ventana se pierde automaticamente
+    	*/
     	
       switch(gameMode) {
-        case 0://1v1
+        case 0: //1v1
           //player.lost
-          //lock the board
-          //display game over screen
-        	gui.guiPrintLine("Game Over"); 
-        	// Game over en log
-        	JOptionPane.showMessageDialog(null, "Game Over \n" + "El jugador " + "ha ganado");
-        	//Game over en pantalla
+        	gui.guiPrintLine("Game Over, tablero bloqueado"); 
+        	//JOptionPane.showMessageDialog(null, "Game Over \n" + players[attackerInfo.getOwner()-1].getName() + " ha ganado");
+        	msg.printSimpleMessage("Game Over \n" + players[attackerInfo.getOwner()-1].getName() + " ha ganado");
+        	removeMouseActions();
         	break;
         case 1: //2v2
         	/*

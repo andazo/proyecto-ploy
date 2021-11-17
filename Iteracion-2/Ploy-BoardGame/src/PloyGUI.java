@@ -80,10 +80,10 @@ public class PloyGUI {
 		ployInterface.setBackground(Color.black);
 		
 		menuBar = new JMenuBar();
-        ployInterface.setJMenuBar(menuBar);
+    ployInterface.setJMenuBar(menuBar);
         
 		JMenu options = new JMenu("Opciones");
-        menuBar.add(options);
+    menuBar.add(options);
 		JMenuItem rules = new JMenuItem("Reglas");
 		options.add(rules);
 		
@@ -92,20 +92,20 @@ public class PloyGUI {
 		JMenuItem load = new JMenuItem("Cargar Partida");
 		options.add(load);
         
-        JMenu hitPieces = new JMenu("Piezas Eliminadas");
-        menuBar.add(hitPieces);
-        JMenuItem hitP1 = new JMenuItem("Jugador 1");
-        hitPieces.add(hitP1);
-        JMenuItem hitP2 = new JMenuItem("Jugador 2");
-        hitPieces.add(hitP2);
-        
-        if (gameMode != 0) {
-        	JMenuItem hitP3 = new JMenuItem("Jugador 3");
-            hitPieces.add(hitP3);
-            JMenuItem hitP4 = new JMenuItem("Jugador 4");
-            hitPieces.add(hitP4);
-        }
-        
+    JMenu hitPieces = new JMenu("Piezas Eliminadas");
+    menuBar.add(hitPieces);
+    JMenuItem hitP1 = new JMenuItem("Jugador 1");
+    hitPieces.add(hitP1);
+    JMenuItem hitP2 = new JMenuItem("Jugador 2");
+    hitPieces.add(hitP2);
+    
+    if (gameMode != 0) {
+    	JMenuItem hitP3 = new JMenuItem("Jugador 3");
+        hitPieces.add(hitP3);
+        JMenuItem hitP4 = new JMenuItem("Jugador 4");
+        hitPieces.add(hitP4);
+    }
+    
 		boardPanel = new JPanel();
 		boardPanel.setLayout(new GridLayout(9,9,5,5));
 		boardPanel.setBackground(boardColorThistle);
@@ -134,8 +134,8 @@ public class PloyGUI {
 		c.fill = GridBagConstraints.NONE;
 		c.gridx = 0;
 		c.gridy = 0;
-		ployInterface.add(boardPanel, c);
 		
+		ployInterface.add(boardPanel, c);
 		ployInterface.add(boardPanel);
 		
 		textOutput = new JTextArea(1,1);
@@ -552,4 +552,5 @@ public class PloyGUI {
 	public void closeWindow() {
 		ployInterface.dispose();
 	}
+	
 }
