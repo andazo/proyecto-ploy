@@ -23,6 +23,8 @@ public class PloyBoard {
 				populateBoard1v1(players[0].getColor(), 1);
 		  	populateBoard1v1(players[1].getColor(), 2);
 		  	getBoardInfo().setActivePlayers(2);
+		  	players[0].setNumPieces(15);
+		  	players[1].setNumPieces(15);
 		    break;
 			case 1: // 1v1v1v1
 				populateBoard1v1v1v1(players[0].getColor(), 1);
@@ -30,6 +32,10 @@ public class PloyBoard {
 				populateBoard1v1v1v1(players[2].getColor(), 3);
 				populateBoard1v1v1v1(players[3].getColor(), 4);
 				getBoardInfo().setActivePlayers(4);
+				players[0].setNumPieces(9);
+				players[1].setNumPieces(9);
+				players[2].setNumPieces(9);
+				players[3].setNumPieces(9);
 		    break;
 			case 2: // 2v2
 				populateBoard2v2(players[0].getColor(), 1);
@@ -37,6 +43,14 @@ public class PloyBoard {
 		  	populateBoard2v2(players[2].getColor(), 3);
 		  	populateBoard2v2(players[3].getColor(), 4);
 		  	getBoardInfo().setActivePlayers(4);
+		  	players[0].setNumPieces(9);
+				players[1].setNumPieces(9);
+				players[2].setNumPieces(9);
+				players[3].setNumPieces(9);
+				players[0].setFriend(2);
+				players[1].setFriend(1);
+				players[2].setFriend(4);
+				players[3].setFriend(3);
 		    break;
 		}
 	}
