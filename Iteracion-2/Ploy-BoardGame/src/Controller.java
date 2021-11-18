@@ -226,6 +226,20 @@ public class Controller implements ActionListener {
     	}
     }
     
+    private static char finished(Message msg) {
+		String[] options = {"Mirar Tablero", "Terminar"};
+		char newGame = ' ';
+    	int input = 0;
+	    input = msg.inputMessageWithOptions("Seleccione lo que desea hacer", "Menu Gamer Over", options);
+	    if (input == 0) {
+	    	newGame = 'Y';
+	    } else if (input == 1) {
+	    	System.exit(0);
+	    }
+	    
+	    return newGame;
+	}
+    
     private void playerLost(BoardSquareInfo hitInfo, BoardSquareInfo attackerInfo, int gameMode) {
     	/*
     	 	Se podria pasar a una funcion booleana, cuando se meta en el main siempre va
@@ -238,10 +252,16 @@ public class Controller implements ActionListener {
     	
       switch(gameMode) {
         case 0: //1v1
+        	boolean aux = true;
         	players[hitInfo.getOwner()-1].setLost(true);
         	gui.guiPrintLine("Game Over, tablero bloqueado"); 
         	msg.printSimpleMessage("Game Over \n" + players[attackerInfo.getOwner()-1].getName() + " ha ganado");
-        	removeMouseActions();
+        	char finishedGame = finished(msg);
+        	if (finishedGame == 'Y' ) {
+        		removeMouseActions();
+        	} else {
+        		System.exit(0);
+        	}
         	break;
         case 1: //1v1v1v1
           players[hitInfo.getOwner()-1].setLost(true);
@@ -250,6 +270,12 @@ public class Controller implements ActionListener {
             removeMouseActions();
             msg.printSimpleMessage("Game Over \n" + players[attackerInfo.getOwner()-1].getName() + " ha ganado");
             gui.guiPrintLine("Game Over 1v1v1v1, tablero bloqueado");
+            char finishedGame1 = finished(msg);
+        	if (finishedGame1 == 'Y' ) {
+        		removeMouseActions();
+        	} else {
+        		System.exit(0);
+        	}
           } else {
           	// el jugador que queda controla las piezas que quedan
             msg.printSimpleMessage(players[hitInfo.getOwner()-1].getName() + " ha perdido");
@@ -263,6 +289,12 @@ public class Controller implements ActionListener {
             msg.printSimpleMessage("Game Over \n" + players[attackerInfo.getOwner()-1].getName()
             		+ " y " + players[players[attackerInfo.getOwner()-1].getFriend()-1].getName() + " han ganado");
             gui.guiPrintLine("Game Over 2v2, tablero bloqueado");
+            char finishedGame3 = finished(msg);
+        	if (finishedGame3 == 'Y' ) {
+        		removeMouseActions();
+        	} else {
+        		System.exit(0);
+        	}
           } else {
           	// el jugador que queda controla las piezas que quedan
             msg.printSimpleMessage(players[hitInfo.getOwner()-1].getName() + " ha perdido");

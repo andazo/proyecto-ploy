@@ -1,4 +1,5 @@
 /*
+
  * @(#)PloyGUI.java
  *
  *
@@ -91,6 +92,8 @@ public class PloyGUI {
 		options.add(save);
 		JMenuItem load = new JMenuItem("Cargar Partida");
 		options.add(load);
+		
+		
         
     JMenu hitPieces = new JMenu("Piezas Eliminadas");
     menuBar.add(hitPieces);

@@ -74,6 +74,7 @@ public class Main {
 				if (players[i].getColor() == null) {
 					System.exit(0);
 				}
+				
 	    }
 	    
 	    String playersInfo = "";
@@ -107,7 +108,6 @@ public class Main {
 
 	public static void main(String[] args) {
 		
-		//Ciclo while donde se rompa unicamente si algun jugador gana y se devuelva al menu principal cargar/guardar/cancelar
 		
 		Message msg = new Message();
 		FileManager fm = new FileManager();
@@ -116,17 +116,17 @@ public class Main {
 		Player[] players = null;
 		int gameMode = 0;
 		
+	
 		if (newGame == 'Y') {
 			numPlayers = getNumPlayers(msg);
 			players = getPlayers(msg, numPlayers);
 			gameMode = getMode(msg, numPlayers);
 		}
-		
+				
 		PloyGUI gui = new PloyGUI();
 		PloyBoard board = new PloyBoard();
-		
+				
 		Controller controller = new Controller(msg, fm, players, gui, board, gameMode);
 		controller.startGame(newGame);
 	}
-
 }
