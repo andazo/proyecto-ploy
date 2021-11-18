@@ -48,9 +48,15 @@ public class Controller implements ActionListener {
 			gui.makeGUI(players, gameMode);
 			gui.populateBoard(players, gameMode);
 			board.populateBoard(players, gameMode);
+			setMenuActions(gameMode);
+			setMouseActions();
+			setButtonActions();
 		} else if (newGame == 'N') {
 			boolean loadSuccess = fm.loadFile();
 			if (loadSuccess == true) {
+				if (gui.ployInterface != null) {
+					gui.closeWindow();
+				}
 				players = fm.getPlayers();
 				gameMode = fm.getGameMode();
 				gui.makeGUI(players, gameMode);
@@ -58,18 +64,17 @@ public class Controller implements ActionListener {
 				gui.loadBoard(players, gameMode, fm.getBoardData());
 				board.loadHitPiecesIndexes(fm.getHitPiecesIndexes());
 				board.loadHitPieces(gameMode, fm.getHitPieces());
+				setMenuActions(gameMode);
+				setMouseActions();
+				setButtonActions();
 				gui.showSaveLoadMessage("La partida fue cargaga satisfactoriamente", "Partida Cargada");
 			} else {
-				gui.showSaveLoadMessage("Error al cargar la partda, puede que el archivo no exista, saliendo...", "Error");
-				if (this.players == null) {
+				gui.showSaveLoadMessage("Error al cargar la partda, puede que el archivo no exista", "Error");
+				if (gui.ployInterface == null) {
 					System.exit(0);
 				}
 			}
 		}
-		
-		setMenuActions(gameMode);
-		setMouseActions();
-		setButtonActions();
 	}
 	
 	private void setMenuActions(int gameMode) {
@@ -123,7 +128,6 @@ public class Controller implements ActionListener {
         	fm.saveFile(players, gameMode, board.getBoardInfo());
         	gui.showSaveLoadMessage("La partida fue guardada satisfactoriamente", "Partida guardada");
         } else if (evento.getActionCommand().equals("Cargar Partida")) {
-			gui.closeWindow();
         	startGame('N');
         } else if (evento.getActionCommand().equals("Jugador 1")) {
         	gui.showHitPieces(board.getBoardInfo().p1HitPieces, board.getBoardInfo().getP1HitPiecesIndex());
