@@ -4,6 +4,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 public class FileManager {
 	String fileName;
@@ -58,8 +59,9 @@ public class FileManager {
 		}
 	}
 	
-	public void loadFile() {
+	public boolean loadFile() {
 		// Read the content from file
+		boolean loadSuccess = true;
 		try (FileReader fileReader = new FileReader(fileName)) {
 		    int data = fileReader.read();
 		    String buffer = "";
@@ -70,10 +72,11 @@ public class FileManager {
 		    this.data = buffer.lines().toArray(String[]::new);
 		    fileReader.close();
 		} catch (FileNotFoundException e) {
-		    // Exception handling
+			loadSuccess = false;
 		} catch (IOException e) {
-		    // Exception handling
+			// Exception handling
 		}
+		return loadSuccess;
 	}
 	
 	public Player[] getPlayers() {

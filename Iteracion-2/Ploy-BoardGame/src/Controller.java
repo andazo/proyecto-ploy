@@ -49,14 +49,19 @@ public class Controller implements ActionListener {
 			gui.populateBoard(players, gameMode);
 			board.populateBoard(players, gameMode);
 		} else if (newGame == 'N') {
-			fm.loadFile();
-			players = fm.getPlayers();
-			gameMode = fm.getGameMode();
-			gui.makeGUI(players, gameMode);
-			board.loadBoard(players, gameMode, fm.getBoardData());
-			gui.loadBoard(players, gameMode, fm.getBoardData());
-			board.loadHitPiecesIndexes(fm.getHitPiecesIndexes());
-			board.loadHitPieces(gameMode, fm.getHitPieces());
+			boolean loadSuccess = fm.loadFile();
+			if (loadSuccess == true) {
+				players = fm.getPlayers();
+				gameMode = fm.getGameMode();
+				gui.makeGUI(players, gameMode);
+				board.loadBoard(players, gameMode, fm.getBoardData());
+				gui.loadBoard(players, gameMode, fm.getBoardData());
+				board.loadHitPiecesIndexes(fm.getHitPiecesIndexes());
+				board.loadHitPieces(gameMode, fm.getHitPieces());
+			} else {
+				gui.showSaveLoadMessage("Error al cargar la partda, puede que el archivo no exista, saliendo...", "Error");
+				System.exit(-1);
+			}
 		}
 		
 		setMenuActions(gameMode);
@@ -100,7 +105,6 @@ public class Controller implements ActionListener {
 		}
 	}
 	
-	
 	private void setButtonActions() {
 		gui.rotateLeftBut.addActionListener(this);
 		gui.rotateRightBut.addActionListener(this);
@@ -114,9 +118,11 @@ public class Controller implements ActionListener {
             msg.printMessageWithTitle(GAME_RULES, "Reglas del juego");
         } else if (evento.getActionCommand().equals("Guardar Partida")) {
         	fm.saveFile(players, gameMode, board.getBoardInfo());
+        	gui.showSaveLoadMessage("La partida fue guardada satisfactoriamente", "Partida guardada");
         } else if (evento.getActionCommand().equals("Cargar Partida")) {
         	gui.closeWindow();
         	startGame('N');
+        	gui.showSaveLoadMessage("La partida fue cargaga satisfactoriamente", "Partida Cargada");
         } else if (evento.getActionCommand().equals("Jugador 1")) {
         	gui.showHitPieces(board.getBoardInfo().p1HitPieces, board.getBoardInfo().getP1HitPiecesIndex());
         } else if (evento.getActionCommand().equals("Jugador 2")) {

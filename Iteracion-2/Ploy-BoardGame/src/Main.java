@@ -5,7 +5,7 @@ public class Main {
 		String[] options = {"Nueva partida", "Cargar partida","Cancelar"};
 		char newGame = ' ';
     	int input = -1;
-	    input = msg.inputMessageWithOptions("Seleccione lo que desea hacer", "Bienvenido a Ploy BoardGame", options);
+	    input = msg.inputMessageWithOptions("Para empezar, seleccione lo que desea hacer", "Bienvenido a Ploy BoardGame", options);
 	    if (input == 0) {
 	    	newGame = 'Y';
 	    } else if (input == 1) {
