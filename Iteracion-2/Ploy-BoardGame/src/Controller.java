@@ -58,9 +58,12 @@ public class Controller implements ActionListener {
 				gui.loadBoard(players, gameMode, fm.getBoardData());
 				board.loadHitPiecesIndexes(fm.getHitPiecesIndexes());
 				board.loadHitPieces(gameMode, fm.getHitPieces());
+				gui.showSaveLoadMessage("La partida fue cargaga satisfactoriamente", "Partida Cargada");
 			} else {
 				gui.showSaveLoadMessage("Error al cargar la partda, puede que el archivo no exista, saliendo...", "Error");
-				System.exit(-1);
+				if (this.players == null) {
+					System.exit(0);
+				}
 			}
 		}
 		
@@ -120,9 +123,8 @@ public class Controller implements ActionListener {
         	fm.saveFile(players, gameMode, board.getBoardInfo());
         	gui.showSaveLoadMessage("La partida fue guardada satisfactoriamente", "Partida guardada");
         } else if (evento.getActionCommand().equals("Cargar Partida")) {
-        	gui.closeWindow();
+			gui.closeWindow();
         	startGame('N');
-        	gui.showSaveLoadMessage("La partida fue cargaga satisfactoriamente", "Partida Cargada");
         } else if (evento.getActionCommand().equals("Jugador 1")) {
         	gui.showHitPieces(board.getBoardInfo().p1HitPieces, board.getBoardInfo().getP1HitPiecesIndex());
         } else if (evento.getActionCommand().equals("Jugador 2")) {
