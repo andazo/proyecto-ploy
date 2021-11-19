@@ -315,4 +315,36 @@ public class Controller implements ActionListener {
       }
    }
     
+  /*
+     * no se si esto tiene que estar en el controlador o en otra clase como arbitro o algo asi
+   private void checkMovements(int i, int j, int type) {  // i, j es la posicion de la pieza activa, type el tipo de la pieza
+	   // primero se verifica el tipo de la pieza
+	   // se verifica la dirección de la pieza
+	   // se verifica si las posiciones en las que la pieza puede moverse estan vacias
+	   // entonces se cambia el color de los posibles movimientos
+	   
+	   if(board.getBoardInfo().boardSquares[i][j].getType() == 0) { // si es comandante, escudo ...
+		   int dir = board.getBoardInfo().boardSquares[i][j].getDirection();
+		   if(dir == num) { // depende de la direccion los indices cambian
+			   if(board.getBoardInfo().boardSquares[i+1][j].getType() == -1){ // si type es -1 esta vacia
+				   // se cambia el color a la casilla i+1, j
+			   } // si es el escudo solo se verifica una posicion
+		   }
+	   }
+	   
+	   if(board.getBoardInfo().boardSquares[i][j].getType() == 1) { // si es otro como un tipo de probe ...
+		   int dir = board.getBoardInfo().boardSquares[i][j].getDirection();
+		   if(dir == num) { // depende de la direccion los indices cambian
+			   if(board.getBoardInfo().boardSquares[i+1][j].getType() == -1){ // si type es -1 esta vacia
+				   // se cambia el color a la casilla i+1, j
+			   }
+			   if(board.getBoardInfo().boardSquares[i+1][j+1].getType() == -1){ // si type es -1 esta vacia
+				   // se cambia el color a la casilla i+1, j+1
+			   } 
+		   }
+	   
+   		}
+   }
+   */
 }
+
