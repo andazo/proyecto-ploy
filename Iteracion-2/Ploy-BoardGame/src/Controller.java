@@ -262,7 +262,7 @@ public class Controller implements ActionListener {
     	 	a estar en esta ventana se pierde automaticamente
     	*/
     	
-      switch(gameMode) {
+        switch(gameMode) {
         case 0: //1v1
         	boolean aux = true;
         	players[hitInfo.getOwner()-1].setLost(true);
@@ -276,75 +276,72 @@ public class Controller implements ActionListener {
         	}
         	break;
         case 1: //1v1v1v1
-          players[hitInfo.getOwner()-1].setLost(true);
-          board.getBoardInfo().setActivePlayers(board.getBoardInfo().getActivePlayers()-1);
-          if(board.getBoardInfo().getActivePlayers() == 1) {
-            removeMouseActions();
-            msg.printSimpleMessage("Game Over \n" + players[attackerInfo.getOwner()-1].getName() + " ha ganado");
-            gui.guiPrintLine("Game Over 1v1v1v1, tablero bloqueado");
-            char finishedGame1 = finished(msg);
-        	if (finishedGame1 == 'Y' ) {
-        		removeMouseActions();
-        	} else {
-        		System.exit(0);
-        	}
-          } else {
+            players[hitInfo.getOwner()-1].setLost(true);
+            board.getBoardInfo().setActivePlayers(board.getBoardInfo().getActivePlayers()-1);
+            if (board.getBoardInfo().getActivePlayers() == 1) {
+	            removeMouseActions();
+	            msg.printSimpleMessage("Game Over \n" + players[attackerInfo.getOwner()-1].getName() + " ha ganado");
+	            gui.guiPrintLine("Game Over 1v1v1v1, tablero bloqueado");
+	            char finishedGame1 = finished(msg);
+	        	if (finishedGame1 == 'Y' ) {
+	        		removeMouseActions();
+	        	} else {
+	        		System.exit(0);
+	        	}
+            } else {
           	// el jugador que queda controla las piezas que quedan
-            msg.printSimpleMessage(players[hitInfo.getOwner()-1].getName() + " ha perdido");
-          }
+                msg.printSimpleMessage(players[hitInfo.getOwner()-1].getName() + " ha perdido");
+            }
         	break;
         case 2: //2v2
         	players[hitInfo.getOwner()-1].setLost(true);
-          int friend = players[(hitInfo.getOwner()-1)].getFriend()-1;
-          if(players[friend].getLost()) { //si los dos ya perdieron
-            removeMouseActions();
-            msg.printSimpleMessage("Game Over \n" + players[attackerInfo.getOwner()-1].getName()
-            		+ " y " + players[players[attackerInfo.getOwner()-1].getFriend()-1].getName() + " han ganado");
-            gui.guiPrintLine("Game Over 2v2, tablero bloqueado");
-            char finishedGame3 = finished(msg);
-        	if (finishedGame3 == 'Y' ) {
-        		removeMouseActions();
-        	} else {
-        		System.exit(0);
-        	}
-          } else {
-          	// el jugador que queda controla las piezas que quedan
-            msg.printSimpleMessage(players[hitInfo.getOwner()-1].getName() + " ha perdido");
-          }
-        	break;
-      }
-   }
-    
-  /*
-     * no se si esto tiene que estar en el controlador o en otra clase como arbitro o algo asi
-   private void checkMovements(int i, int j, int type) {  // i, j es la posicion de la pieza activa, type el tipo de la pieza
-	   // primero se verifica el tipo de la pieza
-	   // se verifica la dirección de la pieza
-	   // se verifica si las posiciones en las que la pieza puede moverse estan vacias
-	   // entonces se cambia el color de los posibles movimientos
-	   
-	   if(board.getBoardInfo().boardSquares[i][j].getType() == 0) { // si es comandante, escudo ...
-		   int dir = board.getBoardInfo().boardSquares[i][j].getDirection();
-		   if(dir == num) { // depende de la direccion los indices cambian
-			   if(board.getBoardInfo().boardSquares[i+1][j].getType() == -1){ // si type es -1 esta vacia
-				   // se cambia el color a la casilla i+1, j
-			   } // si es el escudo solo se verifica una posicion
-		   }
-	   }
-	   
-	   if(board.getBoardInfo().boardSquares[i][j].getType() == 1) { // si es otro como un tipo de probe ...
-		   int dir = board.getBoardInfo().boardSquares[i][j].getDirection();
-		   if(dir == num) { // depende de la direccion los indices cambian
-			   if(board.getBoardInfo().boardSquares[i+1][j].getType() == -1){ // si type es -1 esta vacia
-				   // se cambia el color a la casilla i+1, j
-			   }
-			   if(board.getBoardInfo().boardSquares[i+1][j+1].getType() == -1){ // si type es -1 esta vacia
-				   // se cambia el color a la casilla i+1, j+1
-			   } 
-		   }
-	   
-   		}
-   }
-   */
-}
+            int friend = players[(hitInfo.getOwner()-1)].getFriend()-1;
+            if (players[friend].getLost()) { //si los dos ya perdieron
+	            removeMouseActions();
+	            msg.printSimpleMessage("Game Over \n" + players[attackerInfo.getOwner()-1].getName()
+	            		+ " y " + players[players[attackerInfo.getOwner()-1].getFriend()-1].getName() + " han ganado");
+	            gui.guiPrintLine("Game Over 2v2, tablero bloqueado");
+	            char finishedGame3 = finished(msg);
+	        	if (finishedGame3 == 'Y' ) {
+	        		removeMouseActions();
+	        	} else {
+	        		System.exit(0);
+	        	}
+	        } else {
+	        	// el jugador que queda controla las piezas que quedan
+	            msg.printSimpleMessage(players[hitInfo.getOwner()-1].getName() + " ha perdido");
+	        }
+            break;
+        }
+    }
 
+    /*
+    private void checkMovements(int i, int j, int type) {  // i, j es la posicion de la pieza activa, type el tipo de la pieza
+	    // primero se verifica el tipo de la pieza
+	    // se verifica la dirección de la pieza
+	    // se verifica si las posiciones en las que la pieza puede moverse estan vacias
+	    // entonces se cambia el color de los posibles movimientos
+	   
+	    if (board.getBoardInfo().boardSquares[i][j].getType() == 0) { // si es comandante, escudo ...
+		    int dir = board.getBoardInfo().boardSquares[i][j].getDirection();
+		    if (dir == num) { // depende de la direccion los indices cambian
+			    if (board.getBoardInfo().boardSquares[i+1][j].getType() == -1){ // si type es -1 esta vacia
+				    // se cambia el color a la casilla i+1, j
+			    } // si es el escudo solo se verifica una posicion
+		    }
+	    }
+	   
+	    if (board.getBoardInfo().boardSquares[i][j].getType() == 1) { // si es otro como un tipo de probe ...
+		    int dir = board.getBoardInfo().boardSquares[i][j].getDirection();
+		    if (dir == num) { // depende de la direccion los indices cambian
+			    if (board.getBoardInfo().boardSquares[i+1][j].getType() == -1){ // si type es -1 esta vacia
+				    // se cambia el color a la casilla i+1, j
+			    }
+			    if (board.getBoardInfo().boardSquares[i+1][j+1].getType() == -1){ // si type es -1 esta vacia
+				    // se cambia el color a la casilla i+1, j+1
+			    } 
+		    }
+   		}
+    }
+    */
+}
