@@ -57,24 +57,23 @@ public class Main {
 		    String color;
 		    boolean usado = false;
 		    while (true) {
-					color = msg.inputQuestionMessage("Color", "Color para el jugador" + player, choices, choices[i]);
-					for (int j = 0; j < i; j++) {
-						if (color == players[j].getColor()) {
-							msg.printMessage("Color ya fue seleccionado");
-							usado = true;
-							j = i;
-				    }
+				color = msg.inputQuestionMessage("Color", "Color para el jugador" + player, choices, choices[i]);
+				for (int j = 0; j < i; j++) {
+					if (color == players[j].getColor()) {
+						msg.printMessage("Color ya fue seleccionado");
+						usado = true;
+						j = i;
 					}
-					if (usado == false) {
-            break;
-	        }
+				}
+				if (usado == false) {
+					break;
+				}
 		    }
 		    players[i].setColor(color);
 		    
-				if (players[i].getColor() == null) {
-					System.exit(0);
-				}
-				
+			if (players[i].getColor() == null) {
+				System.exit(0);
+			}
 	    }
 	    
 	    String playersInfo = "";
@@ -107,8 +106,6 @@ public class Main {
 	}
 
 	public static void main(String[] args) {
-		
-		
 		Message msg = new Message();
 		FileManager fm = new FileManager();
 		char newGame = getNewGame(msg);
@@ -116,7 +113,6 @@ public class Main {
 		Player[] players = null;
 		int gameMode = 0;
 		
-	
 		if (newGame == 'Y') {
 			numPlayers = getNumPlayers(msg);
 			players = getPlayers(msg, numPlayers);

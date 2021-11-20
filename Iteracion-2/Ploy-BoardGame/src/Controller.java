@@ -1,5 +1,7 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+
 import javax.swing.JOptionPane;
 
 
@@ -35,12 +37,12 @@ public class Controller implements ActionListener {
 			+ "sus movimientos.";
 
 	public Controller(Message msg, FileManager fm, Player[] players, PloyGUI gui, PloyBoard board, int gameMode) {
-      this.msg = msg;
-      this.fm = fm;
-      this.players = players;
-      this.gui = gui;
-      this.board = board;
-      this.gameMode = gameMode;
+		this.msg = msg;
+		this.fm = fm;
+		this.players = players;
+		this.gui = gui;
+		this.board = board;
+		this.gameMode = gameMode;
 	}
 	
 	public void startGame(char newGame) {
@@ -138,80 +140,105 @@ public class Controller implements ActionListener {
         } else if (evento.getActionCommand().equals("Jugador 4")) {
         	gui.showHitPieces(board.getBoardInfo().p4HitPieces, board.getBoardInfo().getP4HitPiecesIndex());
         } else if (evento.getActionCommand().equals("Girar izq")) {
+        	String[][] moves = getValidMoves(board.getBoardInfo().getLastI(), board.getBoardInfo().getLastJ());
+			cancelHighlightMoves(moves, board.getBoardInfo().getLastI(), board.getBoardInfo().getLastJ());
         	gui.rotatePiece(board.getBoardInfo().getLastI(), board.getBoardInfo().getLastJ(), 315);
-        	board.rotatePiece(board.getBoardInfo().getLastI(), board.getBoardInfo().getLastJ(), -45);
+        	board.getBoardInfo().rotatePiece(board.getBoardInfo().getLastI(), board.getBoardInfo().getLastJ(), -45);
+        	moves = getValidMoves(board.getBoardInfo().getLastI(), board.getBoardInfo().getLastJ());
+	  		highlightMoves(moves, board.getBoardInfo().getLastI(), board.getBoardInfo().getLastJ());
         } else if (evento.getActionCommand().equals("Girar der")) {
+        	String[][] moves = getValidMoves(board.getBoardInfo().getLastI(), board.getBoardInfo().getLastJ());
+			cancelHighlightMoves(moves, board.getBoardInfo().getLastI(), board.getBoardInfo().getLastJ());
         	gui.rotatePiece(board.getBoardInfo().getLastI(), board.getBoardInfo().getLastJ(), 45);
-        	board.rotatePiece(board.getBoardInfo().getLastI(), board.getBoardInfo().getLastJ(), 45);
+        	board.getBoardInfo().rotatePiece(board.getBoardInfo().getLastI(), board.getBoardInfo().getLastJ(), 45);
+        	moves = getValidMoves(board.getBoardInfo().getLastI(), board.getBoardInfo().getLastJ());
+	  		highlightMoves(moves, board.getBoardInfo().getLastI(), board.getBoardInfo().getLastJ());
         }
     }
     
     public void clickedOn(int i, int j, int numPlayers, Player[] players) {
+    	String[][] moves = null;
 		if (!board.getBoardInfo().getPieceActive()) {
 			if (board.getBoardInfo().boardSquares[i][j].getType() != -1) {
 				board.getBoardInfo().setPieceActive(true);
 	  		gui.squaresPanels[i][j].setBackground(gui.boardColorHighlight);
 	  		board.getBoardInfo().setLastI(i);
 	  		board.getBoardInfo().setLastJ(j);
-	  		board.getBoardInfo().setOriginalDirection(board.getBoardInfo().boardSquares[i][j].getDirection());
+	  		int direction = board.getBoardInfo().boardSquares[i][j].getDirection();
+	  		board.getBoardInfo().setOriginalDirection(direction);
 	  		gui.rotateLeftBut.setEnabled(true);
-				gui.rotateRightBut.setEnabled(true);
+			gui.rotateRightBut.setEnabled(true);
 	  		gui.guiPrintLine("pieza activa");
+	  		moves = getValidMoves(i, j);
+	  		highlightMoves(moves, i, j);
 			}
 		} else {
-			if (!(board.getBoardInfo().getLastI() == i && board.getBoardInfo().getLastJ() == j)) {
-				if (board.getBoardInfo().boardSquares[board.getBoardInfo().getLastI()][board.getBoardInfo().getLastJ()].getDirection() == board.getBoardInfo().getOriginalDirection() || board.getBoardInfo().boardSquares[board.getBoardInfo().getLastI()][board.getBoardInfo().getLastJ()].getType() == 8) {
-					if (board.getBoardInfo().boardSquares[i][j].getOwner() != board.getBoardInfo().boardSquares[board.getBoardInfo().getLastI()][board.getBoardInfo().getLastJ()].getOwner()) {
+			int lastI = board.getBoardInfo().getLastI();
+			int lastJ = board.getBoardInfo().getLastJ();
+			if (!(lastI == i && lastJ == j)) {
+				int originalDirection = board.getBoardInfo().getOriginalDirection();
+				if (board.getBoardInfo().boardSquares[lastI][lastJ].getDirection() == originalDirection || board.getBoardInfo().boardSquares[lastI][lastJ].getType() == 8) {
+					int originalOwner = board.getBoardInfo().boardSquares[lastI][lastJ].getOwner();
+					int targetPieceOwner = board.getBoardInfo().boardSquares[i][j].getOwner();
+					if (originalOwner != targetPieceOwner) {
 						
-						if(board.getBoardInfo().boardSquares[i][j].getOwner() != 0) {
-							players[board.getBoardInfo().boardSquares[i][j].getOwner()-1].setNumPieces(players[board.getBoardInfo().boardSquares[i][j].getOwner()-1].getNumPieces()-1);
+						moves = getValidMoves(lastI, lastJ);
+						cancelHighlightMoves(moves, lastI, lastJ);
+						
+						if (targetPieceOwner != 0) {
+							players[targetPieceOwner - 1].setNumPieces(players[targetPieceOwner - 1].getNumPieces() - 1);
 							checkGameOver(board.getBoardInfo().boardSquares[i][j], board.getBoardInfo().boardSquares[board.getBoardInfo().getLastI()][board.getBoardInfo().getLastJ()]);
 						}
 						
+						String targetPieceColor = board.getBoardInfo().boardSquares[i][j].getColor();
+						String targetPieceType = Integer.toString(board.getBoardInfo().boardSquares[i][j].getType());
+						
 						if (numPlayers == 2) {
-							if (board.getBoardInfo().boardSquares[i][j].getColor().equals(players[0].getColor())) {
-								board.getBoardInfo().p1HitPieces[board.getBoardInfo().getP1HitPiecesIndex()][0] = Integer.toString(board.getBoardInfo().boardSquares[i][j].getType());
-								board.getBoardInfo().p1HitPieces[board.getBoardInfo().getP1HitPiecesIndex()][1] = board.getBoardInfo().boardSquares[i][j].getColor();
+							if (targetPieceColor.equals(players[0].getColor())) {
+								board.getBoardInfo().p1HitPieces[board.getBoardInfo().getP1HitPiecesIndex()][0] = targetPieceType;
+								board.getBoardInfo().p1HitPieces[board.getBoardInfo().getP1HitPiecesIndex()][1] = targetPieceColor;
 								board.getBoardInfo().setP1HitPiecesIndex(board.getBoardInfo().getP1HitPiecesIndex() + 1);
-							} else if (board.getBoardInfo().boardSquares[i][j].getColor().equals(players[1].getColor())) {
-								board.getBoardInfo().p2HitPieces[board.getBoardInfo().getP2HitPiecesIndex()][0] = Integer.toString(board.getBoardInfo().boardSquares[i][j].getType());
-								board.getBoardInfo().p2HitPieces[board.getBoardInfo().getP2HitPiecesIndex()][1] = board.getBoardInfo().boardSquares[i][j].getColor();
+							} else if (targetPieceColor.equals(players[1].getColor())) {
+								board.getBoardInfo().p2HitPieces[board.getBoardInfo().getP2HitPiecesIndex()][0] = targetPieceType;
+								board.getBoardInfo().p2HitPieces[board.getBoardInfo().getP2HitPiecesIndex()][1] = targetPieceColor;
 								board.getBoardInfo().setP2HitPiecesIndex(board.getBoardInfo().getP2HitPiecesIndex() + 1);
 							}
 						} else {
-							if (board.getBoardInfo().boardSquares[i][j].getColor().equals(players[0].getColor())) {
-								board.getBoardInfo().p1HitPieces[board.getBoardInfo().getP1HitPiecesIndex()][0] = Integer.toString(board.getBoardInfo().boardSquares[i][j].getType());
-								board.getBoardInfo().p1HitPieces[board.getBoardInfo().getP1HitPiecesIndex()][1] = board.getBoardInfo().boardSquares[i][j].getColor();
+							if (targetPieceColor.equals(players[0].getColor())) {
+								board.getBoardInfo().p1HitPieces[board.getBoardInfo().getP1HitPiecesIndex()][0] = targetPieceType;
+								board.getBoardInfo().p1HitPieces[board.getBoardInfo().getP1HitPiecesIndex()][1] = targetPieceColor;
 								board.getBoardInfo().setP1HitPiecesIndex(board.getBoardInfo().getP1HitPiecesIndex() + 1);
-							} else if (board.getBoardInfo().boardSquares[i][j].getColor().equals(players[1].getColor())) {
-								board.getBoardInfo().p2HitPieces[board.getBoardInfo().getP2HitPiecesIndex()][0] = Integer.toString(board.getBoardInfo().boardSquares[i][j].getType());
-								board.getBoardInfo().p2HitPieces[board.getBoardInfo().getP2HitPiecesIndex()][1] = board.getBoardInfo().boardSquares[i][j].getColor();
+							} else if (targetPieceColor.equals(players[1].getColor())) {
+								board.getBoardInfo().p2HitPieces[board.getBoardInfo().getP2HitPiecesIndex()][0] = targetPieceType;
+								board.getBoardInfo().p2HitPieces[board.getBoardInfo().getP2HitPiecesIndex()][1] = targetPieceColor;
 								board.getBoardInfo().setP2HitPiecesIndex(board.getBoardInfo().getP2HitPiecesIndex() + 1);
-							} else if (board.getBoardInfo().boardSquares[i][j].getColor().equals(players[2].getColor())) {
-								board.getBoardInfo().p3HitPieces[board.getBoardInfo().getP3HitPiecesIndex()][0] = Integer.toString(board.getBoardInfo().boardSquares[i][j].getType());
-								board.getBoardInfo().p3HitPieces[board.getBoardInfo().getP3HitPiecesIndex()][1] = board.getBoardInfo().boardSquares[i][j].getColor();
+							} else if (targetPieceColor.equals(players[2].getColor())) {
+								board.getBoardInfo().p3HitPieces[board.getBoardInfo().getP3HitPiecesIndex()][0] = targetPieceType;
+								board.getBoardInfo().p3HitPieces[board.getBoardInfo().getP3HitPiecesIndex()][1] = targetPieceColor;
 								board.getBoardInfo().setP3HitPiecesIndex(board.getBoardInfo().getP3HitPiecesIndex() + 1);
-							} else if (board.getBoardInfo().boardSquares[i][j].getColor().equals(players[3].getColor())) {
-								board.getBoardInfo().p4HitPieces[board.getBoardInfo().getP4HitPiecesIndex()][0] = Integer.toString(board.getBoardInfo().boardSquares[i][j].getType());
-								board.getBoardInfo().p4HitPieces[board.getBoardInfo().getP4HitPiecesIndex()][1] = board.getBoardInfo().boardSquares[i][j].getColor();
+							} else if (targetPieceColor.equals(players[3].getColor())) {
+								board.getBoardInfo().p4HitPieces[board.getBoardInfo().getP4HitPiecesIndex()][0] = targetPieceType;
+								board.getBoardInfo().p4HitPieces[board.getBoardInfo().getP4HitPiecesIndex()][1] = targetPieceColor;
 								board.getBoardInfo().setP4HitPiecesIndex(board.getBoardInfo().getP4HitPiecesIndex() + 1);
 							}
 						}
-						gui.squaresPanels[i][j].setIcon(gui.squaresPanels[board.getBoardInfo().getLastI()][board.getBoardInfo().getLastJ()].getIcon());
-						gui.squaresPanels[board.getBoardInfo().getLastI()][board.getBoardInfo().getLastJ()].setIcon(null);
-						gui.squaresPanels[board.getBoardInfo().getLastI()][board.getBoardInfo().getLastJ()].setBackground(gui.boardColorPurple);
-						board.getBoardInfo().boardSquares[i][j].setType(board.getBoardInfo().boardSquares[board.getBoardInfo().getLastI()][board.getBoardInfo().getLastJ()].getType());
-						board.getBoardInfo().boardSquares[board.getBoardInfo().getLastI()][board.getBoardInfo().getLastJ()].setType(-1);
-						board.getBoardInfo().boardSquares[i][j].setOwner(board.getBoardInfo().boardSquares[board.getBoardInfo().getLastI()][board.getBoardInfo().getLastJ()].getOwner());
-						board.getBoardInfo().boardSquares[board.getBoardInfo().getLastI()][board.getBoardInfo().getLastJ()].setOwner(0);
-						board.getBoardInfo().boardSquares[i][j].setDirection(board.getBoardInfo().boardSquares[board.getBoardInfo().getLastI()][board.getBoardInfo().getLastJ()].getDirection());
-						board.getBoardInfo().boardSquares[board.getBoardInfo().getLastI()][board.getBoardInfo().getLastJ()].setDirection(0);
-						board.getBoardInfo().boardSquares[i][j].setColor(board.getBoardInfo().boardSquares[board.getBoardInfo().getLastI()][board.getBoardInfo().getLastJ()].getColor());
-						board.getBoardInfo().boardSquares[board.getBoardInfo().getLastI()][board.getBoardInfo().getLastJ()].setColor("-");
+						
+						gui.squaresPanels[i][j].setIcon(gui.squaresPanels[lastI][lastJ].getIcon());
+						gui.squaresPanels[lastI][lastJ].setIcon(null);
+						gui.squaresPanels[lastI][lastJ].setBackground(gui.boardColorPurple);
+						board.getBoardInfo().boardSquares[i][j].setType(board.getBoardInfo().boardSquares[lastI][lastJ].getType());
+						board.getBoardInfo().boardSquares[lastI][lastJ].setType(-1);
+						board.getBoardInfo().boardSquares[i][j].setOwner(board.getBoardInfo().boardSquares[lastI][lastJ].getOwner());
+						board.getBoardInfo().boardSquares[lastI][lastJ].setOwner(0);
+						board.getBoardInfo().boardSquares[i][j].setDirection(board.getBoardInfo().boardSquares[lastI][lastJ].getDirection());
+						board.getBoardInfo().boardSquares[lastI][lastJ].setDirection(0);
+						board.getBoardInfo().boardSquares[i][j].setColor(board.getBoardInfo().boardSquares[lastI][lastJ].getColor());
+						board.getBoardInfo().boardSquares[lastI][lastJ].setColor("-");
 						board.getBoardInfo().setPieceActive(false);
 						gui.rotateLeftBut.setEnabled(false);
 						gui.rotateRightBut.setEnabled(false);
 						gui.guiPrintLine("pieza movida");
+		
 					} else {
 						gui.guiPrintLine("pieza pertenece al jugador");
 					}
@@ -219,7 +246,7 @@ public class Controller implements ActionListener {
 					gui.guiPrintLine("pieza rotada, imposible mover");
 				}
 			} else {
-				gui.squaresPanels[board.getBoardInfo().getLastI()][board.getBoardInfo().getLastJ()].setBackground(gui.boardColorPurple);
+				gui.squaresPanels[lastI][lastJ].setBackground(gui.boardColorPurple);
 				board.getBoardInfo().setPieceActive(false);
 				gui.rotateLeftBut.setEnabled(false);
 				gui.rotateRightBut.setEnabled(false);
@@ -228,6 +255,8 @@ public class Controller implements ActionListener {
 				} else {
 					gui.guiPrintLine("pieza no movida");
 				}
+				moves = getValidMoves(board.getBoardInfo().getLastI(), board.getBoardInfo().getLastJ());
+				cancelHighlightMoves(moves, board.getBoardInfo().getLastI(), board.getBoardInfo().getLastJ());
 			}
 		}
 	}
@@ -314,34 +343,204 @@ public class Controller implements ActionListener {
             break;
         }
     }
-
+    
     /*
-    private void checkMovements(int i, int j, int type) {  // i, j es la posicion de la pieza activa, type el tipo de la pieza
-	    // primero se verifica el tipo de la pieza
-	    // se verifica la dirección de la pieza
-	    // se verifica si las posiciones en las que la pieza puede moverse estan vacias
-	    // entonces se cambia el color de los posibles movimientos
-	   
-	    if (board.getBoardInfo().boardSquares[i][j].getType() == 0) { // si es comandante, escudo ...
-		    int dir = board.getBoardInfo().boardSquares[i][j].getDirection();
-		    if (dir == num) { // depende de la direccion los indices cambian
-			    if (board.getBoardInfo().boardSquares[i+1][j].getType() == -1){ // si type es -1 esta vacia
-				    // se cambia el color a la casilla i+1, j
-			    } // si es el escudo solo se verifica una posicion
-		    }
-	    }
-	   
-	    if (board.getBoardInfo().boardSquares[i][j].getType() == 1) { // si es otro como un tipo de probe ...
-		    int dir = board.getBoardInfo().boardSquares[i][j].getDirection();
-		    if (dir == num) { // depende de la direccion los indices cambian
-			    if (board.getBoardInfo().boardSquares[i+1][j].getType() == -1){ // si type es -1 esta vacia
-				    // se cambia el color a la casilla i+1, j
-			    }
-			    if (board.getBoardInfo().boardSquares[i+1][j+1].getType() == -1){ // si type es -1 esta vacia
-				    // se cambia el color a la casilla i+1, j+1
-			    } 
-		    }
-   		}
+     * Valid moves
+     * 
+     * |-|-|-|-|-|-|-|				|-|-|-|-|-|-|-|				|-|-|-|O|-|-|-|
+     * |-|-|-|-|-|-|-|				|-|-|-|-|-|-|-|				|-|-|-|O|-|-|-|
+     * |-|-|O|-|O|-|-|				|-|-|-|-|-|-|-|				|-|-|-|O|-|-|-|
+     * |-|-|-|P|-|-|-| commander	|O|O|O|P|O|O|O| lance 1		|-|-|-|P|-|-|-| lance 2
+     * |-|-|O|-|O|-|-|				|-|-|-|O|-|-|-|				|-|-|O|-|O|-|-|
+     * |-|-|-|-|-|-|-|				|-|-|-|O|-|-|-|				|-|O|-|-|-|O|-|
+     * |-|-|-|-|-|-|-|				|-|-|-|O|-|-|-|				|O|-|-|-|-|-|O|
+     * 
+     * |-|-|-|-|-|-|-|				|-|-|-|-|-|-|-|				|-|-|-|-|-|-|-|
+     * |-|-|-|-|-|-|-|				|-|-|-|-|-|-|-|				|-|-|-|-|-|-|-|
+     * |-|-|-|-|-|-|-|				|-|-|-|-|-|-|-|				|-|-|-|-|-|-|-|
+     * |-|-|-|P|-|-|-| lance 3		|-|-|-|P|-|-|-| probe 1		|-|-|-|P|-|-|-| probe 2
+     * |-|-|O|O|O|-|-|				|-|-|O|O|-|-|-|				|-|-|0|-|0|-|-|
+     * |-|O|-|O|-|O|-|				|-|O|-|O|-|-|-|				|-|0|-|-|-|0|-|
+     * |O|-|-|O|-|-|O|				|-|-|-|-|-|-|-|				|-|-|-|-|-|-|-|
+     * 
+     * |-|-|-|-|-|-|-|				|-|-|-|-|-|-|-|				|-|-|-|-|-|-|-|
+     * |-|-|-|O|-|-|-|				|-|-|-|-|-|-|-|				|-|-|-|-|-|-|-|
+     * |-|-|-|O|-|-|-|				|-|-|-|-|-|-|-|				|-|-|-|-|-|-|-|
+     * |-|-|-|P|-|-|-| probe 3		|-|-|-|P|-|-|-| probe 4		|-|-|-|P|-|-|-| shield
+     * |-|-|-|O|-|-|-|				|-|-|-|0|0|-|-|				|-|-|-|0|-|-|-|
+     * |-|-|-|O|-|-|-|				|-|-|-|0|-|0|-|				|-|-|-|-|-|-|-|
+     * |-|-|-|-|-|-|-|				|-|-|-|-|-|-|-|				|-|-|-|-|-|-|-|
+     */
+    public String[][] getValidMoves(int i, int j) {
+		String[][] moves = new String[7][7];
+		moves[3][3] = "O";
+		int type = board.getBoardInfo().boardSquares[i][j].getType();
+		if (type == 0) {
+			moves[2][2] = "O";
+			moves[2][4] = "O";
+			moves[4][2] = "O";
+			moves[4][4] = "O";			
+		} else if (type == 1) {
+			moves[3][2] = "O";
+			moves[3][1] = "O";
+			moves[3][0] = "O";
+			moves[4][3] = "O";
+			moves[5][3] = "O";
+			moves[6][3] = "O";
+			moves[3][4] = "O";
+			moves[3][5] = "O";
+			moves[3][6] = "O";
+		} else if (type == 2) {
+			moves[2][3] = "O";
+			moves[1][3] = "O";
+			moves[0][3] = "O";
+			moves[4][2] = "O";
+			moves[5][1] = "O";
+			moves[6][0] = "O";
+			moves[4][4] = "O";
+			moves[5][5] = "O";
+			moves[6][6] = "O";
+		} else if (type == 3) {
+			moves[4][2] = "O";
+			moves[5][1] = "O";
+			moves[6][0] = "O";
+			moves[4][3] = "O";
+			moves[5][3] = "O";
+			moves[6][3] = "O";
+			moves[4][4] = "O";
+			moves[5][5] = "O";
+			moves[6][6] = "O";
+		} else if (type == 4) {
+			moves[4][2] = "O";
+			moves[5][1] = "O";
+			moves[4][3] = "O";
+			moves[5][3] = "O";
+		} else if (type == 5) {
+			moves[4][2] = "O";
+			moves[5][1] = "O";
+			moves[4][4] = "O";
+			moves[5][5] = "O";
+		} else if (type == 6) {
+			moves[2][3] = "O";
+			moves[1][3] = "O";
+			moves[4][3] = "O";
+			moves[5][3] = "O";
+		} else if (type == 7) {
+			moves[4][3] = "O";
+			moves[5][3] = "O";
+			moves[4][4] = "O";
+			moves[5][5] = "O";
+		} else if (type == 8) {
+			moves[4][3] = "O";
+		}
+		moves = rotateMoves(moves, i, j);
+		return moves;
     }
-    */
+    
+    public String[][] rotateMoves(String[][] moves, int i, int j) {
+    	String[][] rotatedMoves = new String[7][7];
+		int direction = board.getBoardInfo().boardSquares[i][j].getDirection();
+		while (direction > 0) {
+			for (int x = 0; x < 7; x++) {
+				for (int y = 0; y < 7; y++) {
+					if (moves[x][y] != null) {
+						if (x == 0) {
+							if (y < 4) {
+								rotatedMoves[x][y + 3] = moves[x][y];
+							} else if (y == 4) {
+								rotatedMoves[x + 1][y + 2] = moves[x][y];
+							} else if (y == 5) {
+								rotatedMoves[x + 2][y + 1] = moves[x][y];
+							} else if (y == 6) {
+								rotatedMoves[x + 3][y] = moves[x][y];
+							}
+						} else if (x == 1) {
+							if (y < 4) {
+								rotatedMoves[x][y + 2] = moves[x][y];
+							} else if (y == 4) {
+								rotatedMoves[x + 1][y + 1] = moves[x][y];
+							} else if (y == 5) {
+								rotatedMoves[x + 2][y] = moves[x][y];
+							}
+						} else if (x == 2) {
+							if (y < 4) {
+								rotatedMoves[x][y + 1] = moves[x][y];
+							} else if (y == 4) {
+								rotatedMoves[x + 1][y] = moves[x][y];
+							}
+						} else if (x == 3) {
+							if (y == 4) {
+								rotatedMoves[x + 1][y] = moves[x][y];
+							} else if (y == 5) {
+								rotatedMoves[x + 2][y] = moves[x][y];
+							} else if (y == 6) {
+								rotatedMoves[x + 3][y] = moves[x][y];
+							} else if (y == 2) {
+								rotatedMoves[x - 1][y] = moves[x][y];
+							} else if (y == 1) {
+								rotatedMoves[x - 2][y] = moves[x][y];
+							} else if (y == 0) {
+								rotatedMoves[x - 3][y] = moves[x][y];
+							} else {
+								rotatedMoves[x][y] = moves[x][y];
+							}
+						} else if (x == 4) {
+							if (y > 2) {
+								rotatedMoves[x][y - 1] = moves[x][y];
+							} else if (y == 2) {
+								rotatedMoves[x - 1][y] = moves[x][y];
+							}
+						} else if (x == 5) {
+							if (y > 2) {
+								rotatedMoves[x][y - 2] = moves[x][y];
+							} else if (y == 2) {
+								rotatedMoves[x - 1][y - 1] = moves[x][y];
+							} else if (y == 1) {
+								rotatedMoves[x - 2][y] = moves[x][y];
+							}
+						} else if (x == 6) {
+							if (y > 2) {
+								rotatedMoves[x][y - 3] = moves[x][y];
+							} else if (y == 2) {
+								rotatedMoves[x - 1][y - 2] = moves[x][y];
+							} else if (y == 1) {
+								rotatedMoves[x - 2][y - 1] = moves[x][y];
+							} else if (y == 0) {
+								rotatedMoves[x - 3][y] = moves[x][y];
+							}
+						}
+					}
+				}
+			}
+			moves = rotatedMoves;			
+			rotatedMoves = new String[7][7];
+			direction = direction - 45;
+		}
+    	return moves;
+    }
+    
+    private void highlightMoves(String[][] moves, int i, int j) {
+    	
+    	for (int x = 0; x < 7; x++) {
+			for (int y = 0; y < 7; y++) {
+				try {
+					if (moves[x][y] == "O") {
+						gui.squaresPanels[(i - 3) + x][(j - 3) + y].setBackground(gui.boardColorHighlight);
+					}
+				} catch (Exception e) { }
+			}
+		}
+    }
+    
+    private void cancelHighlightMoves(String[][] moves, int i, int j) {
+    	for (int x = 0; x < 7; x++) {
+			for (int y = 0; y < 7; y++) {
+				try {
+					gui.squaresPanels[(i - 3) + x][(j - 3) + y].setBackground(gui.boardColorPurple);
+				} catch (Exception e) {
+					
+				}
+			}
+		}
+    }
 }

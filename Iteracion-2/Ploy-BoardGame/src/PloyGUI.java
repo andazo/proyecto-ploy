@@ -538,12 +538,6 @@ public class PloyGUI {
 		RotateIcon ri = new RotateIcon(squaresPanels[x][y].getIcon(), direction, true);
 		squaresPanels[x][y].setIcon(ri);
 	}
-
-	/*
-	private void highlightMoves() {
-		
-	}
-	*/
 	
 	public void guiPrintLine(String str) {
 		System.out.println(str);

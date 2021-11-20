@@ -127,4 +127,14 @@ public class BoardInfo {
     	return activePlayers;
     }
 
+    // direction = -45 rota hacia la izquierda, direction = 45 rota hacia la derecha
+ 	public void rotatePiece(int x, int y, int direction) {
+ 		int newDirection = boardSquares[x][y].getDirection() + direction;
+ 		if (newDirection < 0) {
+ 			newDirection = newDirection + 360;
+ 		} else if (newDirection > 360) {
+ 			newDirection = newDirection - 360;
+ 		}
+ 		boardSquares[x][y].setDirection(newDirection);
+ 	}
 }
