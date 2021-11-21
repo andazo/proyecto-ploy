@@ -61,16 +61,28 @@ public class PloyBoard {
 		if (playerNum == 1) {
 			for (int i = 1; i < 8; i++) {
 				getBoardInfo().boardSquares[8][i].setType(pieceOrder1v1P1[orderArrayIndex]);
-				getBoardInfo().boardSquares[8][i].setDirection(180);
 				getBoardInfo().boardSquares[8][i].setOwner(1);
 				getBoardInfo().boardSquares[8][i].setColor(color);
+				
+				if (getBoardInfo().boardSquares[8][i].getType() == 0) {
+					getBoardInfo().boardSquares[8][i].setDirection(0);					
+				} else {
+					getBoardInfo().boardSquares[8][i].setDirection(180);
+				}
+				
 				orderArrayIndex++;
 			}
 			for (int i = 2; i < 7; i++) {
 				getBoardInfo().boardSquares[7][i].setType(pieceOrder1v1P1[orderArrayIndex]);
-				getBoardInfo().boardSquares[7][i].setDirection(180);
 				getBoardInfo().boardSquares[7][i].setOwner(1);
 				getBoardInfo().boardSquares[7][i].setColor(color);
+				
+				if (getBoardInfo().boardSquares[7][i].getType() == 6) {
+					getBoardInfo().boardSquares[7][i].setDirection(0);					
+				} else {
+					getBoardInfo().boardSquares[7][i].setDirection(180);
+				}
+				
 				orderArrayIndex++;
 			}
 			for (int i = 3; i < 6; i++) {
@@ -110,10 +122,12 @@ public class PloyBoard {
 		if (playerNum == 1) {
 			for (int i = 0; i < 3; i++) {
 				int direction = 0;
-				if (i != 2) {
-					direction = 225;
-				} else {
+				if (i == 0) {
+					direction = 45;
+				} else if (i == 2) {
 					direction = 180;
+				} else {
+					direction = 225;
 				}
 				getBoardInfo().boardSquares[8][i].setType(pieceOrder1v1v1v1[orderArrayIndex]);
 				getBoardInfo().boardSquares[8][i].setDirection(direction);
@@ -145,10 +159,12 @@ public class PloyBoard {
 		} else if (playerNum == 2) {
 			for (int i = 0; i < 3; i++) {
 				int direction = 0;
-				if (i != 2) {
-					direction = 315;
-				} else {
+				if (i == 0) {
+					direction = 45;
+				} else if (i == 2) {
 					direction = 270;
+				} else {
+					direction = 315;
 				}
 				getBoardInfo().boardSquares[i][0].setType(pieceOrder1v1v1v1[orderArrayIndex]);
 				getBoardInfo().boardSquares[i][0].setDirection(direction);
@@ -180,10 +196,12 @@ public class PloyBoard {
 		} else if (playerNum == 3) {
 			for (int i = 8; i > 5; i--) {
 				int direction = 0;
-				if (i != 6) {
+				if (i == 8) {
 					direction = 45;
-				} else {
+				} else if (i == 6) {
 					direction = 0;
+				} else {
+					direction = 45;
 				}
 				getBoardInfo().boardSquares[0][i].setType(pieceOrder1v1v1v1[orderArrayIndex]);
 				getBoardInfo().boardSquares[0][i].setDirection(direction);
@@ -214,11 +232,13 @@ public class PloyBoard {
 			getBoardInfo().p3HitPieces = new String[9][2];
 		} else {
 			for (int i = 8; i > 5; i--) {
-				int direction = 0;
-				if (i != 6) {
-					direction = 135;
-				} else {
+				int direction = 0;				
+				if (i == 8) {
+					direction = 45;
+				} else if (i == 6) {
 					direction = 90;
+				} else {
+					direction = 135;
 				}
 				getBoardInfo().boardSquares[i][8].setType(pieceOrder1v1v1v1[orderArrayIndex]);
 				getBoardInfo().boardSquares[i][8].setDirection(direction);
@@ -255,9 +275,15 @@ public class PloyBoard {
 		if (playerNum == 1) {
 			for(int i = 1; i < 4; i++) {
 				getBoardInfo().boardSquares[8][i].setType(pieceOrder2v2[orderArrayIndex]);
-				getBoardInfo().boardSquares[8][i].setDirection(180);
 				getBoardInfo().boardSquares[8][i].setOwner(1);
 				getBoardInfo().boardSquares[8][i].setColor(color);
+				
+				if (getBoardInfo().boardSquares[8][i].getType() == 0) {
+					getBoardInfo().boardSquares[8][i].setDirection(0);					
+				} else {
+					getBoardInfo().boardSquares[8][i].setDirection(180);
+				}
+				
 				orderArrayIndex++;
 			}
 			for(int i = 1; i < 4; i++) {
@@ -299,9 +325,15 @@ public class PloyBoard {
 		} else if (playerNum == 3) {
 			for(int i = 7; i > 4; i--) {
 				getBoardInfo().boardSquares[8][i].setType(pieceOrder2v2[orderArrayIndex]);
-				getBoardInfo().boardSquares[8][i].setDirection(180);
 				getBoardInfo().boardSquares[8][i].setOwner(3);
 				getBoardInfo().boardSquares[8][i].setColor(color);
+				
+				if (getBoardInfo().boardSquares[8][i].getType() == 0) {
+					getBoardInfo().boardSquares[8][i].setDirection(0);					
+				} else {
+					getBoardInfo().boardSquares[8][i].setDirection(180);
+				}
+				
 				orderArrayIndex++;
 			}
 			for(int i = 5; i < 8; i++) {
@@ -401,5 +433,9 @@ public class PloyBoard {
 				}
 			}
 		}
+	}
+	
+	public void loadCurrentPlayer(int currentPlayer) {
+		getBoardInfo().setCurrentPlayer(currentPlayer);
 	}
 }

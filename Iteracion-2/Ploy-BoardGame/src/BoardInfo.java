@@ -29,7 +29,7 @@ public class BoardInfo {
 		}
     	pieceActive = false;
     	gameOver = false;
-    	currentPlayer = 0;
+    	currentPlayer = 1;
     	lastI = 0;
     	lastJ = 0;
     	originalDirection = 0;
@@ -130,10 +130,25 @@ public class BoardInfo {
     // direction = -45 rota hacia la izquierda, direction = 45 rota hacia la derecha
  	public void rotatePiece(int x, int y, int direction) {
  		int newDirection = boardSquares[x][y].getDirection() + direction;
- 		if (newDirection < 0) {
- 			newDirection = newDirection + 360;
- 		} else if (newDirection > 360) {
- 			newDirection = newDirection - 360;
+ 		int type = boardSquares[x][y].getType();
+ 		if (type == 0) {
+ 			if (newDirection < 0) {
+	 			newDirection = newDirection + 90;
+	 		} else if (newDirection >= 90) {
+	 			newDirection = newDirection - 90;
+	 		}
+ 		} else if (type == 6) {
+ 			if (newDirection < 0) {
+	 			newDirection = newDirection + 180;
+	 		} else if (newDirection >= 180) {
+	 			newDirection = newDirection - 180;
+	 		}
+ 		} else {
+	 		if (newDirection < 0) {
+	 			newDirection = newDirection + 360;
+	 		} else if (newDirection >= 360) {
+	 			newDirection = newDirection - 360;
+	 		}
  		}
  		boardSquares[x][y].setDirection(newDirection);
  	}

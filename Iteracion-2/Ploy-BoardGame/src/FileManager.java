@@ -26,9 +26,10 @@ public class FileManager {
 		try (FileWriter fileWriter = new FileWriter(System.getProperty("user.dir") + "/Saves/" + fileName, false)) {
 		    String fileContent = "players";
 		    for (int i = 0; i < players.length; i++) {
-		    	fileContent = fileContent + " " + players[i].getName() + " " + players[i].getColor();
+		    	fileContent = fileContent + " " + players[i].getName() + " " + players[i].getColor() + " " + players[i].getNumPieces() + " " + players[i].getLost() + " " + players[i].getFriend();
 		    }
 		    fileContent = fileContent + "\n" + "gameMode " + gameMode;
+		    fileContent = fileContent + "\n" + "currentPlayer " + boardInfo.getCurrentPlayer();
 		    fileContent = fileContent + "\n" + "board";
 		    for (int i = 0; i < 9; i++) {
 		    	for (int j = 0; j < 9; j++) {
@@ -104,17 +105,23 @@ public class FileManager {
 		
 		String[] lineData = data[pos].split(" ");
 		
-		Player[] players = new Player[lineData.length / 2];
-		for (int i = 0; i < lineData.length / 2; i++) {
+		Player[] players = new Player[lineData.length / 5];
+		for (int i = 0; i < lineData.length / 5; i++) {
 	    	players[i] = new Player();
 		}
 		pos = 0;
 		
 		for (int i = 1; i < lineData.length; i++) {
-			if (i % 2 != 0) {
+			if (i % 5 == 1) {
 				players[pos].setName(lineData[i]);
-			} else if (i % 2 == 0) {
+			} else if (i % 5 == 2) {
 				players[pos].setColor(lineData[i]);
+			} else if (i % 5 == 3) {
+				players[pos].setNumPieces(Integer.parseInt(lineData[i]));
+			} else if (i % 5 == 4) {
+				players[pos].setLost(Boolean.parseBoolean(lineData[i]));
+			} else if (i % 5 == 0) {
+				players[pos].setFriend(Integer.parseInt(lineData[i]));
 				pos++;
 			}
 		}
@@ -124,6 +131,22 @@ public class FileManager {
 	
 	public int getGameMode() {
 		String token = "gameMode";
+		int pos = 0;
+		
+		for (int i = 0; i < data.length; i++) {
+			if (data[i].contains(token)) {
+				pos = i;
+				break;
+			}
+		}
+		
+		String[] lineData = data[pos].split(" ");
+		
+		return Integer.parseInt(lineData[1]);
+	}
+	
+	public int getCurrentPlayer() {
+		String token = "currentPlayer";
 		int pos = 0;
 		
 		for (int i = 0; i < data.length; i++) {

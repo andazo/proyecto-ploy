@@ -113,8 +113,8 @@ public class Controller implements ActionListener {
 	}
 	
 	private void removeMouseActions() {
-		for(int i = 0; i < 9; i++) {
-			for(int j = 0; j < 9; j++) {
+		for (int i = 0; i < 9; i++) {
+			for (int j = 0; j < 9; j++) {
 				gui.squaresPanels[i][j].removeMouseListener(gui.squaresPanels[i][j].getMouseListeners()[0]);
 			}
 		}
@@ -154,43 +154,52 @@ public class Controller implements ActionListener {
 			cancelHighlightMoves(moves, board.getBoardInfo().getLastI(), board.getBoardInfo().getLastJ());
         	gui.rotatePiece(board.getBoardInfo().getLastI(), board.getBoardInfo().getLastJ(), 315);
         	board.getBoardInfo().rotatePiece(board.getBoardInfo().getLastI(), board.getBoardInfo().getLastJ(), -45);
-        	moves = getValidMoves(board.getBoardInfo().getLastI(), board.getBoardInfo().getLastJ());
-	  		highlightMoves(moves, board.getBoardInfo().getLastI(), board.getBoardInfo().getLastJ());
+        	int lastI = board.getBoardInfo().getLastI();
+			int lastJ = board.getBoardInfo().getLastJ();
+        	int originalDirection = board.getBoardInfo().getOriginalDirection();
+			if (board.getBoardInfo().boardSquares[lastI][lastJ].getDirection() == originalDirection || board.getBoardInfo().boardSquares[lastI][lastJ].getType() == 8) {
+				moves = getValidMoves(board.getBoardInfo().getLastI(), board.getBoardInfo().getLastJ());
+				highlightMoves(moves, board.getBoardInfo().getLastI(), board.getBoardInfo().getLastJ());
+			}
         } else if (evento.getActionCommand().equals("Girar der")) {
         	String[][] moves = getValidMoves(board.getBoardInfo().getLastI(), board.getBoardInfo().getLastJ());
 			cancelHighlightMoves(moves, board.getBoardInfo().getLastI(), board.getBoardInfo().getLastJ());
         	gui.rotatePiece(board.getBoardInfo().getLastI(), board.getBoardInfo().getLastJ(), 45);
         	board.getBoardInfo().rotatePiece(board.getBoardInfo().getLastI(), board.getBoardInfo().getLastJ(), 45);
-        	moves = getValidMoves(board.getBoardInfo().getLastI(), board.getBoardInfo().getLastJ());
-	  		highlightMoves(moves, board.getBoardInfo().getLastI(), board.getBoardInfo().getLastJ());
+        	int lastI = board.getBoardInfo().getLastI();
+			int lastJ = board.getBoardInfo().getLastJ();
+        	int originalDirection = board.getBoardInfo().getOriginalDirection();
+			if (board.getBoardInfo().boardSquares[lastI][lastJ].getDirection() == originalDirection || board.getBoardInfo().boardSquares[lastI][lastJ].getType() == 8) {
+				moves = getValidMoves(board.getBoardInfo().getLastI(), board.getBoardInfo().getLastJ());
+				highlightMoves(moves, board.getBoardInfo().getLastI(), board.getBoardInfo().getLastJ());
+			}
         }
     }
     
     public void clickedOn(int i, int j, int numPlayers, Player[] players) {
     	String[][] moves = null;
-		if (!board.getBoardInfo().getPieceActive()) {
+    	if (board.getBoardInfo().boardSquares[i][j].getColor().equals(players[board.getBoardInfo().getCurrentPlayer() - 1].getColor()) && !board.getBoardInfo().getPieceActive()) {
 			if (board.getBoardInfo().boardSquares[i][j].getType() != -1) {
 				board.getBoardInfo().setPieceActive(true);
-	  		gui.squaresPanels[i][j].setBackground(gui.boardColorHighlight);
-	  		board.getBoardInfo().setLastI(i);
-	  		board.getBoardInfo().setLastJ(j);
-	  		int direction = board.getBoardInfo().boardSquares[i][j].getDirection();
-	  		board.getBoardInfo().setOriginalDirection(direction);
-	  		gui.rotateLeftBut.setEnabled(true);
-			gui.rotateRightBut.setEnabled(true);
-	  		gui.guiPrintLine("pieza activa");
-	  		moves = getValidMoves(i, j);
-	  		highlightMoves(moves, i, j);
+		  		gui.squaresPanels[i][j].setBackground(gui.boardColorHighlight);
+			  	board.getBoardInfo().setLastI(i);
+			  	board.getBoardInfo().setLastJ(j);
+			 	int direction = board.getBoardInfo().boardSquares[i][j].getDirection();
+			 	board.getBoardInfo().setOriginalDirection(direction);
+		 		gui.rotateLeftBut.setEnabled(true);
+				gui.rotateRightBut.setEnabled(true);
+		  		gui.guiPrintLine("pieza activa");
+		  		moves = getValidMoves(i, j);
+		  		highlightMoves(moves, i, j);
 			}
-		} else {
+		} else if (board.getBoardInfo().getPieceActive()) {
 			int lastI = board.getBoardInfo().getLastI();
 			int lastJ = board.getBoardInfo().getLastJ();
 			if (!(lastI == i && lastJ == j)) {
 				int originalDirection = board.getBoardInfo().getOriginalDirection();
 				if (board.getBoardInfo().boardSquares[lastI][lastJ].getDirection() == originalDirection || board.getBoardInfo().boardSquares[lastI][lastJ].getType() == 8) {
-					int originalOwner = board.getBoardInfo().boardSquares[lastI][lastJ].getOwner();
 					int targetPieceOwner = board.getBoardInfo().boardSquares[i][j].getOwner();
-					if (originalOwner != targetPieceOwner) {
+					if (gui.squaresPanels[i][j].getBackground() == gui.boardColorHighlight) {
 						
 						moves = getValidMoves(lastI, lastJ);
 						cancelHighlightMoves(moves, lastI, lastJ);
@@ -232,7 +241,7 @@ public class Controller implements ActionListener {
 								board.getBoardInfo().setP4HitPiecesIndex(board.getBoardInfo().getP4HitPiecesIndex() + 1);
 							}
 						}
-						
+							
 						gui.squaresPanels[i][j].setIcon(gui.squaresPanels[lastI][lastJ].getIcon());
 						gui.squaresPanels[lastI][lastJ].setIcon(null);
 						gui.squaresPanels[lastI][lastJ].setBackground(gui.boardColorPurple);
@@ -247,13 +256,28 @@ public class Controller implements ActionListener {
 						board.getBoardInfo().setPieceActive(false);
 						gui.rotateLeftBut.setEnabled(false);
 						gui.rotateRightBut.setEnabled(false);
-						gui.guiPrintLine("pieza movida");
-		
+						gui.guiPrintLine("Pieza movida");
+						board.getBoardInfo().setCurrentPlayer(board.getBoardInfo().getCurrentPlayer() + 1);
+						if (numPlayers == 2) {
+							if (board.getBoardInfo().getCurrentPlayer() == 3) {
+								board.getBoardInfo().setCurrentPlayer(board.getBoardInfo().getCurrentPlayer() - 2);
+							}
+						} else {
+							if (board.getBoardInfo().getCurrentPlayer() == 5) {
+								board.getBoardInfo().setCurrentPlayer(board.getBoardInfo().getCurrentPlayer() - 4);
+							}
+							while (players[board.getBoardInfo().getCurrentPlayer() - 1].getLost() == true) {
+								board.getBoardInfo().setCurrentPlayer(board.getBoardInfo().getCurrentPlayer() + 1);
+								if (board.getBoardInfo().getCurrentPlayer() == 5) {
+									board.getBoardInfo().setCurrentPlayer(board.getBoardInfo().getCurrentPlayer() - 4);
+								}
+							}
+						}
 					} else {
-						gui.guiPrintLine("pieza pertenece al jugador");
+						gui.guiPrintLine("Movimiento no permitido");
 					}
 				} else {
-					gui.guiPrintLine("pieza rotada, imposible mover");
+					gui.guiPrintLine("Pieza rotada, imposible mover");
 				}
 			} else {
 				gui.squaresPanels[lastI][lastJ].setBackground(gui.boardColorPurple);
@@ -261,14 +285,32 @@ public class Controller implements ActionListener {
 				gui.rotateLeftBut.setEnabled(false);
 				gui.rotateRightBut.setEnabled(false);
 				if (board.getBoardInfo().boardSquares[i][j].getDirection() != board.getBoardInfo().getOriginalDirection()) {
-					gui.guiPrintLine("pieza rotada");
+					gui.guiPrintLine("Pieza rotada");
+					board.getBoardInfo().setCurrentPlayer(board.getBoardInfo().getCurrentPlayer() + 1);
+					if (numPlayers == 2) {
+						if (board.getBoardInfo().getCurrentPlayer() == 3) {
+							board.getBoardInfo().setCurrentPlayer(board.getBoardInfo().getCurrentPlayer() - 2);
+						}
+					} else {
+						if (board.getBoardInfo().getCurrentPlayer() == 5) {
+							board.getBoardInfo().setCurrentPlayer(board.getBoardInfo().getCurrentPlayer() - 4);
+						}
+						while (players[board.getBoardInfo().getCurrentPlayer() - 1].getLost() == true) {
+							board.getBoardInfo().setCurrentPlayer(board.getBoardInfo().getCurrentPlayer() + 1);
+							if (board.getBoardInfo().getCurrentPlayer() == 5) {
+								board.getBoardInfo().setCurrentPlayer(board.getBoardInfo().getCurrentPlayer() - 4);
+							}
+						}
+					}
 				} else {
-					gui.guiPrintLine("pieza no movida");
+					gui.guiPrintLine("Pieza no movida");
 				}
 				moves = getValidMoves(board.getBoardInfo().getLastI(), board.getBoardInfo().getLastJ());
 				cancelHighlightMoves(moves, board.getBoardInfo().getLastI(), board.getBoardInfo().getLastJ());
 			}
-		}
+    	} else {
+    		gui.guiPrintLine("Pieza no pertenece al jugador");
+    	}
 	}
     
     private void checkGameOver(BoardSquareInfo hitInfo, BoardSquareInfo attackerInfo) {
@@ -444,6 +486,286 @@ public class Controller implements ActionListener {
 			moves[4][3] = "O";
 		}
 		moves = rotateMoves(moves, i, j);
+		
+		// Exclude other pieces
+		// Allies
+		
+		// -1 | +1
+		if (i - 1 >= 0 && j - 1 >= 0) {
+			if (board.getBoardInfo().boardSquares[i - 1][j - 1].getOwner() == board.getBoardInfo().boardSquares[i][j].getOwner()) {
+				moves[2][2] = "-";
+				moves[1][1] = "-";
+				moves[0][0] = "-";
+			}
+		}
+		if (i - 1 >= 0) {
+			if (board.getBoardInfo().boardSquares[i - 1][j].getOwner() == board.getBoardInfo().boardSquares[i][j].getOwner()) {
+				moves[2][3] = "-";
+				moves[1][3] = "-";
+				moves[0][3] = "-";
+			}
+		}
+		if (i - 1 >= 0 && j + 1 <= 8) {
+			if (board.getBoardInfo().boardSquares[i - 1][j + 1].getOwner() == board.getBoardInfo().boardSquares[i][j].getOwner()) {
+				moves[2][4] = "-";
+				moves[1][5] = "-";
+				moves[0][6] = "-";
+			}
+		}
+		if (j - 1 >= 0) {
+			if (board.getBoardInfo().boardSquares[i][j - 1].getOwner() == board.getBoardInfo().boardSquares[i][j].getOwner()) {
+				moves[3][2] = "-";
+				moves[3][1] = "-";
+				moves[3][0] = "-";
+			}
+		}
+		if (j + 1 <= 8) {
+			if (board.getBoardInfo().boardSquares[i][j + 1].getOwner() == board.getBoardInfo().boardSquares[i][j].getOwner()) {
+				moves[3][4] = "-";
+				moves[3][5] = "-";
+				moves[3][6] = "-";
+			}
+		}
+		if (i + 1 <= 8 && j - 1 >= 0) {
+			if (board.getBoardInfo().boardSquares[i + 1][j - 1].getOwner() == board.getBoardInfo().boardSquares[i][j].getOwner()) {
+				moves[4][2] = "-";
+				moves[5][1] = "-";
+				moves[6][0] = "-";
+			}
+		}
+		if (i + 1 <= 8) {
+			if (board.getBoardInfo().boardSquares[i + 1][j].getOwner() == board.getBoardInfo().boardSquares[i][j].getOwner()) {
+				moves[4][3] = "-";
+				moves[5][3] = "-";
+				moves[6][3] = "-";
+			}
+		}
+		if (i + 1 <= 8 && j + 1 <= 8) {
+			if (board.getBoardInfo().boardSquares[i + 1][j + 1].getOwner() == board.getBoardInfo().boardSquares[i][j].getOwner()) {
+				moves[4][4] = "-";
+				moves[5][5] = "-";
+				moves[6][6] = "-";
+			}
+		}
+		
+		// -2 | +2
+		if (i - 2 >= 0 && j - 2 >= 0) {
+			if (board.getBoardInfo().boardSquares[i - 2][j - 2].getOwner() == board.getBoardInfo().boardSquares[i][j].getOwner()) {
+				moves[1][1] = "-";
+				moves[0][0] = "-";
+			}
+		}
+		if (i - 2 >= 0) {
+			if (board.getBoardInfo().boardSquares[i - 2][j].getOwner() == board.getBoardInfo().boardSquares[i][j].getOwner()) {
+				moves[1][3] = "-";
+				moves[0][3] = "-";
+			}
+		}
+		if (i - 2 >= 0 && j + 2 <= 8) {
+			if (board.getBoardInfo().boardSquares[i - 2][j + 2].getOwner() == board.getBoardInfo().boardSquares[i][j].getOwner()) {
+				moves[1][5] = "-";
+				moves[0][6] = "-";
+			}
+		}
+		if (j - 2 >= 0) {
+			if (board.getBoardInfo().boardSquares[i][j - 2].getOwner() == board.getBoardInfo().boardSquares[i][j].getOwner()) {
+				moves[3][1] = "-";
+				moves[3][0] = "-";
+			}
+		}
+		if (j + 2 <= 8) {
+			if (board.getBoardInfo().boardSquares[i][j + 2].getOwner() == board.getBoardInfo().boardSquares[i][j].getOwner()) {
+				moves[3][5] = "-";
+				moves[3][6] = "-";
+			}
+		}
+		if (i + 2 <= 8 && j - 2 >= 0) {
+			if (board.getBoardInfo().boardSquares[i + 2][j - 2].getOwner() == board.getBoardInfo().boardSquares[i][j].getOwner()) {
+				moves[5][1] = "-";
+				moves[6][0] = "-";
+			}
+		}
+		if (i + 2 <= 8) {
+			if (board.getBoardInfo().boardSquares[i + 2][j].getOwner() == board.getBoardInfo().boardSquares[i][j].getOwner()) {
+				moves[5][3] = "-";
+				moves[6][3] = "-";
+			}
+		}
+		if (i + 2 <= 8 && j + 2 <= 8) {
+			if (board.getBoardInfo().boardSquares[i + 2][j + 2].getOwner() == board.getBoardInfo().boardSquares[i][j].getOwner()) {
+				moves[5][5] = "-";
+				moves[6][6] = "-";
+			}
+		}
+		
+		// -3 | +3
+		if (i - 3 >= 0 && j - 3 >= 0) {
+			if (board.getBoardInfo().boardSquares[i - 3][j - 3].getOwner() == board.getBoardInfo().boardSquares[i][j].getOwner()) {
+				moves[0][0] = "-";
+			}
+		}
+		if (i - 3 >= 0) {
+			if (board.getBoardInfo().boardSquares[i - 3][j].getOwner() == board.getBoardInfo().boardSquares[i][j].getOwner()) {
+				moves[0][3] = "-";
+			}
+		}
+		if (i - 3 >= 0 && j + 3 <= 8) {
+			if (board.getBoardInfo().boardSquares[i - 3][j + 3].getOwner() == board.getBoardInfo().boardSquares[i][j].getOwner()) {
+				moves[0][6] = "-";
+			}
+		}
+		if (j - 3 >= 0) {
+			if (board.getBoardInfo().boardSquares[i][j - 3].getOwner() == board.getBoardInfo().boardSquares[i][j].getOwner()) {
+				moves[3][0] = "-";
+			}
+		}
+		if (j + 3 <= 8) {
+			if (board.getBoardInfo().boardSquares[i][j + 3].getOwner() == board.getBoardInfo().boardSquares[i][j].getOwner()) {
+				moves[3][6] = "-";
+			}
+		}
+		if (i + 3 <= 8 && j - 3 >= 0) {
+			if (board.getBoardInfo().boardSquares[i + 3][j - 3].getOwner() == board.getBoardInfo().boardSquares[i][j].getOwner()) {
+				moves[6][0] = "-";
+			}
+		}
+		if (i + 3 <= 8) {
+			if (board.getBoardInfo().boardSquares[i + 3][j].getOwner() == board.getBoardInfo().boardSquares[i][j].getOwner()) {
+				moves[6][3] = "-";
+			}
+		}
+		if (i + 3 <= 8 && j + 3 <= 8) {
+			if (board.getBoardInfo().boardSquares[i + 3][j + 3].getOwner() == board.getBoardInfo().boardSquares[i][j].getOwner()) {
+				moves[6][6] = "-";
+			}
+		}
+		
+		// Enemies
+		
+		// -2 | +2
+		if (i - 2 >= 0 && j - 2 >= 0) {
+			if (board.getBoardInfo().boardSquares[i - 2][j - 2].getOwner() != board.getBoardInfo().boardSquares[i][j].getOwner() && board.getBoardInfo().boardSquares[i - 2][j - 2].getOwner() != 0) {
+				if (moves[1][1] == "O") {
+					moves[0][0] = "-";
+				}
+			}
+		}
+		if (i - 2 >= 0) {
+			if (board.getBoardInfo().boardSquares[i - 2][j].getOwner() != board.getBoardInfo().boardSquares[i][j].getOwner() && board.getBoardInfo().boardSquares[i - 2][j].getOwner() != 0) {
+				if (moves[1][3] == "O") {
+					moves[0][3] = "-";
+				}
+			}
+		}
+		if (i - 2 >= 0 && j + 2 <= 8) {
+			if (board.getBoardInfo().boardSquares[i - 2][j + 2].getOwner() != board.getBoardInfo().boardSquares[i][j].getOwner() && board.getBoardInfo().boardSquares[i - 2][j + 2].getOwner() != 0) {
+				if (moves[1][5] == "O") {
+					moves[0][6] = "-";
+				}
+			}
+		}
+		if (j - 2 >= 0) {
+			if (board.getBoardInfo().boardSquares[i][j - 2].getOwner() != board.getBoardInfo().boardSquares[i][j].getOwner() && board.getBoardInfo().boardSquares[i][j - 2].getOwner() != 0) {
+				if (moves[3][1] == "O") {
+					moves[3][0] = "-";
+				}
+			}
+		}
+		if (j + 2 <= 8) {
+			if (board.getBoardInfo().boardSquares[i][j + 2].getOwner() != board.getBoardInfo().boardSquares[i][j].getOwner() && board.getBoardInfo().boardSquares[i][j + 2].getOwner() != 0) {
+				if (moves[3][5] == "O") {
+					moves[3][6] = "-";
+				}
+			}
+		}
+		if (i + 2 <= 8 && j - 2 >= 0) {
+			if (board.getBoardInfo().boardSquares[i + 2][j - 2].getOwner() != board.getBoardInfo().boardSquares[i][j].getOwner() && board.getBoardInfo().boardSquares[i + 2][j - 2].getOwner() != 0) {
+				if (moves[5][1] == "O") {
+					moves[6][0] = "-";
+				}
+			}
+		}
+		if (i + 2 <= 8) {
+			if (board.getBoardInfo().boardSquares[i + 2][j].getOwner() != board.getBoardInfo().boardSquares[i][j].getOwner() && board.getBoardInfo().boardSquares[i + 2][j].getOwner() != 0) {
+				if (moves[5][3] == "O") {
+					moves[6][3] = "-";
+				}
+			}
+		}
+		if (i + 2 <= 8 && j + 2 <= 8) {
+			if (board.getBoardInfo().boardSquares[i + 2][j + 2].getOwner() != board.getBoardInfo().boardSquares[i][j].getOwner() && board.getBoardInfo().boardSquares[i + 2][j + 2].getOwner() != 0) {
+				if (moves[5][5] == "O") {
+					moves[6][6] = "-";
+				}
+			}
+		}
+		
+		// -1 | +1
+		if (i - 1 >= 0 && j - 1 >= 0) {
+			if (board.getBoardInfo().boardSquares[i - 1][j - 1].getOwner() != board.getBoardInfo().boardSquares[i][j].getOwner() && board.getBoardInfo().boardSquares[i - 1][j - 1].getOwner() != 0) {
+				if (moves[2][2] == "O") {
+					moves[1][1] = "-";
+					moves[0][0] = "-";
+				}
+			}
+		}
+		if (i - 1 >= 0) {
+			if (board.getBoardInfo().boardSquares[i - 1][j].getOwner() != board.getBoardInfo().boardSquares[i][j].getOwner() && board.getBoardInfo().boardSquares[i - 1][j].getOwner() != 0) {
+				if (moves[2][3] == "O") {
+					moves[1][3] = "-";
+					moves[0][3] = "-";
+				}
+			}
+		}
+		if (i - 1 >= 0 && j + 1 <= 8) {
+			if (board.getBoardInfo().boardSquares[i - 1][j + 1].getOwner() != board.getBoardInfo().boardSquares[i][j].getOwner() && board.getBoardInfo().boardSquares[i - 1][j + 1].getOwner() != 0) {
+				if (moves[2][4] == "O") {
+					moves[1][5] = "-";
+					moves[0][6] = "-";
+				}
+			}
+		}
+		if (j - 1 >= 0) {
+			if (board.getBoardInfo().boardSquares[i][j - 1].getOwner() != board.getBoardInfo().boardSquares[i][j].getOwner() && board.getBoardInfo().boardSquares[i][j - 1].getOwner() != 0) {
+				if (moves[3][2] == "O") {
+					moves[3][1] = "-";
+					moves[3][0] = "-";
+				}
+			}
+		}
+		if (j + 1 <= 8) {
+			if (board.getBoardInfo().boardSquares[i][j + 1].getOwner() != board.getBoardInfo().boardSquares[i][j].getOwner() && board.getBoardInfo().boardSquares[i][j + 1].getOwner() != 0) {
+				if (moves[3][4] == "O") {
+					moves[3][5] = "-";
+					moves[3][6] = "-";
+				}
+			}
+		}
+		if (i + 1 <= 8 && j - 1 >= 0) {
+			if (board.getBoardInfo().boardSquares[i + 1][j - 1].getOwner() != board.getBoardInfo().boardSquares[i][j].getOwner() && board.getBoardInfo().boardSquares[i + 1][j - 1].getOwner() != 0) {
+				if (moves[4][2] == "O") {
+					moves[5][1] = "-";
+					moves[6][0] = "-";
+				}
+			}
+		}
+		if (i + 1 <= 8) {
+			if (board.getBoardInfo().boardSquares[i + 1][j].getOwner() != board.getBoardInfo().boardSquares[i][j].getOwner() && board.getBoardInfo().boardSquares[i + 1][j].getOwner() != 0) {
+				if (moves[4][3] == "O") {
+					moves[5][3] = "-";
+					moves[6][3] = "-";
+				}
+			}
+		}
+		if (i + 1 <= 8 && j + 1 <= 8) {
+			if (board.getBoardInfo().boardSquares[i + 1][j + 1].getOwner() != board.getBoardInfo().boardSquares[i][j].getOwner() && board.getBoardInfo().boardSquares[i + 1][j + 1].getOwner() != 0) {
+				if (moves[4][4] == "O") {
+					moves[5][5] = "-";
+					moves[6][6] = "-";
+				}
+			}
+		}
+		
 		return moves;
     }
     
@@ -545,10 +867,10 @@ public class Controller implements ActionListener {
     private void cancelHighlightMoves(String[][] moves, int i, int j) {
     	for (int x = 0; x < 7; x++) {
 			for (int y = 0; y < 7; y++) {
-				try {
-					gui.squaresPanels[(i - 3) + x][(j - 3) + y].setBackground(gui.boardColorPurple);
-				} catch (Exception e) {
-					
+				if (!(x == 3 && y == 3)) {
+					try {
+						gui.squaresPanels[(i - 3) + x][(j - 3) + y].setBackground(gui.boardColorPurple);
+					} catch (Exception e) { }
 				}
 			}
 		}
