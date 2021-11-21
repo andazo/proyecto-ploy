@@ -1,3 +1,5 @@
+import javax.swing.JFileChooser;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -7,16 +9,21 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 public class FileManager {
-	String fileName;
 	String[] data;
+	JFileChooser fileChooser;
 	
 	public FileManager() {
-		fileName = "SavedData.txt";
+		fileChooser = new JFileChooser();
+		File directory = new File("Saves");
+		if (!directory.exists()) {
+	        directory.mkdirs();
+		}
+		fileChooser.setCurrentDirectory(new File(System.getProperty("user.dir") + "/Saves"));
 	}
 	
-	public void saveFile(Player[] players, int gameMode, BoardInfo boardInfo) {	
+	public void saveFile(Player[] players, int gameMode, BoardInfo boardInfo, String fileName) {	
 		// Write content to a file
-		try (FileWriter fileWriter = new FileWriter(fileName, false)) {
+		try (FileWriter fileWriter = new FileWriter(System.getProperty("user.dir") + "/Saves/" + fileName, false)) {
 		    String fileContent = "players";
 		    for (int i = 0; i < players.length; i++) {
 		    	fileContent = fileContent + " " + players[i].getName() + " " + players[i].getColor();
@@ -59,24 +66,29 @@ public class FileManager {
 		}
 	}
 	
-	public boolean loadFile() {
+	public int loadFile() {
 		// Read the content from file
-		boolean loadSuccess = true;
-		try (FileReader fileReader = new FileReader(fileName)) {
-		    int data = fileReader.read();
-		    String buffer = "";
-		    while(data != -1) {
-		    	buffer = buffer + (char) data;
-		        data = fileReader.read();
-		    }
-		    this.data = buffer.lines().toArray(String[]::new);
-		    fileReader.close();
-		} catch (FileNotFoundException e) {
-			loadSuccess = false;
-		} catch (IOException e) {
-			// Exception handling
+		File selectedFile = chooseFile();
+		if (selectedFile != null) {
+			int loadSuccess = 0;
+			try (FileReader fileReader = new FileReader(selectedFile)) {
+			    int data = fileReader.read();
+			    String buffer = "";
+			    while(data != -1) {
+			    	buffer = buffer + (char) data;
+			        data = fileReader.read();
+			    }
+			    this.data = buffer.lines().toArray(String[]::new);
+			    fileReader.close();
+			} catch (FileNotFoundException e) {
+				loadSuccess = 1;
+			} catch (IOException e) {
+				// Exception handling
+			}
+			return loadSuccess;
+		} else {
+			return 2;
 		}
-		return loadSuccess;
 	}
 	
 	public Player[] getPlayers() {
@@ -213,5 +225,15 @@ public class FileManager {
 		}
 		
 		return hitPieces;
+	}
+	
+	private File chooseFile() {
+		File selectedFile = null;
+		int result = fileChooser.showOpenDialog(null);
+		if (result == JFileChooser.APPROVE_OPTION) {
+		    selectedFile = fileChooser.getSelectedFile();
+		    System.out.println("Selected file: " + selectedFile.getAbsolutePath());
+		}
+		return selectedFile;
 	}
 }

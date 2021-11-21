@@ -54,8 +54,8 @@ public class Controller implements ActionListener {
 			setMouseActions();
 			setButtonActions();
 		} else if (newGame == 'N') {
-			boolean loadSuccess = fm.loadFile();
-			if (loadSuccess == true) {
+			int loadStatus = fm.loadFile();
+			if (loadStatus == 0) {
 				if (gui.ployInterface != null) {
 					gui.closeWindow();
 				}
@@ -70,8 +70,13 @@ public class Controller implements ActionListener {
 				setMouseActions();
 				setButtonActions();
 				gui.showSaveLoadMessage("La partida fue cargaga satisfactoriamente", "Partida Cargada");
-			} else {
+			} else if (loadStatus == 1) {
 				gui.showSaveLoadMessage("Error al cargar la partda, puede que el archivo no exista", "Error");
+				if (gui.ployInterface == null) {
+					System.exit(0);
+				}
+			} else {
+				gui.showSaveLoadMessage("El proceso de cargado fue cancelado", "Cargado cancelado");
 				if (gui.ployInterface == null) {
 					System.exit(0);
 				}
@@ -127,8 +132,13 @@ public class Controller implements ActionListener {
         if (evento.getActionCommand().equals("Reglas")) {
             msg.printMessageWithTitle(GAME_RULES, "Reglas del juego");
         } else if (evento.getActionCommand().equals("Guardar Partida")) {
-        	fm.saveFile(players, gameMode, board.getBoardInfo());
-        	gui.showSaveLoadMessage("La partida fue guardada satisfactoriamente", "Partida guardada");
+        	String fileName = msg.inputMessage("Ingrese el nombre del archivo a guardar");
+        	if (fileName != null) {
+        		fm.saveFile(players, gameMode, board.getBoardInfo(), fileName);
+        		gui.showSaveLoadMessage("La partida fue guardada satisfactoriamente", "Partida guardada");
+        	} else {
+        		gui.showSaveLoadMessage("El proceso de guardado fue cancelado", "Guardado cancelado");
+        	}
         } else if (evento.getActionCommand().equals("Cargar Partida")) {
         	startGame('N');
         } else if (evento.getActionCommand().equals("Jugador 1")) {

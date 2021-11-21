@@ -11,7 +11,7 @@ public class Message {
     }
     
     public void printSimpleMessage(String message) {
-      JOptionPane.showMessageDialog(null, message);
+    	JOptionPane.showMessageDialog(null, message);
     }
 
     public void printMessageWithTitle(Object message, String title) {
