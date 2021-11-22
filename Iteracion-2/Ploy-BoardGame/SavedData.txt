@@ -1,0 +1,92 @@
+players Jugador 1 Verde Jugador 2 Rojo
+gameMode 0
+board
+-1 0 0 -
+1 0 2 Rojo
+2 0 2 Rojo
+3 0 2 Rojo
+0 0 2 Rojo
+3 0 2 Rojo
+2 0 2 Rojo
+1 0 2 Rojo
+-1 0 0 -
+-1 0 0 -
+-1 0 0 -
+7 0 2 Rojo
+5 0 2 Rojo
+6 0 2 Rojo
+5 0 2 Rojo
+4 0 2 Rojo
+-1 0 0 -
+-1 0 0 -
+-1 0 0 -
+-1 0 0 -
+-1 0 0 -
+8 0 2 Rojo
+8 0 2 Rojo
+8 0 2 Rojo
+-1 0 0 -
+-1 0 0 -
+-1 0 0 -
+-1 0 0 -
+-1 0 0 -
+-1 0 0 -
+-1 0 0 -
+-1 0 0 -
+-1 0 0 -
+-1 0 0 -
+-1 0 0 -
+-1 0 0 -
+-1 0 0 -
+-1 0 0 -
+-1 0 0 -
+-1 0 0 -
+-1 0 0 -
+-1 0 0 -
+-1 0 0 -
+-1 0 0 -
+-1 0 0 -
+-1 0 0 -
+-1 0 0 -
+-1 0 0 -
+-1 0 0 -
+8 180 1 Verde
+-1 0 0 -
+-1 0 0 -
+-1 0 0 -
+-1 0 0 -
+-1 0 0 -
+-1 0 0 -
+-1 0 0 -
+8 180 1 Verde
+-1 0 0 -
+8 180 1 Verde
+-1 0 0 -
+-1 0 0 -
+-1 0 0 -
+-1 0 0 -
+-1 0 0 -
+4 180 1 Verde
+5 180 1 Verde
+6 180 1 Verde
+5 180 1 Verde
+7 180 1 Verde
+-1 0 0 -
+-1 0 0 -
+-1 0 0 -
+1 180 1 Verde
+2 180 1 Verde
+3 180 1 Verde
+0 180 1 Verde
+3 180 1 Verde
+2 180 1 Verde
+1 180 1 Verde
+-1 0 0 -
+p1HitPiecesIndex 0
+p1HitPiecesData
+p2HitPiecesIndex 0
+p2HitPiecesData
+p3HitPiecesIndex 0
+p3HitPiecesData
+p4HitPiecesIndex 0
+p4HitPiecesData
