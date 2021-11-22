@@ -1,9 +1,5 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
-
-import javax.swing.JOptionPane;
-
 
 public class Controller implements ActionListener {
 
@@ -115,7 +111,9 @@ public class Controller implements ActionListener {
 	private void removeMouseActions() {
 		for (int i = 0; i < 9; i++) {
 			for (int j = 0; j < 9; j++) {
+				try {
 				gui.squaresPanels[i][j].removeMouseListener(gui.squaresPanels[i][j].getMouseListeners()[0]);
+				} catch (Exception e) { }
 			}
 		}
 	}
@@ -337,7 +335,6 @@ public class Controller implements ActionListener {
     private void playerLost(BoardSquareInfo hitInfo, BoardSquareInfo attackerInfo, int gameMode) {
         switch(gameMode) {
         case 0: //1v1
-        	boolean aux = true;
         	players[hitInfo.getOwner()-1].setLost(true);
         	gui.guiPrintLine("Game Over, tablero bloqueado"); 
         	msg.printSimpleMessage("Game Over \n" + players[attackerInfo.getOwner()-1].getName() + " ha ganado");
@@ -363,29 +360,29 @@ public class Controller implements ActionListener {
 	            }
             } else {
             	board.getBoardInfo().updateOwner(hitInfo.getOwner(), attackerInfo.getOwner()); //jugador controla las piezas ahora
-              msg.printSimpleMessage(players[hitInfo.getOwner()-1].getName() + " ha perdido, ahora "
+                msg.printSimpleMessage(players[hitInfo.getOwner()-1].getName() + " ha perdido, ahora "
             	+ players[hitInfo.getOwner()-1].getName() + " controla sus piezas.");
             }
         	break;
         case 2: //2v2
         	players[hitInfo.getOwner()-1].setLost(true);
-          int friend = players[(hitInfo.getOwner()-1)].getFriend()-1;
-          if (players[friend].getLost()) { //si los dos ya perdieron
-            removeMouseActions();
-            msg.printSimpleMessage("Game Over \n" + players[attackerInfo.getOwner()-1].getName()
+            int friend = players[(hitInfo.getOwner()-1)].getFriend()-1;
+            if (players[friend].getLost()) { //si los dos ya perdieron
+              removeMouseActions();
+              msg.printSimpleMessage("Game Over \n" + players[attackerInfo.getOwner()-1].getName()
             		+ " y " + players[players[attackerInfo.getOwner()-1].getFriend()-1].getName() + " han ganado");
-            gui.guiPrintLine("Game Over 2v2, tablero bloqueado");
-            char finishedGame3 = finished(msg);
-            if (finishedGame3 == 'Y' ) {
-            	removeMouseActions();
-            } else {
+              gui.guiPrintLine("Game Over 2v2, tablero bloqueado");
+              char finishedGame3 = finished(msg);
+              if (finishedGame3 == 'Y' ) {
+               	removeMouseActions();
+              } else {
             	System.exit(0);
-            }
+              }
 	        } else {
 	        	board.getBoardInfo().updateOwner(hitInfo.getOwner(), players[hitInfo.getOwner()-1].getFriend()); //amigo controla las piezas ahora
 	        	board.getBoardInfo().setActivePlayers(board.getBoardInfo().getActivePlayers()-1);
             msg.printSimpleMessage(players[hitInfo.getOwner()-1].getName() + " ha perdido");
-	        }
+	      }
           break;
         }
     }

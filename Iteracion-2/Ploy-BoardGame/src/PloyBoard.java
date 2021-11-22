@@ -1,5 +1,3 @@
-import javax.swing.JLabel;
-
 public class PloyBoard {
 	
 	final int pieceOrder1v1P1[] = {1,2,3,0,3,2,1,4,5,6,5,7};
