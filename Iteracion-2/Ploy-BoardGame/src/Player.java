@@ -1,10 +1,11 @@
+import java.util.ArrayList;
 
 public class Player {
     private String name;
     private String color;
     private int numPieces;
     private boolean lost;
-    int friend;
+    private int friend;
 
     public void setName(String playerName) {
         name = playerName;

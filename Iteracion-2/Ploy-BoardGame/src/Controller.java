@@ -69,7 +69,7 @@ public class Controller implements ActionListener {
 				setMenuActions(gameMode);
 				setMouseActions();
 				setButtonActions();
-				gui.showSaveLoadMessage("La partida fue cargaga satisfactoriamente", "Partida Cargada");
+				gui.showSaveLoadMessage("La partida fue cargada satisfactoriamente", "Partida Cargada");
 			} else if (loadStatus == 1) {
 				gui.showSaveLoadMessage("Error al cargar la partda, puede que el archivo no exista", "Error");
 				if (gui.ployInterface == null) {
@@ -178,20 +178,21 @@ public class Controller implements ActionListener {
     
     public void clickedOn(int i, int j, int numPlayers, Player[] players) {
     	String[][] moves = null;
-    	if (board.getBoardInfo().boardSquares[i][j].getColor().equals(players[board.getBoardInfo().getCurrentPlayer() - 1].getColor()) && !board.getBoardInfo().getPieceActive()) {
-			if (board.getBoardInfo().boardSquares[i][j].getType() != -1) {
-				board.getBoardInfo().setPieceActive(true);
+    	//if (board.getBoardInfo().boardSquares[i][j].getColor().equals(players[board.getBoardInfo().getCurrentPlayer() - 1].getColor()) && !board.getBoardInfo().getPieceActive()) {
+  		if (board.getBoardInfo().boardSquares[i][j].getOwner() == board.getBoardInfo().getCurrentPlayer() && !board.getBoardInfo().getPieceActive()) {	
+				if (board.getBoardInfo().boardSquares[i][j].getType() != -1) {
+					board.getBoardInfo().setPieceActive(true);
 		  		gui.squaresPanels[i][j].setBackground(gui.boardColorHighlight);
 			  	board.getBoardInfo().setLastI(i);
 			  	board.getBoardInfo().setLastJ(j);
-			 	int direction = board.getBoardInfo().boardSquares[i][j].getDirection();
-			 	board.getBoardInfo().setOriginalDirection(direction);
-		 		gui.rotateLeftBut.setEnabled(true);
-				gui.rotateRightBut.setEnabled(true);
+				 	int direction = board.getBoardInfo().boardSquares[i][j].getDirection();
+				 	board.getBoardInfo().setOriginalDirection(direction);
+			 		gui.rotateLeftBut.setEnabled(true);
+					gui.rotateRightBut.setEnabled(true);
 		  		gui.guiPrintLine("pieza activa");
 		  		moves = getValidMoves(i, j);
 		  		highlightMoves(moves, i, j);
-			}
+				}
 		} else if (board.getBoardInfo().getPieceActive()) {
 			int lastI = board.getBoardInfo().getLastI();
 			int lastJ = board.getBoardInfo().getLastJ();
@@ -334,15 +335,6 @@ public class Controller implements ActionListener {
 	}
     
     private void playerLost(BoardSquareInfo hitInfo, BoardSquareInfo attackerInfo, int gameMode) {
-    	/*
-    	 	Se podria pasar a una funcion booleana, cuando se meta en el main siempre va
-    		a ser false, cuando alguien gana se pasa a true y vuelve al menu inicial
-    	 	donde se sale cancelando unicamente
-    	
-    	 	Al igual como se agregan fichas a la ventana de piezas eliminadas, si el capitan llega 
-    	 	a estar en esta ventana se pierde automaticamente
-    	*/
-    	
         switch(gameMode) {
         case 0: //1v1
         	boolean aux = true;
@@ -364,35 +356,37 @@ public class Controller implements ActionListener {
 	            msg.printSimpleMessage("Game Over \n" + players[attackerInfo.getOwner()-1].getName() + " ha ganado");
 	            gui.guiPrintLine("Game Over 1v1v1v1, tablero bloqueado");
 	            char finishedGame1 = finished(msg);
-	        	if (finishedGame1 == 'Y' ) {
-	        		removeMouseActions();
-	        	} else {
-	        		System.exit(0);
-	        	}
+	            if (finishedGame1 == 'Y' ) {
+	            	removeMouseActions();
+	            } else {
+	            	System.exit(0);
+	            }
             } else {
-          	// el jugador que queda controla las piezas que quedan
-                msg.printSimpleMessage(players[hitInfo.getOwner()-1].getName() + " ha perdido");
+            	board.getBoardInfo().updateOwner(hitInfo.getOwner(), attackerInfo.getOwner()); //jugador controla las piezas ahora
+              msg.printSimpleMessage(players[hitInfo.getOwner()-1].getName() + " ha perdido, ahora "
+            	+ players[hitInfo.getOwner()-1].getName() + " controla sus piezas.");
             }
         	break;
         case 2: //2v2
         	players[hitInfo.getOwner()-1].setLost(true);
-            int friend = players[(hitInfo.getOwner()-1)].getFriend()-1;
-            if (players[friend].getLost()) { //si los dos ya perdieron
-	            removeMouseActions();
-	            msg.printSimpleMessage("Game Over \n" + players[attackerInfo.getOwner()-1].getName()
-	            		+ " y " + players[players[attackerInfo.getOwner()-1].getFriend()-1].getName() + " han ganado");
-	            gui.guiPrintLine("Game Over 2v2, tablero bloqueado");
-	            char finishedGame3 = finished(msg);
-	        	if (finishedGame3 == 'Y' ) {
-	        		removeMouseActions();
-	        	} else {
-	        		System.exit(0);
-	        	}
+          int friend = players[(hitInfo.getOwner()-1)].getFriend()-1;
+          if (players[friend].getLost()) { //si los dos ya perdieron
+            removeMouseActions();
+            msg.printSimpleMessage("Game Over \n" + players[attackerInfo.getOwner()-1].getName()
+            		+ " y " + players[players[attackerInfo.getOwner()-1].getFriend()-1].getName() + " han ganado");
+            gui.guiPrintLine("Game Over 2v2, tablero bloqueado");
+            char finishedGame3 = finished(msg);
+            if (finishedGame3 == 'Y' ) {
+            	removeMouseActions();
+            } else {
+            	System.exit(0);
+            }
 	        } else {
-	        	// el jugador que queda controla las piezas que quedan
-	            msg.printSimpleMessage(players[hitInfo.getOwner()-1].getName() + " ha perdido");
+	        	board.getBoardInfo().updateOwner(hitInfo.getOwner(), players[hitInfo.getOwner()-1].getFriend()); //amigo controla las piezas ahora
+	        	board.getBoardInfo().setActivePlayers(board.getBoardInfo().getActivePlayers()-1);
+            msg.printSimpleMessage(players[hitInfo.getOwner()-1].getName() + " ha perdido");
 	        }
-            break;
+          break;
         }
     }
     
