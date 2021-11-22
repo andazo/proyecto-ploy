@@ -47,10 +47,10 @@ public class PloyBoard {
 				players[1].setNumPieces(9);
 				players[2].setNumPieces(9);
 				players[3].setNumPieces(9);
-				players[0].setFriend(2);
-				players[1].setFriend(1);
-				players[2].setFriend(4);
-				players[3].setFriend(3);
+				players[0].setFriend(3);
+				players[1].setFriend(4);
+				players[2].setFriend(1);
+				players[3].setFriend(2);
 		    break;
 		}
 	}
