@@ -2,10 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class PloyGUI extends GUI {
-	JFrame frame;
-	JPanel boardPanel, rotateButtons;
-	JMenuBar menuBar;
-	int boardSize;
+	JPanel rotateButtons;
 	JButton rotateLeftBut, rotateRightBut;
 	Color boardColorPurple = new Color(65, 11, 153);
 	Color boardColorThistle = new Color(200, 184, 219);
@@ -86,4 +83,7 @@ public class PloyGUI extends GUI {
 	}
 	
 	public void rotatePiece(int x, int y, int direction) {}
+	
+	public void setMouseActions() {}
+	public void removeMouseActions() {}
 }
