@@ -1,11 +1,3 @@
-/*
-
- * @(#)PloyGUI.java
- *
- *
- * @author 
- * @version 
- */
 
 import javax.swing.*;
 import java.awt.*;
@@ -45,10 +37,17 @@ public class PloyGUI {
 	ImageIcon yellowIcons[] = new ImageIcon[9];
 	ImageIcon greenIcons [] = new ImageIcon[9];
 	
+	/**
+	 * 
+	 */
 	public PloyGUI() {
 		loadImages();
 	}
 	
+	/**
+	 * @param hitPiecesData
+	 * @param hitPiecesIndex
+	 */
 	public void showHitPieces(String[][] hitPiecesData, int hitPiecesIndex) {
 		JLabel[] hitPieces = new JLabel[hitPiecesIndex];	
 		for (int i = 0; i < hitPiecesIndex; i++) {
@@ -70,6 +69,10 @@ public class PloyGUI {
 		}
 	}
 	
+	/**
+	 * @param players
+	 * @param gameMode
+	 */
 	public void makeGUI(Player[] players, int gameMode) {
 		ployInterface = new JFrame();
 		ployInterface.setTitle("Ploy");
@@ -210,6 +213,9 @@ public class PloyGUI {
 	}
 	
 	//Carga todas las imagenes de las piezas, los convierte a iconos y los guarda en arreglos.
+	/**
+	 * 
+	 */
 	private void loadImages() {
 		String path = "";
 		for (int i = 0; i < 4; i++) {
@@ -245,6 +251,10 @@ public class PloyGUI {
 		}
 	}
 	
+	/**
+	 * @param color
+	 * @return
+	 */
 	private ImageIcon[] getIconArray(String color) {
 		switch(color) {
 			case "Rojo":
@@ -260,6 +270,10 @@ public class PloyGUI {
 		}
 	}
 	
+	/**
+	 * @param players
+	 * @param gameMode
+	 */
 	public void populateBoard(Player[] players, int gameMode) {
 		switch (gameMode) {
 			case 0: // 1v1
@@ -281,6 +295,10 @@ public class PloyGUI {
 		}
 	}
 	
+	/**
+	 * @param color
+	 * @param playerNum
+	 */
 	private void populateBoard1v1(String color, int playerNum) {
 		int orderArrayIndex = 0;
 		if (playerNum == 1) {
@@ -319,6 +337,10 @@ public class PloyGUI {
 		}
 	}
 	
+	/**
+	 * @param color
+	 * @param playerNum
+	 */
 	private void populateBoard1v1v1v1(String color, int playerNum) {
 		int orderArrayIndex = 0;
 		if (playerNum == 1) {
@@ -448,6 +470,10 @@ public class PloyGUI {
 		}
 	}
 	
+	/**
+	 * @param color
+	 * @param playerNum
+	 */
 	private void populateBoard2v2(String color, int playerNum) {
 		int orderArrayIndex = 0;
 		if (playerNum == 1) {
@@ -519,6 +545,11 @@ public class PloyGUI {
 		}
 	}
 	
+	/**
+	 * @param players
+	 * @param gameMode
+	 * @param board
+	 */
 	public void loadBoard(Player[] players, int gameMode, String[][][] board) {
 		for (int i = 0; i < 9; i++) {
 			for (int j = 0; j < 9; j++) {
@@ -532,11 +563,19 @@ public class PloyGUI {
 	}
 	
 	// direction = 315 rota hacia la izquierda, direction = 45 rota hacia la derecha
+	/**
+	 * @param x
+	 * @param y
+	 * @param direction
+	 */
 	public void rotatePiece(int x, int y, int direction) {
 		RotateIcon ri = new RotateIcon(squaresPanels[x][y].getIcon(), direction, true);
 		squaresPanels[x][y].setIcon(ri);
 	}
 	
+	/**
+	 * @param str
+	 */
 	public void guiPrintLine(String str) {
 		System.out.println(str);
 		textOutput.append(str+"\n");
@@ -544,12 +583,19 @@ public class PloyGUI {
 		textScroll.paintImmediately(new Rectangle(new Point(0,0),textScroll.getSize()));
 	}
 	
+	/**
+	 * @param message
+	 * @param title
+	 */
 	public void showSaveLoadMessage(String message, String title) {
 		JLabel label = new JLabel(message);
 		label.setHorizontalAlignment(SwingConstants.CENTER);
 		JOptionPane.showMessageDialog(null, label, title, JOptionPane.PLAIN_MESSAGE, null);
 	}
 	
+	/**
+	 * 
+	 */
 	public void closeWindow() {
 		ployInterface.dispose();
 	}

@@ -1,3 +1,4 @@
+
 public class PloyBoard {
 	
 	final int pieceOrder1v1P1[] = {1,2,3,0,3,2,1,4,5,6,5,7};
@@ -7,14 +8,24 @@ public class PloyBoard {
 	
 	private BoardInfo boardInfo;
 	
+	/**
+	 * 
+	 */
 	public PloyBoard() {
 		boardInfo = new BoardInfo();
 	}
 	
+	/**
+	 * @return
+	 */
 	public BoardInfo getBoardInfo() {
 		return boardInfo;
 	}
 	
+	/**
+	 * @param players
+	 * @param gameMode
+	 */
 	public void populateBoard(Player[] players, int gameMode) {
 		switch (gameMode) {
 			case 0: // 1v1
@@ -53,7 +64,11 @@ public class PloyBoard {
 		}
 	}
     
-  private void populateBoard1v1(String color, int playerNum) {
+  /**
+ * @param color
+ * @param playerNum
+ */
+private void populateBoard1v1(String color, int playerNum) {
 		int orderArrayIndex = 0;
 		
 		if (playerNum == 1) {
@@ -115,6 +130,10 @@ public class PloyBoard {
 		}
 	}
 	
+	/**
+	 * @param color
+	 * @param playerNum
+	 */
 	private void populateBoard1v1v1v1(String color, int playerNum) {
 		int orderArrayIndex = 0;
 		if (playerNum == 1) {
@@ -268,6 +287,10 @@ public class PloyBoard {
 		}
 	}
 	
+	/**
+	 * @param color
+	 * @param playerNum
+	 */
 	private void populateBoard2v2(String color, int playerNum) {
 		int orderArrayIndex = 0;
 		if (playerNum == 1) {
@@ -373,6 +396,11 @@ public class PloyBoard {
 		}
 	}
 	
+	/**
+	 * @param players
+	 * @param gameMode
+	 * @param board
+	 */
 	public void loadBoard(Player[] players, int gameMode, String[][][] board) {
 		for (int i = 0; i < 9; i++) {
 			for (int j = 0; j < 9; j++) {
@@ -384,6 +412,9 @@ public class PloyBoard {
 		}
 	}
 	
+	/**
+	 * @param hitPiecesIndexes
+	 */
 	public void loadHitPiecesIndexes(int[] hitPiecesIndexes) {
 		getBoardInfo().setP1HitPiecesIndex(hitPiecesIndexes[0]);
 		getBoardInfo().setP2HitPiecesIndex(hitPiecesIndexes[1]);
@@ -391,6 +422,10 @@ public class PloyBoard {
 		getBoardInfo().setP4HitPiecesIndex(hitPiecesIndexes[3]);
 	}
 	
+	/**
+	 * @param gameMode
+	 * @param hitPieces
+	 */
 	public void loadHitPieces(int gameMode, String[][][] hitPieces) {
 		if (gameMode == 0) {
 			getBoardInfo().p1HitPieces = new String[15][2];
@@ -433,6 +468,9 @@ public class PloyBoard {
 		}
 	}
 	
+	/**
+	 * @param currentPlayer
+	 */
 	public void loadCurrentPlayer(int currentPlayer) {
 		getBoardInfo().setCurrentPlayer(currentPlayer);
 	}

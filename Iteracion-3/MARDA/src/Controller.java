@@ -1,21 +1,23 @@
 
 public class Controller {
 	PloyGUI gui;
-
+	PloyBoard board;
 
 	public void startGame() {
-		PloyPlayer p1 = new PloyPlayer("Richie", 1,"red");
-		System.out.println(p1.getName());
-		System.out.println(p1.getColor());
-		System.out.println(p1.getID());
-		System.out.println(p1.getLost());
-		System.out.println(p1.getFriend());
-		System.out.println(p1.getNumPieces());
-
 		gui = new PloyGUI(600);
+		char newGame = getNewGame();
+		int numPlayers = 0;
+		PloyPlayer[] players = null;
+		int gameMode = 0;
+		
+		if (newGame == 'Y') {
+			numPlayers = getNumPlayers();
+			players = getPlayers(numPlayers);
+			gameMode = getMode(numPlayers);
+		}
+		
+		board = new PloyBoard();
 		gui.drawBoard();
-
-		getPlayers(getNumPlayers());
 	}
 
 	private int getNumPlayers() {

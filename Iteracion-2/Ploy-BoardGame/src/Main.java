@@ -1,6 +1,10 @@
 
 public class Main {
 	
+	/**
+	 * @param msg
+	 * @return
+	 */
 	private static char getNewGame(Message msg) {
 		String[] options = {"Nueva partida", "Cargar partida","Cancelar"};
 		char newGame = ' ';
@@ -16,6 +20,10 @@ public class Main {
 	    return newGame;
 	}
 	
+	/**
+	 * @param msg
+	 * @return
+	 */
 	private static int getNumPlayers(Message msg) {
 		// Numero de jugadores en la partida, puede ser de 2 o 4
 		String[] options = {"2", "4"};
@@ -32,6 +40,11 @@ public class Main {
 	    return numPlayers;
 	}
 	
+	/**
+	 * @param msg
+	 * @param numPlayers
+	 * @return
+	 */
 	private static Player[] getPlayers(Message msg, int numPlayers) {
 		//Arreglo de opciones de colores para los jugadores
 	    String[] choices = { "Verde", "Rojo", "Azul", "Amarillo"};
@@ -88,6 +101,11 @@ public class Main {
 	    return players;
 	}
 	
+	/**
+	 * @param msg
+	 * @param numPlayers
+	 * @return
+	 */
 	private static int getMode(Message msg, int numPlayers) {
 	    int gameMode = 0;
 	    if (numPlayers == 4) {
@@ -105,6 +123,9 @@ public class Main {
 		return gameMode;
 	}
 
+	/**
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		Message msg = new Message();
 		FileManager fm = new FileManager();

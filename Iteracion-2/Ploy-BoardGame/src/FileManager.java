@@ -9,6 +9,9 @@ public class FileManager {
 	String[] data;
 	JFileChooser fileChooser;
 	
+	/**
+	 * 
+	 */
 	public FileManager() {
 		fileChooser = new JFileChooser();
 		File directory = new File("Saves");
@@ -18,6 +21,12 @@ public class FileManager {
 		fileChooser.setCurrentDirectory(new File(System.getProperty("user.dir") + "/Saves"));
 	}
 	
+	/**
+	 * @param players
+	 * @param gameMode
+	 * @param boardInfo
+	 * @param fileName
+	 */
 	public void saveFile(Player[] players, int gameMode, BoardInfo boardInfo, String fileName) {	
 		// Write content to a file
 		try (FileWriter fileWriter = new FileWriter(System.getProperty("user.dir") + "/Saves/" + fileName, false)) {
@@ -64,6 +73,9 @@ public class FileManager {
 		}
 	}
 	
+	/**
+	 * @return
+	 */
 	public int loadFile() {
 		// Read the content from file
 		File selectedFile = chooseFile();
@@ -89,6 +101,9 @@ public class FileManager {
 		}
 	}
 	
+	/**
+	 * @return
+	 */
 	public Player[] getPlayers() {
 		String token = "players";
 		int pos = 0;
@@ -126,6 +141,9 @@ public class FileManager {
 		return players;
 	}
 	
+	/**
+	 * @return
+	 */
 	public int getGameMode() {
 		String token = "gameMode";
 		int pos = 0;
@@ -142,6 +160,9 @@ public class FileManager {
 		return Integer.parseInt(lineData[1]);
 	}
 	
+	/**
+	 * @return
+	 */
 	public int getCurrentPlayer() {
 		String token = "currentPlayer";
 		int pos = 0;
@@ -158,6 +179,9 @@ public class FileManager {
 		return Integer.parseInt(lineData[1]);
 	}
 	
+	/**
+	 * @return
+	 */
 	public String[][][] getBoardData() {
 		String token = "board";
 		int pos = 0;
@@ -180,6 +204,9 @@ public class FileManager {
 		return board;
 	}
 	
+	/**
+	 * @return
+	 */
 	public int[] getHitPiecesIndexes() {
 		int[] hitPiecesIndexes = new int[4];
 		String token = "";
@@ -201,6 +228,9 @@ public class FileManager {
 		return hitPiecesIndexes;
 	}
 	
+	/**
+	 * @return
+	 */
 	public String[][][] getHitPieces() {
 		String[][][] hitPieces = new String[4][15][2];
 		String tokenIni = "";
@@ -247,6 +277,9 @@ public class FileManager {
 		return hitPieces;
 	}
 	
+	/**
+	 * @return
+	 */
 	private File chooseFile() {
 		File selectedFile = null;
 		int result = fileChooser.showOpenDialog(null);

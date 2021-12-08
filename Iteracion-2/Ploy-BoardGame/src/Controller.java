@@ -32,6 +32,14 @@ public class Controller implements ActionListener {
 			+ "de su companero de equipo y puede usar todas las piezas del equipo para "
 			+ "sus movimientos.";
 
+	/**
+	 * @param msg
+	 * @param fm
+	 * @param players
+	 * @param gui
+	 * @param board
+	 * @param gameMode
+	 */
 	public Controller(Message msg, FileManager fm, Player[] players, PloyGUI gui, PloyBoard board, int gameMode) {
 		this.msg = msg;
 		this.fm = fm;
@@ -41,6 +49,9 @@ public class Controller implements ActionListener {
 		this.gameMode = gameMode;
 	}
 	
+	/**
+	 * @param newGame
+	 */
 	public void startGame(char newGame) {
 		if (newGame == 'Y') {
 			gui.makeGUI(players, gameMode);
@@ -80,6 +91,9 @@ public class Controller implements ActionListener {
 		}
 	}
 	
+	/**
+	 * @param gameMode
+	 */
 	private void setMenuActions(int gameMode) {
 		gui.menuBar.getMenu(0).getItem(0).addActionListener(this);  // Opciones / Reglas
 		gui.menuBar.getMenu(0).getItem(1).addActionListener(this);  // Opciones / Guardar Partida
@@ -92,6 +106,9 @@ public class Controller implements ActionListener {
 		}
 	}
     
+	/**
+	 * 
+	 */
 	private void setMouseActions() {
 		for(int i = 0; i < 9; i++) {
 			for(int j = 0; j < 9; j++) {
@@ -108,6 +125,9 @@ public class Controller implements ActionListener {
 		}
 	}
 	
+	/**
+	 * 
+	 */
 	private void removeMouseActions() {
 		for (int i = 0; i < 9; i++) {
 			for (int j = 0; j < 9; j++) {
@@ -118,6 +138,9 @@ public class Controller implements ActionListener {
 		}
 	}
 	
+	/**
+	 * 
+	 */
 	private void setButtonActions() {
 		gui.rotateLeftBut.addActionListener(this);
 		gui.rotateRightBut.addActionListener(this);
@@ -174,6 +197,12 @@ public class Controller implements ActionListener {
         }
     }
     
+    /**
+     * @param i
+     * @param j
+     * @param numPlayers
+     * @param players
+     */
     public void clickedOn(int i, int j, int numPlayers, Player[] players) {
     	String[][] moves = null;
     	//if (board.getBoardInfo().boardSquares[i][j].getColor().equals(players[board.getBoardInfo().getCurrentPlayer() - 1].getColor()) && !board.getBoardInfo().getPieceActive()) {
@@ -312,12 +341,20 @@ public class Controller implements ActionListener {
     	}
 	}
     
+    /**
+     * @param hitInfo
+     * @param attackerInfo
+     */
     private void checkGameOver(BoardSquareInfo hitInfo, BoardSquareInfo attackerInfo) {
     	if(hitInfo.getType() == 0 || players[hitInfo.getOwner()-1].getNumPieces() == 1) {
     		playerLost(hitInfo, attackerInfo, this.gameMode);
     	}
     }
     
+    /**
+     * @param msg
+     * @return
+     */
     private static char finished(Message msg) {
 		String[] options = {"Mirar Tablero", "Terminar"};
 		char newGame = ' ';
@@ -332,6 +369,11 @@ public class Controller implements ActionListener {
 	    return newGame;
 	}
     
+    /**
+     * @param hitInfo
+     * @param attackerInfo
+     * @param gameMode
+     */
     private void playerLost(BoardSquareInfo hitInfo, BoardSquareInfo attackerInfo, int gameMode) {
         switch(gameMode) {
         case 0: //1v1
@@ -413,6 +455,11 @@ public class Controller implements ActionListener {
      * |-|-|-|O|-|-|-|				|-|-|-|0|0|-|-|				|-|-|-|0|-|-|-|
      * |-|-|-|O|-|-|-|				|-|-|-|0|-|0|-|				|-|-|-|-|-|-|-|
      * |-|-|-|-|-|-|-|				|-|-|-|-|-|-|-|				|-|-|-|-|-|-|-|
+     */
+    /**
+     * @param i
+     * @param j
+     * @return
      */
     public String[][] getValidMoves(int i, int j) {
 		String[][] moves = new String[7][7];
@@ -760,6 +807,12 @@ public class Controller implements ActionListener {
 		return moves;
     }
     
+    /**
+     * @param moves
+     * @param i
+     * @param j
+     * @return
+     */
     public String[][] rotateMoves(String[][] moves, int i, int j) {
     	String[][] rotatedMoves = new String[7][7];
 		int direction = board.getBoardInfo().boardSquares[i][j].getDirection();
@@ -842,6 +895,11 @@ public class Controller implements ActionListener {
     	return moves;
     }
     
+    /**
+     * @param moves
+     * @param i
+     * @param j
+     */
     private void highlightMoves(String[][] moves, int i, int j) {
     	
     	for (int x = 0; x < 7; x++) {
@@ -855,6 +913,11 @@ public class Controller implements ActionListener {
 		}
     }
     
+    /**
+     * @param moves
+     * @param i
+     * @param j
+     */
     private void cancelHighlightMoves(String[][] moves, int i, int j) {
     	for (int x = 0; x < 7; x++) {
 			for (int y = 0; y < 7; y++) {

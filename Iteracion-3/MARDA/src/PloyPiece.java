@@ -1,7 +1,6 @@
 
-public class PloyPiece extends Piece{
+public class PloyPiece extends Piece {
 	private int type, direction;
-
 	
 	PloyPiece(int type, int direction, int owner, String color) {
 		this.type = type;
