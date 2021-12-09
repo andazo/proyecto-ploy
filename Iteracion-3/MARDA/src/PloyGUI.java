@@ -5,6 +5,9 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * Concrete class representing a GUI for Ploy
+ */
 public class PloyGUI extends GUI {
 	JPanel rotateButtons;
 	JButton rotateLeftBut, rotateRightBut;
@@ -13,19 +16,24 @@ public class PloyGUI extends GUI {
 	Color boardColorThistle = new Color(200, 184, 219);
 	Color boardColorSnow = new Color(249, 244, 245);
 	int smallSquareSize;
-	
+
 	final String chipFolderNames [] = {"chips_red/", "chips_blue/", "chips_green/", "chips_yellow/"};
 	final String chipNames [] = {"comm", "lance_1", "lance_2", "lance_3", "probe_1", "probe_2", "probe_3", "probe_4", "shield"}; 
 	final int pieceOrder1v1P1[] = {1,2,3,0,3,2,1,4,5,6,5,7};
 	final int pieceOrder1v1P2[] = {1,2,3,0,3,2,1,7,5,6,5,4};
 	final int pieceOrder1v1v1v1[] = {0,1,7,3,5,8,4,8,8};
 	final int pieceOrder2v2[] = {1,0,3,4,5,7};
-	
+
 	ImageIcon redIcons[] = new ImageIcon[9];
 	ImageIcon blueIcons[] = new ImageIcon[9];
 	ImageIcon yellowIcons[] = new ImageIcon[9];
 	ImageIcon greenIcons [] = new ImageIcon[9];
-	
+
+	/**
+	 * Instantiates a new Ploy GUI.
+	 *
+	 * @param boardSize the size of the board 
+	 */
 	public PloyGUI(int boardSize) {
 		this.boardSize = boardSize;
 		frame = new JFrame();
@@ -39,7 +47,10 @@ public class PloyGUI extends GUI {
 		rotateRightBut = new JButton("Girar derecha");
 		loadImages();
 	}
-	
+
+	/**
+	 * Draws all of the board's components.
+	 */
 	@Override
 	public void drawBoard() {
 		frame.setTitle("Ploy");
@@ -47,7 +58,7 @@ public class PloyGUI extends GUI {
 		frame.setFocusable(true);
 		frame.requestFocus();
 		frame.setBackground(Color.black);
-		
+
 		frame.setJMenuBar(menuBar);
 		JMenu options = new JMenu("Opciones");
 		menuBar.add(options);
@@ -58,21 +69,21 @@ public class PloyGUI extends GUI {
 		JMenuItem load = new JMenuItem("Cargar Partida");
 		options.add(load);
 		JMenu lostPieces = new JMenu("Piezas Eliminadas");
-		
-	    menuBar.add(lostPieces);
-	    JMenuItem hitP1 = new JMenuItem("Jugador 1");
-	    lostPieces.add(hitP1);
-	    JMenuItem hitP2 = new JMenuItem("Jugador 2");
-	    lostPieces.add(hitP2);
-	    JMenuItem hitP3 = new JMenuItem("Jugador 3");
-	    lostPieces.add(hitP3);
-        JMenuItem hitP4 = new JMenuItem("Jugador 4");
-        lostPieces.add(hitP4);
-    
+
+		menuBar.add(lostPieces);
+		JMenuItem hitP1 = new JMenuItem("Jugador 1");
+		lostPieces.add(hitP1);
+		JMenuItem hitP2 = new JMenuItem("Jugador 2");
+		lostPieces.add(hitP2);
+		JMenuItem hitP3 = new JMenuItem("Jugador 3");
+		lostPieces.add(hitP3);
+		JMenuItem hitP4 = new JMenuItem("Jugador 4");
+		lostPieces.add(hitP4);
+
 		boardPanel.setLayout(new GridLayout(9,9,5,5));
 		boardPanel.setBackground(boardColorThistle);
 		boardPanel.setBorder(BorderFactory.createMatteBorder(30, 30, 30, 30, boardColorThistle));
-		
+
 		/*
 		JLabel squarePanel = new JLabel();
 		squarePanel.setOpaque(true);
@@ -82,8 +93,8 @@ public class PloyGUI extends GUI {
 		squarePanel.setPreferredSize(new Dimension(60,60));
 		squarePanel.setBackground(boardColorPurple);
 		boardPanel.add(squarePanel);
-		*/
-		
+		 */
+
 		for(int i = 0; i < 9; i++) {
 			for(int j = 0; j < 9; j++) {
 				squaresPanels[i][j] = new JLabel();
@@ -100,9 +111,9 @@ public class PloyGUI extends GUI {
 				boardPanel.add(squaresPanels[i][j]);
 			}
 		}
-		
-		
-		
+
+
+
 		frame.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.NONE;
@@ -118,7 +129,7 @@ public class PloyGUI extends GUI {
 		textOutput.setColumns(35);
 		textScroll = new JScrollPane(textOutput);
 		textScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		
+
 		c.fill = GridBagConstraints.BOTH;
 		c.gridwidth = GridBagConstraints.REMAINDER;
 		c.gridx = 1;
@@ -133,31 +144,37 @@ public class PloyGUI extends GUI {
 		c.gridx = 0;
 		c.gridy = 1;
 		frame.add(rotateButtons,c);
-		
+
 		frame.setResizable(false);		
-		
+
 		try {
 			frame.setIconImage(ImageIO.read(new File("img/icon.png")));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		frame.pack();
-		
+
 		guiPrintLine("Bienvenidos a Ploy");
 		guiPrintLine("Para ganar, capture el comandante del oponente o todas las piezas\nexcepto el comandante.");
 		guiPrintLine("Cada pieza se puede mover por el\ntablero la cantidad de espacios de\nacuerdo con la cantidad de rayas\nque posee.");
 		guiPrintLine("En un turno se puede mover una\npieza o cambiar su direccion.");
 		guiPrintLine("Los escudos se pueden mover y\ncambiar de direccion en un mismo\nturno.");
-		
+
 		textScroll.paintImmediately(new Rectangle(new Point(0,0),textScroll.getSize()));
 		rotateButtons.paintImmediately(new Rectangle(new Point(0,0),rotateButtons.getSize()));
 		textScroll.paintImmediately(new Rectangle(new Point(0,0),textScroll.getSize()));
 		rotateButtons.paintImmediately(new Rectangle(new Point(0,0),rotateButtons.getSize()));
-		
+
 		frame.setVisible(true);
 	}
-	
+
+	/**
+	 * Shows each player's lost pieces.
+	 *
+	 * @param hitPiecesData the hit pieces data
+	 * @param hitPiecesIndex the hit pieces index
+	 */
 	@Override
 	public void showLostPieces(String[][] hitPiecesData, int hitPiecesIndex) {
 		JLabel[] hitPieces = new JLabel[hitPiecesIndex];	
@@ -179,36 +196,40 @@ public class PloyGUI extends GUI {
 			JOptionPane.showMessageDialog(null, hitPiecesPanel, "Piezas eliminadas", JOptionPane.PLAIN_MESSAGE, null);
 		}
 	}
-	
+
 	/**
-	 * @param players
-	 * @param gameMode
+	 * Places all the players' pieces on the board.
+	 *
+	 * @param players the players in the game
+	 * @param gameMode the game mode being played
 	 */
 	@Override
 	public void populateBoard(Object[] players, int gameMode) {
 		switch (gameMode) {
-			case 0: // 1v1
-				populateBoard1v1(((PloyPlayer) players[0]).getColor(), 1);
-			  	populateBoard1v1(((PloyPlayer) players[1]).getColor(), 2);
-			    break;
-			case 1: // 1v1v1v1
-				populateBoard1v1v1v1(((PloyPlayer) players[0]).getColor(), 1);
-				populateBoard1v1v1v1(((PloyPlayer) players[1]).getColor(), 2);
-				populateBoard1v1v1v1(((PloyPlayer) players[2]).getColor(), 3);
-				populateBoard1v1v1v1(((PloyPlayer) players[3]).getColor(), 4);
-			    break;
-			case 2: // 2v2
-				populateBoard2v2(((PloyPlayer) players[0]).getColor(), 1);
-			  	populateBoard2v2(((PloyPlayer) players[1]).getColor(), 2);
-			  	populateBoard2v2(((PloyPlayer) players[2]).getColor(), 3);
-			  	populateBoard2v2(((PloyPlayer) players[3]).getColor(), 4);
-			    break;
+		case 0: // 1v1
+			populateBoard1v1(((PloyPlayer) players[0]).getColor(), 1);
+			populateBoard1v1(((PloyPlayer) players[1]).getColor(), 2);
+			break;
+		case 1: // 1v1v1v1
+			populateBoard1v1v1v1(((PloyPlayer) players[0]).getColor(), 1);
+			populateBoard1v1v1v1(((PloyPlayer) players[1]).getColor(), 2);
+			populateBoard1v1v1v1(((PloyPlayer) players[2]).getColor(), 3);
+			populateBoard1v1v1v1(((PloyPlayer) players[3]).getColor(), 4);
+			break;
+		case 2: // 2v2
+			populateBoard2v2(((PloyPlayer) players[0]).getColor(), 1);
+			populateBoard2v2(((PloyPlayer) players[1]).getColor(), 2);
+			populateBoard2v2(((PloyPlayer) players[2]).getColor(), 3);
+			populateBoard2v2(((PloyPlayer) players[3]).getColor(), 4);
+			break;
 		}
 	}
-	
+
 	/**
-	 * @param color
-	 * @param playerNum
+	 * Populates the board for the 1 v 1 game mode.
+	 *
+	 * @param color the color of the pieces being placed
+	 * @param playerNum the number of the player whose pieces are being placed
 	 */
 	private void populateBoard1v1(String color, int playerNum) {
 		int orderArrayIndex = 0;
@@ -247,10 +268,12 @@ public class PloyGUI extends GUI {
 			}
 		}
 	}
-	
+
 	/**
-	 * @param color
-	 * @param playerNum
+	 * Populates the board for the 1v1v1v1 game mode.
+	 *
+	 * @param color the color of the pieces being placed
+	 * @param playerNum the number of the player whose pieces are being placed
 	 */
 	private void populateBoard1v1v1v1(String color, int playerNum) {
 		int orderArrayIndex = 0;
@@ -380,10 +403,12 @@ public class PloyGUI extends GUI {
 			}
 		}
 	}
-	
+
 	/**
-	 * @param color
-	 * @param playerNum
+	 * Populates the board for the 2v2.
+	 *
+	 * @param color the color of the pieces being placed
+	 * @param playerNum the number of the player whose pieces are being placed
 	 */
 	private void populateBoard2v2(String color, int playerNum) {
 		int orderArrayIndex = 0;
@@ -455,12 +480,22 @@ public class PloyGUI extends GUI {
 			}
 		}
 	}
-	
+
+	/**
+	 * Rotates a piece.
+	 *
+	 * @param x location of the piece on the x axis of the board
+	 * @param y location of the piece on the y axis of the board
+	 * @param direction the new direction the piece will face
+	 */
 	public void rotatePiece(int x, int y, int direction) {
 		PloyRotateIcon ri = new PloyRotateIcon(squaresPanels[x][y].getIcon(), direction, true);
 		squaresPanels[x][y].setIcon(ri);
 	}
-	
+
+	/**
+	 * Loads all the pieces' images on an icon array so they can be drawn on the board.
+	 */
 	private void loadImages() {
 		String path = "img/";
 		for (int i = 0; i < 4; i++) {
@@ -468,7 +503,7 @@ public class PloyGUI extends GUI {
 				path += chipFolderNames[i];
 				path += chipNames[j];
 				path += ".png";
-				
+
 				BufferedImage img = null;
 				try {
 					img = ImageIO.read(new File(path));
@@ -476,45 +511,54 @@ public class PloyGUI extends GUI {
 					e.printStackTrace();
 				}
 				ImageIcon icon = new ImageIcon(img);
-				
+
 				switch (i) {
-					case 0:
-						redIcons[j] = icon;
-						break;
-					case 1:
-						blueIcons[j] = icon;
-						break;
-					case 2:
-						greenIcons[j] = icon;
-						break;
-					case 3:
-						yellowIcons[j] = icon;
-						break;
+				case 0:
+					redIcons[j] = icon;
+					break;
+				case 1:
+					blueIcons[j] = icon;
+					break;
+				case 2:
+					greenIcons[j] = icon;
+					break;
+				case 3:
+					yellowIcons[j] = icon;
+					break;
 				}
 				path = "img/";
 			}
 		}
 	}
-	
+
 	/**
-	 * @param color
-	 * @return
+	 * Gets the array of icons of a given color.
+	 *
+	 * @param color the color of the pieces wanted 
+	 * @return the array of icons for that color
 	 */
 	private ImageIcon[] getIconArray(String color) {
 		switch(color) {
-			case "Rojo":
-				return this.redIcons;
-			case "Azul":
-				return this.blueIcons;
-			case "Verde":
-				return this.greenIcons;
-			case "Amarillo":
-				return this.yellowIcons;
-			default:
-				return this.redIcons;
+		case "Rojo":
+			return this.redIcons;
+		case "Azul":
+			return this.blueIcons;
+		case "Verde":
+			return this.greenIcons;
+		case "Amarillo":
+			return this.yellowIcons;
+		default:
+			return this.redIcons;
 		}
 	}
-	
+
+	/**
+	 * Load board.
+	 *
+	 * @param players the players
+	 * @param gameMode the game mode
+	 * @param board the board
+	 */
 	public void loadBoard(PloyPlayer[] players, int gameMode, String[][][] board) {
 		for (int i = 0; i < 9; i++) {
 			for (int j = 0; j < 9; j++) {

@@ -1,48 +1,34 @@
 
+/**
+ * Abstract class for representing the information of the pieces placed on squares.
+ */
 abstract class BoardSquare {
 	protected int type;
 	protected int owner;
 	protected String color;
 
-    /**
-     * @param type
-     */
-    public void setType(int type) {
-    	this.type = type;
-    }
 
-    /**
-     * @return
-     */
-    public int getType() {
-        return type;
-    }
+  public void setType(int type) {
+  	this.type = type;
+  }
 
-    /**
-     * @param owner
-     */
-    public void setOwner(int owner) {
-    	this.owner = owner;
-    }
+  public int getType() {
+      return type;
+  }
 
-    /**
-     * @return
-     */
-    public int getOwner() {
-        return owner;
-    }
-    
-    /**
-     * @param color
-     */
-    public void setColor(String color) {
-    	this.color = color;
-    }
+  public void setOwner(int owner) {
+  	this.owner = owner;
+  }
 
-    /**
-     * @return
-     */
-    public String getColor() {
-        return color;
-    }
+  public int getOwner() {
+      return owner;
+  }
+  
+  public void setColor(String color) {
+  	this.color = color;
+  }
+
+  public String getColor() {
+      return color;
+  }
 }

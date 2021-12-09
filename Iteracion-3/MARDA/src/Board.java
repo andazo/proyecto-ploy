@@ -1,95 +1,80 @@
 
+/**
+ * Abstract class that represents the logic aspects of the game board.
+ */
 abstract class Board {	
-	protected boolean pieceActive;
-	protected boolean gameOver;
-	protected int currentPlayer;
-	protected int lastI;
-	protected int lastJ;
-	protected int activePlayers;
 	
+	/** True if a piece is selected and ready to move. */
+	protected boolean pieceActive;
+	
+	/** True if the game is currently over. */
+	protected boolean gameOver;
+	
+	/** The player whose turn it is. */
+	protected int currentPlayer;
+	
+	/** The location on the x axis of the piece previously selected. */
+	protected int lastI;
+	
+	/** The location on the y axis of the piece previously selected. */
+	protected int lastJ;
+	
+	/** The number of players still in the game */
+	protected int activePlayers;
+
+	/**
+	 * Populates board according to the amount of players and the mode being played.
+	 *
+	 * @param players array of players in the game
+	 * @param gameMode the game mode being played
+	 */
 	abstract void populateBoard(Object[] players, int gameMode);
-    
-    /**
-     * @param pieceActive
-     */
-    public void setPieceActive(boolean pieceActive) {
-        this.pieceActive = pieceActive;
-    }
 
-    /**
-     * @return
-     */
-    public boolean getPieceActive() {
-        return pieceActive;
-    }
-    
-    /**
-     * @param gameOver
-     */
-    public void setGameOver(boolean gameOver) {
-        this.gameOver = gameOver;
-    }
+	public void setPieceActive(boolean pieceActive) {
+		this.pieceActive = pieceActive;
+	}
 
-    /**
-     * @return
-     */
-    public boolean getGameOver() {
-        return gameOver;
-    }
-    
-    /**
-     * @param currentPlayer
-     */
-    public void setCurrentPlayer(int currentPlayer) {
-        this.currentPlayer = currentPlayer;
-    }
+	public boolean getPieceActive() {
+		return pieceActive;
+	}
 
-    /**
-     * @return
-     */
-    public int getCurrentPlayer() {
-        return currentPlayer;
-    }
-    
-    /**
-     * @param lastI
-     */
-    public void setLastI(int lastI) {
-        this.lastI = lastI;
-    }
+	public void setGameOver(boolean gameOver) {
+		this.gameOver = gameOver;
+	}
 
-    /**
-     * @return
-     */
-    public int getLastI() {
-        return lastI;
-    }
-    
-    /**
-     * @param lastJ
-     */
-    public void setLastJ(int lastJ) {
-        this.lastJ = lastJ;
-    }
+	public boolean getGameOver() {
+		return gameOver;
+	}
 
-    /**
-     * @return
-     */
-    public int getLastJ() {
-        return lastJ;
-    }
-    
-    /**
-     * @param players
-     */
-    public void setActivePlayers(int players) {
-    	activePlayers = players;
-    }
-    
-    /**
-     * @return
-     */
-    public int getActivePlayers() {
-    	return activePlayers;
-    }
+	public void setCurrentPlayer(int currentPlayer) {
+		this.currentPlayer = currentPlayer;
+	}
+
+	public int getCurrentPlayer() {
+		return currentPlayer;
+	}
+
+	public void setLastI(int lastI) {
+		this.lastI = lastI;
+	}
+
+	public int getLastI() {
+		return lastI;
+	}
+
+	public void setLastJ(int lastJ) {
+		this.lastJ = lastJ;
+	}
+
+	public int getLastJ() {
+		return lastJ;
+	}
+
+	public void setActivePlayers(int players) {
+		activePlayers = players;
+	}
+
+	public int getActivePlayers() {
+		return activePlayers;
+	}
 }

@@ -1,13 +1,19 @@
 
+/**
+ * Concrete class for representing a board square, contains all
+ * the information about the piece placed on it.
+ */
 public class PloyBoardSquare extends BoardSquare {
 	int direction;
 	
 	/**
-     * @param type
-     * @param direction
-     * @param owner
-     * @param color
-     */
+	 * Instantiates a new ploy board square.
+	 *
+	 * @param type the type of piece in the square
+	 * @param direction the direction the piece is facing
+	 * @param owner the owner of the piece
+	 * @param color the color of the piece
+	 */
 	public PloyBoardSquare(int type, int direction, int owner, String color) {
         this.type = type;
         this.direction = direction;
@@ -15,16 +21,10 @@ public class PloyBoardSquare extends BoardSquare {
         this.color = color;
     }
 	
-	/**
-     * @param direction
-     */
     public void setDirection(int direction) {
     	this.direction = direction;
     }
 
-    /**
-     * @return
-     */
     public int getDirection() {
         return direction;
     }

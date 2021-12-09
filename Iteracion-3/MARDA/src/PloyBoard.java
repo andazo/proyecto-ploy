@@ -1,4 +1,7 @@
 
+/**
+ * Concrete class representing the logic aspects of the game board
+ */
 public class PloyBoard extends Board {
 	public PloyBoardSquare[][] boardSquares;
 	
@@ -20,15 +23,15 @@ public class PloyBoard extends Board {
 	final int pieceOrder2v2[] = {1,0,3,4,5,7};
 
     /**
-     * 
+     * Instantiates a new Ploy board.
      */
     public PloyBoard() {
     	boardSquares = new PloyBoardSquare[9][9];
-		for (int i = 0; i < 9; i++) {
-			for (int j = 0; j < 9; j++) {
-				boardSquares[i][j] = new PloyBoardSquare(-1, 0, 0, "-");
+			for (int i = 0; i < 9; i++) {
+				for (int j = 0; j < 9; j++) {
+					boardSquares[i][j] = new PloyBoardSquare(-1, 0, 0, "-");
+				}
 			}
-		}
     	pieceActive = false;
     	gameOver = false;
     	currentPlayer = 1;
@@ -112,8 +115,10 @@ public class PloyBoard extends Board {
     }
     
     /**
-     * @param currentOwner
-     * @param newOwner
+     * Update owner.
+     *
+     * @param currentOwner the current owner
+     * @param newOwner the new owner
      */
     public void updateOwner(int currentOwner, int newOwner) {
     	for (int i = 0; i < 9; i++) {
@@ -125,12 +130,14 @@ public class PloyBoard extends Board {
 		}
     }
 
-    // direction = -45 rota hacia la izquierda, direction = 45 rota hacia la derecha
+    // 
  	/**
- 	 * @param x
- 	 * @param y
- 	 * @param direction
- 	 */
+     * Rotates a piece.
+     * Direction = -45 turns the piece left, direction = 45 turns it right
+     * @param x 
+     * @param y the y
+     * @param direction the new direction the piece will face
+     */
  	public void rotatePiece(int x, int y, int direction) {
  		int newDirection = boardSquares[x][y].getDirection() + direction;
  		int type = boardSquares[x][y].getType();
@@ -157,9 +164,11 @@ public class PloyBoard extends Board {
  	}
  	
  	/**
-	 * @param players
-	 * @param gameMode
-	 */
+	  * Populate board.
+	  *
+	  * @param players array of players that will play the game
+	  * @param gameMode the game mode that will be played
+	  */
  	@Override
 	public void populateBoard(Object[] players, int gameMode) {
 		switch (gameMode) {
@@ -200,9 +209,11 @@ public class PloyBoard extends Board {
 	}
     
 	  /**
-	 * @param color
-	 * @param playerNum
-	 */
+  	 * Populate board for 1 v 1 game mode.
+  	 *
+  	 * @param color the color of the player whose chips are being placed
+  	 * @param playerNum the player whose chips are being placed
+  	 */
 	private void populateBoard1v1(String color, int playerNum) {
 		int orderArrayIndex = 0;
 		
@@ -266,8 +277,10 @@ public class PloyBoard extends Board {
 	}
 	
 	/**
-	 * @param color
-	 * @param playerNum
+	 * Populate board for the 1v1v1v1 game mode.
+	 *
+	 * @param color the color of the player whose chips are being placed
+   * @param playerNum the player whose chips are being placed
 	 */
 	private void populateBoard1v1v1v1(String color, int playerNum) {
 		int orderArrayIndex = 0;
@@ -423,8 +436,10 @@ public class PloyBoard extends Board {
 	}
 	
 	/**
-	 * @param color
-	 * @param playerNum
+	 * Populate the board for the 2v2 game mode.
+	 *
+	 * @param color the color of the player whose chips are being placed
+   * @param playerNum the player whose chips are being placed
 	 */
 	private void populateBoard2v2(String color, int playerNum) {
 		int orderArrayIndex = 0;
@@ -532,9 +547,11 @@ public class PloyBoard extends Board {
 	}
 	
 	/**
-	 * @param players
-	 * @param gameMode
-	 * @param board
+	 * Load board.
+	 *
+	 * @param players the players
+	 * @param gameMode the game mode
+	 * @param board the board
 	 */
 	public void loadBoard(PloyPlayer[] players, int gameMode, String[][][] board) {
 		for (int i = 0; i < 9; i++) {
@@ -548,7 +565,9 @@ public class PloyBoard extends Board {
 	}
 	
 	/**
-	 * @param hitPiecesIndexes
+	 * Load hit pieces indexes.
+	 *
+	 * @param hitPiecesIndexes the hit pieces indexes
 	 */
 	public void loadHitPiecesIndexes(int[] hitPiecesIndexes) {
 		setP1HitPiecesIndex(hitPiecesIndexes[0]);
@@ -558,8 +577,10 @@ public class PloyBoard extends Board {
 	}
 	
 	/**
-	 * @param gameMode
-	 * @param hitPieces
+	 * Load hit pieces.
+	 *
+	 * @param gameMode the game mode
+	 * @param hitPieces the hit pieces
 	 */
 	public void loadHitPieces(int gameMode, String[][][] hitPieces) {
 		if (gameMode == 0) {
@@ -604,7 +625,9 @@ public class PloyBoard extends Board {
 	}
 	
 	/**
-	 * @param currentPlayer
+	 * Load current player.
+	 *
+	 * @param currentPlayer the current player
 	 */
 	public void loadCurrentPlayer(int currentPlayer) {
 		setCurrentPlayer(currentPlayer);

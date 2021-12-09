@@ -1,4 +1,7 @@
 
+/**
+ * Abstract class that represents a player
+ */
 abstract class Player {
 	protected String name, color;
 	protected int id;
