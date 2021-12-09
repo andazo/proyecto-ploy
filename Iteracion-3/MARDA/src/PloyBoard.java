@@ -160,49 +160,50 @@ public class PloyBoard extends Board {
 	 * @param players
 	 * @param gameMode
 	 */
-	public void populateBoard(PloyPlayer[] players, int gameMode) {
+ 	@Override
+	public void populateBoard(Object[] players, int gameMode) {
 		switch (gameMode) {
 			case 0: // 1v1
-				populateBoard1v1(players[0].getColor(), 1);
-			  	populateBoard1v1(players[1].getColor(), 2);
+				populateBoard1v1(((PloyPlayer) players[0]).getColor(), 1);
+			  	populateBoard1v1(((PloyPlayer) players[1]).getColor(), 2);
 			  	setActivePlayers(2);
-			  	players[0].setNumPieces(15);
-			  	players[1].setNumPieces(15);
+			  	((PloyPlayer) players[0]).setNumPieces(15);
+			  	((PloyPlayer) players[1]).setNumPieces(15);
 			    break;
 			case 1: // 1v1v1v1
-				populateBoard1v1v1v1(players[0].getColor(), 1);
-				populateBoard1v1v1v1(players[1].getColor(), 2);
-				populateBoard1v1v1v1(players[2].getColor(), 3);
-				populateBoard1v1v1v1(players[3].getColor(), 4);
+				populateBoard1v1v1v1(((PloyPlayer) players[0]).getColor(), 1);
+				populateBoard1v1v1v1(((PloyPlayer) players[1]).getColor(), 2);
+				populateBoard1v1v1v1(((PloyPlayer) players[2]).getColor(), 3);
+				populateBoard1v1v1v1(((PloyPlayer) players[3]).getColor(), 4);
 				setActivePlayers(4);
-				players[0].setNumPieces(9);
-				players[1].setNumPieces(9);
-				players[2].setNumPieces(9);
-				players[3].setNumPieces(9);
+				((PloyPlayer) players[0]).setNumPieces(9);
+				((PloyPlayer) players[1]).setNumPieces(9);
+				((PloyPlayer) players[2]).setNumPieces(9);
+				((PloyPlayer) players[3]).setNumPieces(9);
 				break;
 			case 2: // 2v2
-				populateBoard2v2(players[0].getColor(), 1);
-			  	populateBoard2v2(players[1].getColor(), 2);
-			  	populateBoard2v2(players[2].getColor(), 3);
-			  	populateBoard2v2(players[3].getColor(), 4);
+				populateBoard2v2(((PloyPlayer) players[0]).getColor(), 1);
+			  	populateBoard2v2(((PloyPlayer) players[1]).getColor(), 2);
+			  	populateBoard2v2(((PloyPlayer) players[2]).getColor(), 3);
+			  	populateBoard2v2(((PloyPlayer) players[3]).getColor(), 4);
 			  	setActivePlayers(4);
-			  	players[0].setNumPieces(9);
-				players[1].setNumPieces(9);
-				players[2].setNumPieces(9);
-				players[3].setNumPieces(9);
-				players[0].setFriend(3);
-				players[1].setFriend(4);
-				players[2].setFriend(1);
-				players[3].setFriend(2);
+			  	((PloyPlayer) players[0]).setNumPieces(9);
+				((PloyPlayer) players[1]).setNumPieces(9);
+				((PloyPlayer) players[2]).setNumPieces(9);
+				((PloyPlayer) players[3]).setNumPieces(9);
+				((PloyPlayer) players[0]).setFriend(3);
+				((PloyPlayer) players[1]).setFriend(4);
+				((PloyPlayer) players[2]).setFriend(1);
+				((PloyPlayer) players[3]).setFriend(2);
 				break;
 		}
 	}
     
-  /**
- * @param color
- * @param playerNum
- */
-private void populateBoard1v1(String color, int playerNum) {
+	  /**
+	 * @param color
+	 * @param playerNum
+	 */
+	private void populateBoard1v1(String color, int playerNum) {
 		int orderArrayIndex = 0;
 		
 		if (playerNum == 1) {

@@ -21,6 +21,7 @@ abstract class GUI {
   
   abstract void drawBoard();
   abstract void showLostPieces(String[][] hitPiecesData, int hitPiecesIndex);
+  abstract void populateBoard(Object[] players, int gameMode);
   
   public void printMessage(Object message) {
   	JOptionPane.showMessageDialog(null, message);

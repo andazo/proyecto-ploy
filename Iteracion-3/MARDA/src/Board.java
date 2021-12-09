@@ -6,6 +6,8 @@ abstract class Board {
 	protected int lastI;
 	protected int lastJ;
 	protected int activePlayers;
+	
+	abstract void populateBoard(Object[] players, int gameMode);
     
     /**
      * @param pieceActive

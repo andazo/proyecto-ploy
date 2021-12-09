@@ -184,23 +184,24 @@ public class PloyGUI extends GUI {
 	 * @param players
 	 * @param gameMode
 	 */
-	public void populateBoard(PloyPlayer[] players, int gameMode) {
+	@Override
+	public void populateBoard(Object[] players, int gameMode) {
 		switch (gameMode) {
 			case 0: // 1v1
-				populateBoard1v1(players[0].getColor(), 1);
-			  	populateBoard1v1(players[1].getColor(), 2);
+				populateBoard1v1(((PloyPlayer) players[0]).getColor(), 1);
+			  	populateBoard1v1(((PloyPlayer) players[1]).getColor(), 2);
 			    break;
 			case 1: // 1v1v1v1
-				populateBoard1v1v1v1(players[0].getColor(), 1);
-				populateBoard1v1v1v1(players[1].getColor(), 2);
-				populateBoard1v1v1v1(players[2].getColor(), 3);
-				populateBoard1v1v1v1(players[3].getColor(), 4);
+				populateBoard1v1v1v1(((PloyPlayer) players[0]).getColor(), 1);
+				populateBoard1v1v1v1(((PloyPlayer) players[1]).getColor(), 2);
+				populateBoard1v1v1v1(((PloyPlayer) players[2]).getColor(), 3);
+				populateBoard1v1v1v1(((PloyPlayer) players[3]).getColor(), 4);
 			    break;
 			case 2: // 2v2
-				populateBoard2v2(players[0].getColor(), 1);
-			  	populateBoard2v2(players[1].getColor(), 2);
-			  	populateBoard2v2(players[2].getColor(), 3);
-			  	populateBoard2v2(players[3].getColor(), 4);
+				populateBoard2v2(((PloyPlayer) players[0]).getColor(), 1);
+			  	populateBoard2v2(((PloyPlayer) players[1]).getColor(), 2);
+			  	populateBoard2v2(((PloyPlayer) players[2]).getColor(), 3);
+			  	populateBoard2v2(((PloyPlayer) players[3]).getColor(), 4);
 			    break;
 		}
 	}
