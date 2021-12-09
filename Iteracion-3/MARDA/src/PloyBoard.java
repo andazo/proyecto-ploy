@@ -3,245 +3,217 @@
  * Concrete class representing the logic aspects of the game board
  */
 public class PloyBoard extends Board {
+	/** Matrix of board squares with the information of the pieces on them */
 	public PloyBoardSquare[][] boardSquares;
-	
+
 	private int originalDirection;
-	
+
 	private int p1HitPiecesIndex;
 	private int p2HitPiecesIndex;
 	private int p3HitPiecesIndex;
 	private int p4HitPiecesIndex;
-	
+
+	// Each player's lost pieces
 	public String[][] p1HitPieces;
 	public String[][] p2HitPieces;
 	public String[][] p3HitPieces;
 	public String[][] p4HitPieces;
-	
+
+	// Order in which the pieces will be placed at the start of the game.
 	final int pieceOrder1v1P1[] = {1,2,3,0,3,2,1,4,5,6,5,7};
 	final int pieceOrder1v1P2[] = {1,2,3,0,3,2,1,7,5,6,5,4};
 	final int pieceOrder1v1v1v1[] = {0,1,7,3,5,8,4,8,8};
 	final int pieceOrder2v2[] = {1,0,3,4,5,7};
 
-    /**
-     * Instantiates a new Ploy board.
-     */
-    public PloyBoard() {
-    	boardSquares = new PloyBoardSquare[9][9];
-			for (int i = 0; i < 9; i++) {
-				for (int j = 0; j < 9; j++) {
-					boardSquares[i][j] = new PloyBoardSquare(-1, 0, 0, "-");
-				}
+	/**
+	 * Instantiates a new Ploy board.
+	 */
+	public PloyBoard() {
+		boardSquares = new PloyBoardSquare[9][9];
+		for (int i = 0; i < 9; i++) {
+			for (int j = 0; j < 9; j++) {
+				boardSquares[i][j] = new PloyBoardSquare(-1, 0, 0, "-");
 			}
-    	pieceActive = false;
-    	gameOver = false;
-    	currentPlayer = 1;
-    	lastI = 0;
-    	lastJ = 0;
-    	originalDirection = 0;
-    	p1HitPiecesIndex = 0;
-    	p2HitPiecesIndex = 0;
-    	p3HitPiecesIndex = 0;
-    	p4HitPiecesIndex = 0;
-    }
-    
-    /**
-     * @param originalDirection
-     */
-    public void setOriginalDirection(int originalDirection) {
-        this.originalDirection = originalDirection;
-    }
+		}
+		pieceActive = false;
+		gameOver = false;
+		currentPlayer = 1;
+		lastI = 0;
+		lastJ = 0;
+		originalDirection = 0;
+		p1HitPiecesIndex = 0;
+		p2HitPiecesIndex = 0;
+		p3HitPiecesIndex = 0;
+		p4HitPiecesIndex = 0;
+	}
 
-    /**
-     * @return
-     */
-    public int getOriginalDirection() {
-        return originalDirection;
-    }
-    
-    /**
-     * @param p1HitPiecesIndex
-     */
-    public void setP1HitPiecesIndex(int p1HitPiecesIndex) {
-        this.p1HitPiecesIndex = p1HitPiecesIndex;
-    }
+	public void setOriginalDirection(int originalDirection) {
+		this.originalDirection = originalDirection;
+	}
 
-    /**
-     * @return
-     */
-    public int getP1HitPiecesIndex() {
-        return p1HitPiecesIndex;
-    }
-    
-    /**
-     * @param p2HitPiecesIndex
-     */
-    public void setP2HitPiecesIndex(int p2HitPiecesIndex) {
-        this.p2HitPiecesIndex = p2HitPiecesIndex;
-    }
+	public int getOriginalDirection() {
+		return originalDirection;
+	}
 
-    /**
-     * @return
-     */
-    public int getP2HitPiecesIndex() {
-        return p2HitPiecesIndex;
-    }
-    
-    /**
-     * @param p3HitPiecesIndex
-     */
-    public void setP3HitPiecesIndex(int p3HitPiecesIndex) {
-        this.p3HitPiecesIndex = p3HitPiecesIndex;
-    }
+	public void setP1HitPiecesIndex(int p1HitPiecesIndex) {
+		this.p1HitPiecesIndex = p1HitPiecesIndex;
+	}
 
-    /**
-     * @return
-     */
-    public int getP3HitPiecesIndex() {
-        return p3HitPiecesIndex;
-    }
-    
-    /**
-     * @param p4HitPiecesIndex
-     */
-    public void setP4HitPiecesIndex(int p4HitPiecesIndex) {
-        this.p4HitPiecesIndex = p4HitPiecesIndex;
-    }
+	public int getP1HitPiecesIndex() {
+		return p1HitPiecesIndex;
+	}
 
-    /**
-     * @return
-     */
-    public int getP4HitPiecesIndex() {
-        return p4HitPiecesIndex;
-    }
-    
-    /**
-     * Update owner.
-     *
-     * @param currentOwner the current owner
-     * @param newOwner the new owner
-     */
-    public void updateOwner(int currentOwner, int newOwner) {
-    	for (int i = 0; i < 9; i++) {
+	public void setP2HitPiecesIndex(int p2HitPiecesIndex) {
+		this.p2HitPiecesIndex = p2HitPiecesIndex;
+	}
+
+	public int getP2HitPiecesIndex() {
+		return p2HitPiecesIndex;
+	}
+
+	public void setP3HitPiecesIndex(int p3HitPiecesIndex) {
+		this.p3HitPiecesIndex = p3HitPiecesIndex;
+	}
+
+	public int getP3HitPiecesIndex() {
+		return p3HitPiecesIndex;
+	}
+
+	public void setP4HitPiecesIndex(int p4HitPiecesIndex) {
+		this.p4HitPiecesIndex = p4HitPiecesIndex;
+	}
+
+	public int getP4HitPiecesIndex() {
+		return p4HitPiecesIndex;
+	}
+
+	/**
+	 * Update owner.
+	 *
+	 * @param currentOwner the current owner
+	 * @param newOwner the new owner
+	 */
+	public void updateOwner(int currentOwner, int newOwner) {
+		for (int i = 0; i < 9; i++) {
 			for (int j = 0; j < 9; j++) {
 				if(boardSquares[i][j].getOwner() == currentOwner) {
 					boardSquares[i][j].setOwner(newOwner);
 				}
 			}
 		}
-    }
+	}
 
-    // 
- 	/**
-     * Rotates a piece.
-     * Direction = -45 turns the piece left, direction = 45 turns it right
-     * @param x 
-     * @param y the y
-     * @param direction the new direction the piece will face
-     */
- 	public void rotatePiece(int x, int y, int direction) {
- 		int newDirection = boardSquares[x][y].getDirection() + direction;
- 		int type = boardSquares[x][y].getType();
- 		if (type == 0) {
- 			if (newDirection < 0) {
-	 			newDirection = newDirection + 90;
-	 		} else if (newDirection >= 90) {
-	 			newDirection = newDirection - 90;
-	 		}
- 		} else if (type == 6) {
- 			if (newDirection < 0) {
-	 			newDirection = newDirection + 180;
-	 		} else if (newDirection >= 180) {
-	 			newDirection = newDirection - 180;
-	 		}
- 		} else {
-	 		if (newDirection < 0) {
-	 			newDirection = newDirection + 360;
-	 		} else if (newDirection >= 360) {
-	 			newDirection = newDirection - 360;
-	 		}
- 		}
- 		boardSquares[x][y].setDirection(newDirection);
- 	}
- 	
- 	/**
-	  * Populate board.
-	  *
-	  * @param players array of players that will play the game
-	  * @param gameMode the game mode that will be played
-	  */
- 	@Override
+	/**
+	 * Rotates a piece. Direction = -45 turns the piece left, direction = 45 turns it right.
+	 * 
+	 * @param x location on the x axis of the board
+	 * @param y location on the y axis of the board
+	 * @param direction the new direction the piece will face
+	 */
+	public void rotatePiece(int x, int y, int direction) {
+		int newDirection = boardSquares[x][y].getDirection() + direction;
+		int type = boardSquares[x][y].getType();
+		if (type == 0) {
+			if (newDirection < 0) {
+				newDirection = newDirection + 90;
+			} else if (newDirection >= 90) {
+				newDirection = newDirection - 90;
+			}
+		} else if (type == 6) {
+			if (newDirection < 0) {
+				newDirection = newDirection + 180;
+			} else if (newDirection >= 180) {
+				newDirection = newDirection - 180;
+			}
+		} else {
+			if (newDirection < 0) {
+				newDirection = newDirection + 360;
+			} else if (newDirection >= 360) {
+				newDirection = newDirection - 360;
+			}
+		}
+		boardSquares[x][y].setDirection(newDirection);
+	}
+
+	/**
+	 * Populate the board with the data for every piece.
+	 *
+	 * @param players array of players that will play the game
+	 * @param gameMode the game mode that will be played
+	 */
+	@Override
 	public void populateBoard(Object[] players, int gameMode) {
 		switch (gameMode) {
-			case 0: // 1v1
-				populateBoard1v1(((PloyPlayer) players[0]).getColor(), 1);
-			  	populateBoard1v1(((PloyPlayer) players[1]).getColor(), 2);
-			  	setActivePlayers(2);
-			  	((PloyPlayer) players[0]).setNumPieces(15);
-			  	((PloyPlayer) players[1]).setNumPieces(15);
-			    break;
-			case 1: // 1v1v1v1
-				populateBoard1v1v1v1(((PloyPlayer) players[0]).getColor(), 1);
-				populateBoard1v1v1v1(((PloyPlayer) players[1]).getColor(), 2);
-				populateBoard1v1v1v1(((PloyPlayer) players[2]).getColor(), 3);
-				populateBoard1v1v1v1(((PloyPlayer) players[3]).getColor(), 4);
-				setActivePlayers(4);
-				((PloyPlayer) players[0]).setNumPieces(9);
-				((PloyPlayer) players[1]).setNumPieces(9);
-				((PloyPlayer) players[2]).setNumPieces(9);
-				((PloyPlayer) players[3]).setNumPieces(9);
-				break;
-			case 2: // 2v2
-				populateBoard2v2(((PloyPlayer) players[0]).getColor(), 1);
-			  	populateBoard2v2(((PloyPlayer) players[1]).getColor(), 2);
-			  	populateBoard2v2(((PloyPlayer) players[2]).getColor(), 3);
-			  	populateBoard2v2(((PloyPlayer) players[3]).getColor(), 4);
-			  	setActivePlayers(4);
-			  	((PloyPlayer) players[0]).setNumPieces(9);
-				((PloyPlayer) players[1]).setNumPieces(9);
-				((PloyPlayer) players[2]).setNumPieces(9);
-				((PloyPlayer) players[3]).setNumPieces(9);
-				((PloyPlayer) players[0]).setFriend(3);
-				((PloyPlayer) players[1]).setFriend(4);
-				((PloyPlayer) players[2]).setFriend(1);
-				((PloyPlayer) players[3]).setFriend(2);
-				break;
+		case 0: // 1v1
+			populateBoard1v1(((PloyPlayer) players[0]).getColor(), 1);
+			populateBoard1v1(((PloyPlayer) players[1]).getColor(), 2);
+			setActivePlayers(2);
+			((PloyPlayer) players[0]).setNumPieces(15);
+			((PloyPlayer) players[1]).setNumPieces(15);
+			break;
+		case 1: // 1v1v1v1
+			populateBoard1v1v1v1(((PloyPlayer) players[0]).getColor(), 1);
+			populateBoard1v1v1v1(((PloyPlayer) players[1]).getColor(), 2);
+			populateBoard1v1v1v1(((PloyPlayer) players[2]).getColor(), 3);
+			populateBoard1v1v1v1(((PloyPlayer) players[3]).getColor(), 4);
+			setActivePlayers(4);
+			((PloyPlayer) players[0]).setNumPieces(9);
+			((PloyPlayer) players[1]).setNumPieces(9);
+			((PloyPlayer) players[2]).setNumPieces(9);
+			((PloyPlayer) players[3]).setNumPieces(9);
+			break;
+		case 2: // 2v2
+			populateBoard2v2(((PloyPlayer) players[0]).getColor(), 1);
+			populateBoard2v2(((PloyPlayer) players[1]).getColor(), 2);
+			populateBoard2v2(((PloyPlayer) players[2]).getColor(), 3);
+			populateBoard2v2(((PloyPlayer) players[3]).getColor(), 4);
+			setActivePlayers(4);
+			((PloyPlayer) players[0]).setNumPieces(9);
+			((PloyPlayer) players[1]).setNumPieces(9);
+			((PloyPlayer) players[2]).setNumPieces(9);
+			((PloyPlayer) players[3]).setNumPieces(9);
+			((PloyPlayer) players[0]).setFriend(3);
+			((PloyPlayer) players[1]).setFriend(4);
+			((PloyPlayer) players[2]).setFriend(1);
+			((PloyPlayer) players[3]).setFriend(2);
+			break;
 		}
 	}
-    
-	  /**
-  	 * Populate board for 1 v 1 game mode.
-  	 *
-  	 * @param color the color of the player whose chips are being placed
-  	 * @param playerNum the player whose chips are being placed
-  	 */
+
+	/**
+	 * Populate board for 1v1 game mode.
+	 *
+	 * @param color the color of the player whose chips are being placed
+	 * @param playerNum the player whose chips are being placed
+	 */
 	private void populateBoard1v1(String color, int playerNum) {
 		int orderArrayIndex = 0;
-		
+
 		if (playerNum == 1) {
 			for (int i = 1; i < 8; i++) {
 				boardSquares[8][i].setType(pieceOrder1v1P1[orderArrayIndex]);
 				boardSquares[8][i].setOwner(1);
 				boardSquares[8][i].setColor(color);
-				
+
 				if (boardSquares[8][i].getType() == 0) {
 					boardSquares[8][i].setDirection(0);					
 				} else {
 					boardSquares[8][i].setDirection(180);
 				}
-				
+
 				orderArrayIndex++;
 			}
 			for (int i = 2; i < 7; i++) {
 				boardSquares[7][i].setType(pieceOrder1v1P1[orderArrayIndex]);
 				boardSquares[7][i].setOwner(1);
 				boardSquares[7][i].setColor(color);
-				
+
 				if (boardSquares[7][i].getType() == 6) {
 					boardSquares[7][i].setDirection(0);					
 				} else {
 					boardSquares[7][i].setDirection(180);
 				}
-				
+
 				orderArrayIndex++;
 			}
 			for (int i = 3; i < 6; i++) {
@@ -275,12 +247,12 @@ public class PloyBoard extends Board {
 			p2HitPieces = new String[15][2];
 		}
 	}
-	
+
 	/**
 	 * Populate board for the 1v1v1v1 game mode.
 	 *
 	 * @param color the color of the player whose chips are being placed
-   * @param playerNum the player whose chips are being placed
+	 * @param playerNum the player whose chips are being placed
 	 */
 	private void populateBoard1v1v1v1(String color, int playerNum) {
 		int orderArrayIndex = 0;
@@ -434,12 +406,12 @@ public class PloyBoard extends Board {
 			p4HitPieces = new String[9][2];
 		}
 	}
-	
+
 	/**
 	 * Populate the board for the 2v2 game mode.
 	 *
 	 * @param color the color of the player whose chips are being placed
-   * @param playerNum the player whose chips are being placed
+	 * @param playerNum the player whose chips are being placed
 	 */
 	private void populateBoard2v2(String color, int playerNum) {
 		int orderArrayIndex = 0;
@@ -448,13 +420,13 @@ public class PloyBoard extends Board {
 				boardSquares[8][i].setType(pieceOrder2v2[orderArrayIndex]);
 				boardSquares[8][i].setOwner(1);
 				boardSquares[8][i].setColor(color);
-				
+
 				if (boardSquares[8][i].getType() == 0) {
 					boardSquares[8][i].setDirection(0);					
 				} else {
 					boardSquares[8][i].setDirection(180);
 				}
-				
+
 				orderArrayIndex++;
 			}
 			for(int i = 1; i < 4; i++) {
@@ -498,13 +470,13 @@ public class PloyBoard extends Board {
 				boardSquares[8][i].setType(pieceOrder2v2[orderArrayIndex]);
 				boardSquares[8][i].setOwner(3);
 				boardSquares[8][i].setColor(color);
-				
+
 				if (boardSquares[8][i].getType() == 0) {
 					boardSquares[8][i].setDirection(0);					
 				} else {
 					boardSquares[8][i].setDirection(180);
 				}
-				
+
 				orderArrayIndex++;
 			}
 			for(int i = 5; i < 8; i++) {
@@ -545,13 +517,13 @@ public class PloyBoard extends Board {
 			p4HitPieces = new String[9][2];
 		}
 	}
-	
+
 	/**
-	 * Load board.
+	 * Loads the board from a saved file.
 	 *
-	 * @param players the players
+	 * @param players the players in the game
 	 * @param gameMode the game mode
-	 * @param board the board
+	 * @param board the board data
 	 */
 	public void loadBoard(PloyPlayer[] players, int gameMode, String[][][] board) {
 		for (int i = 0; i < 9; i++) {
@@ -563,11 +535,11 @@ public class PloyBoard extends Board {
 			}
 		}
 	}
-	
+
 	/**
-	 * Load hit pieces indexes.
+	 * Load the hit pieces indexes from a save file.
 	 *
-	 * @param hitPiecesIndexes the hit pieces indexes
+	 * @param hitPiecesIndexes the hit pieces indexes from the file
 	 */
 	public void loadHitPiecesIndexes(int[] hitPiecesIndexes) {
 		setP1HitPiecesIndex(hitPiecesIndexes[0]);
@@ -575,12 +547,12 @@ public class PloyBoard extends Board {
 		setP3HitPiecesIndex(hitPiecesIndexes[2]);
 		setP4HitPiecesIndex(hitPiecesIndexes[3]);
 	}
-	
+
 	/**
-	 * Load hit pieces.
+	 * Load each player's lost pieces from a save file.
 	 *
-	 * @param gameMode the game mode
-	 * @param hitPieces the hit pieces
+	 * @param gameMode the game mode being played
+	 * @param hitPieces each player's lost pieces
 	 */
 	public void loadHitPieces(int gameMode, String[][][] hitPieces) {
 		if (gameMode == 0) {
@@ -623,9 +595,9 @@ public class PloyBoard extends Board {
 			}
 		}
 	}
-	
+
 	/**
-	 * Load current player.
+	 * Load the player whose turn it is from a save file.
 	 *
 	 * @param currentPlayer the current player
 	 */
