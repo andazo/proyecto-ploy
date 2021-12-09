@@ -184,7 +184,7 @@ public class PloyGUI extends GUI {
 	 * @param players
 	 * @param gameMode
 	 */
-	public void populateBoard(Player[] players, int gameMode) {
+	public void populateBoard(PloyPlayer[] players, int gameMode) {
 		switch (gameMode) {
 			case 0: // 1v1
 				populateBoard1v1(players[0].getColor(), 1);
@@ -514,7 +514,7 @@ public class PloyGUI extends GUI {
 		}
 	}
 	
-	public void loadBoard(Player[] players, int gameMode, String[][][] board) {
+	public void loadBoard(PloyPlayer[] players, int gameMode, String[][][] board) {
 		for (int i = 0; i < 9; i++) {
 			for (int j = 0; j < 9; j++) {
 				if (Integer.parseInt(board[i][j][0]) != -1) {

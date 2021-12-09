@@ -535,7 +535,7 @@ private void populateBoard1v1(String color, int playerNum) {
 	 * @param gameMode
 	 * @param board
 	 */
-	public void loadBoard(Player[] players, int gameMode, String[][][] board) {
+	public void loadBoard(PloyPlayer[] players, int gameMode, String[][][] board) {
 		for (int i = 0; i < 9; i++) {
 			for (int j = 0; j < 9; j++) {
 				boardSquares[i][j].setType(Integer.parseInt(board[i][j][0]));
