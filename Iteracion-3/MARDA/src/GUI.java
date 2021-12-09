@@ -20,10 +20,7 @@ abstract class GUI {
 	int boardSize;
   
   abstract void drawBoard();
-  abstract void populateBoard();
   abstract void showLostPieces(String[][] hitPiecesData, int hitPiecesIndex);
-  abstract void setMouseActions();
-  abstract void removeMouseActions();
   
   public void printMessage(Object message) {
   	JOptionPane.showMessageDialog(null, message);

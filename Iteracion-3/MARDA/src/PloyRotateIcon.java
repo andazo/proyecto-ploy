@@ -5,7 +5,7 @@ import java.awt.RenderingHints;
 import javax.swing.Icon;
 
 /**
- *  The RotateIcon allows you to change the orientation of an Icon by
+ *  The PloyRotateIcon allows you to change the orientation of an Icon by
  *  rotating the Icon before it is painted. This class supports the following
  *  orientations:
  *
@@ -16,7 +16,7 @@ import javax.swing.Icon;
  * <li>ABOUT_CENTER - the icon is rotated by the specified degrees about its center.
  * </ul>
  */
-public class RotateIcon implements Icon
+public class PloyRotateIcon implements Icon
 {
 	public enum Rotate
 	{
@@ -34,48 +34,48 @@ public class RotateIcon implements Icon
 	private boolean circularIcon;
 
 	/**
-	 *  Convenience constructor to create a RotateIcon that is rotated DOWN.
+	 *  Convenience constructor to create a PloyRotateIcon that is rotated DOWN.
 	 *
 	 *  @param icon  the Icon to rotate
 	 */
-	public RotateIcon(Icon icon)
+	public PloyRotateIcon(Icon icon)
 	{
 		this(icon, Rotate.UP);
 	}
 
 	/**
-	 *  Create a RotateIcon
+	 *  Create a PloyRotateIcon
 	 *
 	 *  @param icon	the Icon to rotate
 	 *  @param rotate  the direction of rotation
 	 */
-	public RotateIcon(Icon icon, Rotate rotate)
+	public PloyRotateIcon(Icon icon, Rotate rotate)
 	{
 		this.icon = icon;
 		this.rotate = rotate;
 	}
 
 	/**
-	 *  Create a RotateIcon. The icon will rotate about its center. This
+	 *  Create a PloyRotateIcon. The icon will rotate about its center. This
 	 *  constructor will automatically set the Rotate enum to ABOUT_CENTER.
 	 *
 	 *  @param icon	the Icon to rotate
 	 *  @param degrees   the degrees of rotation
 	 */
-	public RotateIcon(Icon icon, double degrees)
+	public PloyRotateIcon(Icon icon, double degrees)
 	{
 		this(icon, degrees, false);
 	}
 
 	/**
-	 *  Create a RotateIcon. The icon will rotate about its center. This
+	 *  Create a PloyRotateIcon. The icon will rotate about its center. This
 	 *  constructor will automatically set the Rotate enum to ABOUT_CENTER.
 	 *
 	 *  @param icon	the Icon to rotate
 	 *  @param degrees   the degrees of rotation
 	 *  @param circularIcon treat the icon as circular so its size doesn't change
 	 */
-	public RotateIcon(Icon icon, double degrees, boolean circularIcon)
+	public PloyRotateIcon(Icon icon, double degrees, boolean circularIcon)
 	{
 		this(icon, Rotate.ABOUT_CENTER);
 		setDegrees( degrees );

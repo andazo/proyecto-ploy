@@ -40,6 +40,7 @@ public class PloyGUI extends GUI {
 		loadImages();
 	}
 	
+	@Override
 	public void drawBoard() {
 		frame.setTitle("Ploy");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -157,10 +158,7 @@ public class PloyGUI extends GUI {
 		frame.setVisible(true);
 	}
 	
-	public void populateBoard() {
-		
-	}
-	
+	@Override
 	public void showLostPieces(String[][] hitPiecesData, int hitPiecesIndex) {
 		JLabel[] hitPieces = new JLabel[hitPiecesIndex];	
 		for (int i = 0; i < hitPiecesIndex; i++) {
@@ -182,21 +180,284 @@ public class PloyGUI extends GUI {
 		}
 	}
 	
-	public void rotatePiece(int x, int y, int direction) {
-		RotateIcon ri = new RotateIcon(squaresPanels[x][y].getIcon(), direction, true);
-		squaresPanels[x][y].setIcon(ri);
+	/**
+	 * @param players
+	 * @param gameMode
+	 */
+	public void populateBoard(Player[] players, int gameMode) {
+		switch (gameMode) {
+			case 0: // 1v1
+				populateBoard1v1(players[0].getColor(), 1);
+			  	populateBoard1v1(players[1].getColor(), 2);
+			    break;
+			case 1: // 1v1v1v1
+				populateBoard1v1v1v1(players[0].getColor(), 1);
+				populateBoard1v1v1v1(players[1].getColor(), 2);
+				populateBoard1v1v1v1(players[2].getColor(), 3);
+				populateBoard1v1v1v1(players[3].getColor(), 4);
+			    break;
+			case 2: // 2v2
+				populateBoard2v2(players[0].getColor(), 1);
+			  	populateBoard2v2(players[1].getColor(), 2);
+			  	populateBoard2v2(players[2].getColor(), 3);
+			  	populateBoard2v2(players[3].getColor(), 4);
+			    break;
+		}
 	}
 	
-	public void loadBoard(Player[] players, int gameMode, String[][][] board) {
-		for (int i = 0; i < 9; i++) {
-			for (int j = 0; j < 9; j++) {
-				if (Integer.parseInt(board[i][j][0]) != -1) {
-					RotateIcon ri = new RotateIcon(getIconArray(board[i][j][3])[Integer.parseInt(board[i][j][0])], Integer.parseInt(board[i][j][1]), true);
-					squaresPanels[i][j].setIcon(ri);
-					squaresPanels[i][j].setName(board[i][j][3]);
-				}
+	/**
+	 * @param color
+	 * @param playerNum
+	 */
+	private void populateBoard1v1(String color, int playerNum) {
+		int orderArrayIndex = 0;
+		if (playerNum == 1) {
+			for (int i = 1; i < 8; i++) {
+				PloyRotateIcon ri = new PloyRotateIcon(getIconArray(color)[pieceOrder1v1P1[orderArrayIndex]], 180.0, true);
+				squaresPanels[8][i].setIcon(ri);
+				squaresPanels[8][i].setName(color);
+				orderArrayIndex++;
+			}
+			for (int i = 2; i < 7; i++) {
+				PloyRotateIcon ri = new PloyRotateIcon(getIconArray(color)[pieceOrder1v1P1[orderArrayIndex]], 180.0, true);
+				squaresPanels[7][i].setIcon(ri);
+				squaresPanels[7][i].setName(color);
+				orderArrayIndex++;
+			}
+			for (int i = 3; i < 6; i++) {
+				PloyRotateIcon ri = new PloyRotateIcon(getIconArray(color)[8], 180.0, true);
+				squaresPanels[6][i].setIcon(ri);
+				squaresPanels[6][i].setName(color);
+			}
+		} else {
+			for (int i = 1; i < 8; i++) {
+				squaresPanels[0][i].setIcon(getIconArray(color)[pieceOrder1v1P2[orderArrayIndex]]);
+				squaresPanels[0][i].setName(color);
+				orderArrayIndex++;
+			}
+			for (int i = 2; i < 7; i++) {
+				squaresPanels[1][i].setIcon(getIconArray(color)[pieceOrder1v1P2[orderArrayIndex]]);
+				squaresPanels[1][i].setName(color);
+				orderArrayIndex++;
+			}
+			for (int i = 3; i < 6; i++) {
+				squaresPanels[2][i].setIcon(getIconArray(color)[8]);
+				squaresPanels[2][i].setName(color);
 			}
 		}
+	}
+	
+	/**
+	 * @param color
+	 * @param playerNum
+	 */
+	private void populateBoard1v1v1v1(String color, int playerNum) {
+		int orderArrayIndex = 0;
+		if (playerNum == 1) {
+			for (int i = 0; i < 3; i++) {
+				int direction = 0;
+				if (i != 2) {
+					direction = 225;
+				} else {
+					direction = 180;
+				}
+				PloyRotateIcon ri = new PloyRotateIcon(getIconArray(color)[pieceOrder1v1v1v1[orderArrayIndex]], direction, true);
+				squaresPanels[8][i].setIcon(ri);
+				squaresPanels[8][i].setName(color);
+				orderArrayIndex++;
+			}
+			for (int i = 0; i < 3; i++) {
+				PloyRotateIcon ri = new PloyRotateIcon(getIconArray(color)[pieceOrder1v1v1v1[orderArrayIndex]], 225.0, true);
+				squaresPanels[7][i].setIcon(ri);
+				squaresPanels[7][i].setName(color);
+				orderArrayIndex++;
+			}
+			for (int i = 0; i < 3; i++) {
+				int direction = 0;
+				if (i == 0) {
+					direction = 270;
+				} else {
+					direction = 225;
+				}
+				PloyRotateIcon ri = new PloyRotateIcon(getIconArray(color)[pieceOrder1v1v1v1[orderArrayIndex]], direction, true);
+				squaresPanels[6][i].setIcon(ri);
+				squaresPanels[6][i].setName(color);
+				orderArrayIndex++;
+			}
+		} else if (playerNum == 2) {
+			for (int i = 0; i < 3; i++) {
+				int direction = 0;
+				if (i != 2) {
+					direction = 315;
+				} else {
+					direction = 270;
+				}
+				PloyRotateIcon ri = new PloyRotateIcon(getIconArray(color)[pieceOrder1v1v1v1[orderArrayIndex]], direction, true);
+				squaresPanels[i][0].setIcon(ri);
+				squaresPanels[i][0].setName(color);
+				orderArrayIndex++;
+			}
+			for (int i = 0; i < 3; i++) {
+				PloyRotateIcon ri = new PloyRotateIcon(getIconArray(color)[pieceOrder1v1v1v1[orderArrayIndex]], 315.0, true);
+				squaresPanels[i][1].setIcon(ri);
+				squaresPanels[i][1].setName(color);
+				orderArrayIndex++;
+			}
+			for (int i = 0; i < 3; i++) {
+				int direction = 0;
+				if (i == 0) {
+					direction = 0;
+				} else {
+					direction = 315;
+				}
+				PloyRotateIcon ri = new PloyRotateIcon(getIconArray(color)[pieceOrder1v1v1v1[orderArrayIndex]], direction, true);
+				squaresPanels[i][2].setIcon(ri);
+				squaresPanels[i][2].setName(color);
+				orderArrayIndex++;
+			}
+		} else if (playerNum == 3) {
+			for (int i = 8; i > 5; i--) {
+				int direction = 0;
+				if (i != 6) {
+					direction = 45;
+				} else {
+					direction = 0;
+				}
+				PloyRotateIcon ri = new PloyRotateIcon(getIconArray(color)[pieceOrder1v1v1v1[orderArrayIndex]], direction, true);
+				squaresPanels[0][i].setIcon(ri);
+				squaresPanels[0][i].setName(color);
+				orderArrayIndex++;
+			}
+			for (int i = 8; i > 5; i--) {
+				PloyRotateIcon ri = new PloyRotateIcon(getIconArray(color)[pieceOrder1v1v1v1[orderArrayIndex]], 45.0, true);
+				squaresPanels[1][i].setIcon(ri);
+				squaresPanels[1][i].setName(color);
+				orderArrayIndex++;
+			}
+			for (int i = 8; i > 5; i--) {
+				int direction = 0;
+				if (i == 8) {
+					direction = 90;
+				} else {
+					direction = 45;
+				}
+				PloyRotateIcon ri = new PloyRotateIcon(getIconArray(color)[pieceOrder1v1v1v1[orderArrayIndex]], direction, true);
+				squaresPanels[2][i].setIcon(ri);
+				squaresPanels[2][i].setName(color);
+				orderArrayIndex++;
+			}
+		} else {
+			for (int i = 8; i > 5; i--) {
+				int direction = 0;
+				if (i != 6) {
+					direction = 135;
+				} else {
+					direction = 90;
+				}
+				PloyRotateIcon ri = new PloyRotateIcon(getIconArray(color)[pieceOrder1v1v1v1[orderArrayIndex]], direction, true);
+				squaresPanels[i][8].setIcon(ri);
+				squaresPanels[i][8].setName(color);
+				orderArrayIndex++;
+			}
+			for (int i = 8; i > 5; i--) {
+				PloyRotateIcon ri = new PloyRotateIcon(getIconArray(color)[pieceOrder1v1v1v1[orderArrayIndex]], 135.0, true);
+				squaresPanels[i][7].setIcon(ri);
+				squaresPanels[i][7].setName(color);
+				orderArrayIndex++;
+			}
+			for (int i = 8; i > 5; i--) {
+				int direction = 0;
+				if (i == 8) {
+					direction = 180;
+				} else {
+					direction = 135;
+				}
+				PloyRotateIcon ri = new PloyRotateIcon(getIconArray(color)[pieceOrder1v1v1v1[orderArrayIndex]], direction, true);
+				squaresPanels[i][6].setIcon(ri);
+				squaresPanels[i][6].setName(color);
+				orderArrayIndex++;
+			}
+		}
+	}
+	
+	/**
+	 * @param color
+	 * @param playerNum
+	 */
+	private void populateBoard2v2(String color, int playerNum) {
+		int orderArrayIndex = 0;
+		if (playerNum == 1) {
+			for(int i = 1; i < 4; i++) {
+				PloyRotateIcon ri = new PloyRotateIcon(getIconArray(color)[pieceOrder2v2[orderArrayIndex]], 180.0, true);
+				squaresPanels[8][i].setIcon(ri);
+				squaresPanels[8][i].setName(color);
+				orderArrayIndex++;
+			}
+			for(int i = 1; i < 4; i++) {
+				PloyRotateIcon ri = new PloyRotateIcon(getIconArray(color)[pieceOrder2v2[orderArrayIndex]], 180.0, true);
+				squaresPanels[7][i].setIcon(ri);
+				squaresPanels[7][i].setName(color);
+				orderArrayIndex++;
+			}
+			for(int i = 1; i < 4; i++) {
+				PloyRotateIcon ri = new PloyRotateIcon(getIconArray(color)[8], 180.0, true);
+				squaresPanels[6][i].setIcon(ri);
+				squaresPanels[6][i].setName(color);
+			}
+		} else if (playerNum == 2) {
+			for(int i = 1; i < 4; i++) {
+				squaresPanels[0][i].setIcon(getIconArray(color)[pieceOrder2v2[orderArrayIndex]]);
+				squaresPanels[0][i].setName(color);
+				orderArrayIndex++;
+			}
+			for(int i = 3; i > 0; i--) {
+				squaresPanels[1][i].setIcon(getIconArray(color)[pieceOrder2v2[orderArrayIndex]]);
+				squaresPanels[1][i].setName(color);
+				orderArrayIndex++;
+			}
+			for(int i = 1; i < 4; i++) {
+				squaresPanels[2][i].setIcon(getIconArray(color)[8]);
+				squaresPanels[2][i].setName(color);
+			}
+		} else if (playerNum == 3) {
+			for(int i = 7; i > 4; i--) {
+				PloyRotateIcon ri = new PloyRotateIcon(getIconArray(color)[pieceOrder2v2[orderArrayIndex]], 180.0, true);
+				squaresPanels[8][i].setIcon(ri);
+				squaresPanels[8][i].setName(color);
+				orderArrayIndex++;
+			}
+			for(int i = 5; i < 8; i++) {
+				PloyRotateIcon ri = new PloyRotateIcon(getIconArray(color)[pieceOrder2v2[orderArrayIndex]], 180.0, true);
+				squaresPanels[7][i].setIcon(ri);
+				squaresPanels[7][i].setName(color);
+				orderArrayIndex++;
+			}
+			for(int i = 5; i < 8; i++) {
+				PloyRotateIcon ri = new PloyRotateIcon(getIconArray(color)[8], 180.0, true);
+				squaresPanels[6][i].setIcon(ri);
+				squaresPanels[6][i].setName(color);
+			}
+		} else {
+			for(int i = 7; i > 4; i--) {
+				squaresPanels[0][i].setIcon(getIconArray(color)[pieceOrder2v2[orderArrayIndex]]);
+				squaresPanels[0][i].setName(color);
+				orderArrayIndex++;
+			}
+			for(int i = 7; i > 4; i--) {
+				squaresPanels[1][i].setIcon(getIconArray(color)[pieceOrder2v2[orderArrayIndex]]);
+				squaresPanels[1][i].setName(color);
+				orderArrayIndex++;
+			}
+			for(int i = 5; i < 8; i++) {
+				squaresPanels[2][i].setIcon(getIconArray(color)[8]);
+				squaresPanels[2][i].setName(color);
+			}
+		}
+	}
+	
+	public void rotatePiece(int x, int y, int direction) {
+		PloyRotateIcon ri = new PloyRotateIcon(squaresPanels[x][y].getIcon(), direction, true);
+		squaresPanels[x][y].setIcon(ri);
 	}
 	
 	private void loadImages() {
@@ -253,11 +514,15 @@ public class PloyGUI extends GUI {
 		}
 	}
 	
-	public void setMouseActions() {
-		
-	}
-	
-	public void removeMouseActions() {
-		
+	public void loadBoard(Player[] players, int gameMode, String[][][] board) {
+		for (int i = 0; i < 9; i++) {
+			for (int j = 0; j < 9; j++) {
+				if (Integer.parseInt(board[i][j][0]) != -1) {
+					PloyRotateIcon ri = new PloyRotateIcon(getIconArray(board[i][j][3])[Integer.parseInt(board[i][j][0])], Integer.parseInt(board[i][j][1]), true);
+					squaresPanels[i][j].setIcon(ri);
+					squaresPanels[i][j].setName(board[i][j][3]);
+				}
+			}
+		}
 	}
 }
