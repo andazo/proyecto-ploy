@@ -1,5 +1,5 @@
 
-public class Board {	
+abstract class Board {	
 	protected boolean pieceActive;
 	protected boolean gameOver;
 	protected int currentPlayer;
