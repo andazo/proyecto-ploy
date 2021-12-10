@@ -3,7 +3,9 @@
  * Abstract class for representing the information of the pieces placed on squares.
  */
 abstract class BoardSquare {
+	// The type of piece currently on the square
 	protected int type;
+	// The owner of the piece on the square
 	protected int owner;
 	protected String color;
 

@@ -179,7 +179,7 @@ public class PloyGUI extends GUI {
 	 * Shows each player's lost pieces.
 	 *
 	 * @param hitPiecesData the hit pieces data
-	 * @param hitPiecesIndex the hit pieces index
+	 * @param hitPiecesIndex the current amount of pieces that were lost
 	 */
 	@Override
 	public void showLostPieces(String[][] hitPiecesData, int hitPiecesIndex) {
@@ -204,7 +204,7 @@ public class PloyGUI extends GUI {
 	}
 
 	/**
-	 * Places all the players' pieces on the board.
+	 * Draws all the players' pieces on the board.
 	 *
 	 * @param players the players in the game
 	 * @param gameMode the game mode being played
@@ -232,7 +232,7 @@ public class PloyGUI extends GUI {
 	}
 
 	/**
-	 * Populates the board for the 1 v 1 game mode.
+	 * Populates the board for the 1v1 game mode.
 	 *
 	 * @param color the color of the pieces being placed
 	 * @param playerNum the number of the player whose pieces are being placed
@@ -559,11 +559,11 @@ public class PloyGUI extends GUI {
 	}
 
 	/**
-	 * Load board.
+	 * Draws the board from a save file.
 	 *
-	 * @param players the players
-	 * @param gameMode the game mode
-	 * @param board the board
+	 * @param players array of players in the game
+	 * @param gameMode the game mode being played
+	 * @param board the board's information
 	 */
 	public void loadBoard(PloyPlayer[] players, int gameMode, String[][][] board) {
 		for (int i = 0; i < 9; i++) {
