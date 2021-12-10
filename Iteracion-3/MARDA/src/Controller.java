@@ -5,11 +5,10 @@ import java.awt.event.ActionListener;
 import javax.swing.JOptionPane;
 
 /**
- * Abstract class that represents a controller.
+ * Abstract class that represents the game controller.
  */
 abstract class Controller implements ActionListener {
-
-	/**
+  /**
 	 * Obtains user input to determine whether to start a new game or load an old one.
 	 *
 	 * @return character representing if a new or saved game will be played 
@@ -33,6 +32,7 @@ abstract class Controller implements ActionListener {
 	 * Instantiates all the classes needed for the game and gets all the user's input
 	 * such as user information, game mode and player amount.
 	 */ 
+	// abstract methods
 	abstract void startGame();
 	
 	/**
