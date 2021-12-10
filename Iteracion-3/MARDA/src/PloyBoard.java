@@ -597,7 +597,7 @@ public class PloyBoard extends Board {
 	}
 
 	/**
-	 * Load the player whose turn it is from a save file.
+	 * Set the player whose turn it is
 	 *
 	 * @param currentPlayer the current player
 	 */

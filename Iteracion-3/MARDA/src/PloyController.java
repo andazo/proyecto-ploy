@@ -1,6 +1,10 @@
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * Concrete controller class for Ploy 
+ */
 public class PloyController extends Controller {
 	private PloyGUI gui;
 	private PloyBoard board;
@@ -30,7 +34,12 @@ public class PloyController extends Controller {
 			+ "cargo de todas sus piezas restantes.\nEl companero tambien toma el turno "
 			+ "de su companero de equipo y puede usar todas las piezas del equipo para "
 			+ "sus movimientos.";
-	
+
+	/**
+	 * Instantiates all the classes needed for the game and gets all the user's input
+	 * such as user information, game mode and player amount. The game is ready to be played after 
+	 * this function is executed.
+	 */ 
 	@Override
 	void startGame() {
 		gui = (PloyGUI) initGUI();
@@ -39,10 +48,10 @@ public class PloyController extends Controller {
 		mod = new PloyModerator();
 		players = null;
 		gameMode = 0;
-		
+
 		char newGame = getNewGame();
 		int numPlayers = 0;
-		
+
 		if (newGame == 'Y') {
 			numPlayers = getNumPlayers();
 			players = getPlayers(numPlayers);
@@ -56,11 +65,14 @@ public class PloyController extends Controller {
 			loadGame();
 		}		
 	}
-	
+
+	/**
+	 * Loads in a saved game.
+	 */
 	@Override
 	void loadGame() {
 		int gameMode = 0;
-		
+
 		int loadStatus = fm.loadFile();
 		if (loadStatus == 0) {
 			if (gui.frame != null) {
@@ -90,20 +102,35 @@ public class PloyController extends Controller {
 			}
 		}
 	}
-	
+
+	/**
+	 * Initializes the GUI.
+	 *
+	 * @return the GUI object
+	 */
 	@Override
 	public Object initGUI() {
 		return new PloyGUI(600);
 	}
-	
+
+	/**
+	 * Initializes the board.
+	 *
+	 * @return the board object
+	 */
 	@Override
 	public Object initBoard() {
 		return new PloyBoard();
 	}
-	
+
+	/**
+	 * Brings up a prompt allowing the user to select the amount of players that will be in the game.
+	 *
+	 * @return the number of players that will play
+	 */
 	@Override
 	public int getNumPlayers() {
-		// Numero de jugadores en la partida, puede ser de 2 o 4
+		// Number of players that can be in a game, either 2 or 4
 		String[] options = {"2", "4"};
 		int numPlayers = 0;
 		int input = -1;
@@ -118,6 +145,12 @@ public class PloyController extends Controller {
 		return numPlayers;
 	}
 
+	/**
+	 * Generates prompts to get all the players' information such as name and color of the pieces.
+	 *
+	 * @param numPlayers the number of players in the game
+	 * @return the array of initialized players with all their information 
+	 */
 	@Override
 	public PloyPlayer[] getPlayers(int numPlayers) {
 		//Arreglo de opciones de colores para los jugadores
@@ -148,14 +181,14 @@ public class PloyController extends Controller {
 					break;
 				}
 			}
-			
+
 			players[i] = new PloyPlayer(player, i + 1, color);
 
 			if (players[i].getColor() == null) {
 				System.exit(0);
 			}
 		}
-		
+
 		String playersInfo = "";
 		for (int i = 0; i < numPlayers; i++) {
 			playersInfo = playersInfo + "Jugador " + players[i].getID() + ": " + players[i].getName()
@@ -167,6 +200,12 @@ public class PloyController extends Controller {
 		return players;
 	}
 
+	/**
+	 * Gets the game mode the user wishes to play. 
+	 *
+	 * @param numPlayers number of players in the game
+	 * @return the game mode chosen by the user
+	 */
 	@Override
 	public int getMode(int numPlayers) {
 		int gameMode = 0;
@@ -184,7 +223,10 @@ public class PloyController extends Controller {
 		}
 		return gameMode;
 	}
-	
+
+	/**
+	 * Adds mouse listeners for every square on the board.
+	 */
 	@Override
 	public void setActions() {
 		for(int i = 0; i < 9; i++) {
@@ -200,13 +242,16 @@ public class PloyController extends Controller {
 				});
 			}
 		}
-		
+
 		gui.rotateLeftBut.addActionListener(this);
 		gui.rotateRightBut.addActionListener(this);
 	}
-	
+
+
 	/**
-	 * @param gameMode
+	 * Adds listeners for every button on the menu
+	 *
+	 * @param gameMode the game mode being played 
 	 */
 	private void setMenuActions(int gameMode) {
 		gui.menuBar.getMenu(0).getItem(0).addActionListener(this);  // Opciones / Reglas
@@ -221,54 +266,56 @@ public class PloyController extends Controller {
 	}
 
 	/**
-     * Ejecuta las acciones de los botones.
-     */
+	 * Handles the click events for every button and square on the board 
+	 *
+	 * @param evento click event
+	 */
 	@Override
-    public void actionPerformed(ActionEvent evento) {
-        if (evento.getActionCommand().equals("Reglas")) {
-            gui.printMessageWithTitle(GAME_RULES, "Reglas del juego");
-        } else if (evento.getActionCommand().equals("Guardar Partida")) {
-        	String fileName = gui.inputMessage("Ingrese el nombre del archivo a guardar");
-        	if (fileName != null) {
-        		fm.saveFile(players, gameMode, board, fileName);
-        		gui.showSaveLoadMessage("La partida fue guardada satisfactoriamente", "Partida guardada");
-        	} else {
-        		gui.showSaveLoadMessage("El proceso de guardado fue cancelado", "Guardado cancelado");
-        	}
-        } else if (evento.getActionCommand().equals("Cargar Partida")) {
-        	loadGame();
-        } else if (evento.getActionCommand().equals("Jugador 1")) {
-        	gui.showLostPieces(board.p1HitPieces, board.getP1HitPiecesIndex());
-        } else if (evento.getActionCommand().equals("Jugador 2")) {
-        	gui.showLostPieces(board.p2HitPieces, board.getP2HitPiecesIndex());
-        } else if (evento.getActionCommand().equals("Jugador 3")) {
-        	gui.showLostPieces(board.p3HitPieces, board.getP3HitPiecesIndex());
-        } else if (evento.getActionCommand().equals("Jugador 4")) {
-        	gui.showLostPieces(board.p4HitPieces, board.getP4HitPiecesIndex());
-        } else if (evento.getActionCommand().equals("Girar izquierda")) {
-        	String[][] moves = mod.getValidMoves(board.getLastI(), board.getLastJ(), board);
-        	mod.cancelHighlightMoves(moves, board.getLastI(), board.getLastJ(), gui);
-        	gui.rotatePiece(board.getLastI(), board.getLastJ(), 315);
-        	board.rotatePiece(board.getLastI(), board.getLastJ(), -45);
-        	int lastI = board.getLastI();
+	public void actionPerformed(ActionEvent evento) {
+		if (evento.getActionCommand().equals("Reglas")) {
+			gui.printMessageWithTitle(GAME_RULES, "Reglas del juego");
+		} else if (evento.getActionCommand().equals("Guardar Partida")) {
+			String fileName = gui.inputMessage("Ingrese el nombre del archivo a guardar");
+			if (fileName != null) {
+				fm.saveFile(players, gameMode, board, fileName);
+				gui.showSaveLoadMessage("La partida fue guardada satisfactoriamente", "Partida guardada");
+			} else {
+				gui.showSaveLoadMessage("El proceso de guardado fue cancelado", "Guardado cancelado");
+			}
+		} else if (evento.getActionCommand().equals("Cargar Partida")) {
+			loadGame();
+		} else if (evento.getActionCommand().equals("Jugador 1")) {
+			gui.showLostPieces(board.p1HitPieces, board.getP1HitPiecesIndex());
+		} else if (evento.getActionCommand().equals("Jugador 2")) {
+			gui.showLostPieces(board.p2HitPieces, board.getP2HitPiecesIndex());
+		} else if (evento.getActionCommand().equals("Jugador 3")) {
+			gui.showLostPieces(board.p3HitPieces, board.getP3HitPiecesIndex());
+		} else if (evento.getActionCommand().equals("Jugador 4")) {
+			gui.showLostPieces(board.p4HitPieces, board.getP4HitPiecesIndex());
+		} else if (evento.getActionCommand().equals("Girar izquierda")) {
+			String[][] moves = mod.getValidMoves(board.getLastI(), board.getLastJ(), board);
+			mod.cancelHighlightMoves(moves, board.getLastI(), board.getLastJ(), gui);
+			gui.rotatePiece(board.getLastI(), board.getLastJ(), 315);
+			board.rotatePiece(board.getLastI(), board.getLastJ(), -45);
+			int lastI = board.getLastI();
 			int lastJ = board.getLastJ();
-        	int originalDirection = board.getOriginalDirection();
+			int originalDirection = board.getOriginalDirection();
 			if (board.boardSquares[lastI][lastJ].getDirection() == originalDirection || board.boardSquares[lastI][lastJ].getType() == 8) {
 				moves = mod.getValidMoves(board.getLastI(), board.getLastJ(), board);
 				mod.highlightMoves(moves, board.getLastI(), board.getLastJ(), gui);
 			}
-        } else if (evento.getActionCommand().equals("Girar derecha")) {
-        	String[][] moves = mod.getValidMoves(board.getLastI(), board.getLastJ(), board);
-        	mod.cancelHighlightMoves(moves, board.getLastI(), board.getLastJ(), gui);
-        	gui.rotatePiece(board.getLastI(), board.getLastJ(), 45);
-        	board.rotatePiece(board.getLastI(), board.getLastJ(), 45);
-        	int lastI = board.getLastI();
+		} else if (evento.getActionCommand().equals("Girar derecha")) {
+			String[][] moves = mod.getValidMoves(board.getLastI(), board.getLastJ(), board);
+			mod.cancelHighlightMoves(moves, board.getLastI(), board.getLastJ(), gui);
+			gui.rotatePiece(board.getLastI(), board.getLastJ(), 45);
+			board.rotatePiece(board.getLastI(), board.getLastJ(), 45);
+			int lastI = board.getLastI();
 			int lastJ = board.getLastJ();
-        	int originalDirection = board.getOriginalDirection();
+			int originalDirection = board.getOriginalDirection();
 			if (board.boardSquares[lastI][lastJ].getDirection() == originalDirection || board.boardSquares[lastI][lastJ].getType() == 8) {
 				moves = mod.getValidMoves(board.getLastI(), board.getLastJ(), board);
 				mod.highlightMoves(moves, board.getLastI(), board.getLastJ(), gui);
 			}
-        }
-    }
+		}
+	}
 }

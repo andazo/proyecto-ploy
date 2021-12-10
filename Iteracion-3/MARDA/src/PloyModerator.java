@@ -1,13 +1,26 @@
+
 import java.awt.Component;
 
+/**
+ * Concrete class for a moderator for Ploy in charge of reviewing the game's state to determine 
+ * if a player is out, legal moves and game over conditions. 
+ */
 public class PloyModerator extends Moderator {
 	
 	/**
-     * @param i
-     * @param j
-     * @param numPlayers
-     * @param players
-     */
+	 * Handles the clicking of a piece in case it is not currently active. This includes
+	 * checking whose turn it is, highlighting legal moves and enabling rotation buttons.
+	 * In the case a piece is currently active, it handles legality of moves, capturing 
+	 * enemy pieces and checking the state of the game after a move.
+	 *
+	 * @param i location on the x axis of the board
+	 * @param j location on the y axis of the board
+	 * @param numPlayers the number of players in the game
+	 * @param gameMode the game mode being played
+	 * @param players array of players in the game
+	 * @param board current instance of the board 
+	 * @param gui current instance of the gui
+	 */
 	@Override
     public void clickedOn(int i, int j, int numPlayers, int gameMode, Object[] players, Object board, Object gui) {
     	String[][] moves = null;
@@ -147,10 +160,16 @@ public class PloyModerator extends Moderator {
     	}
 	}
     
-    /**
-     * @param hitInfo
-     * @param attackerInfo
-     */
+	/**
+	 * Checks if the game is over after a move has been made.
+	 *
+	 * @param hitInfo the information of the piece that was captured
+	 * @param attackerInfo the information of the piece that made the attack
+	 * @param gameMode the game mode being played
+	 * @param players the players in the game
+	 * @param board instance of the board
+	 * @param gui instance of the gui
+	 */
 	@Override
     protected void checkGameOver(Object hitInfo, Object attackerInfo, int gameMode, Object[] players, Object board, Object gui) {
     	if (((PloyBoardSquare) hitInfo).getType() == 0 || ((PloyPlayer) players[((PloyBoardSquare) hitInfo).getOwner()-1]).getNumPieces() == 1) {
@@ -158,10 +177,12 @@ public class PloyModerator extends Moderator {
     	}
     }
     
-    /**
-     * @param msg
-     * @return
-     */
+	/**
+	 * Shows a prompt allowing the user to decide what to do after a game is finished.
+	 *
+	 * @param gui instance of the gui
+	 * @return variable indicating if the user wants a new game
+	 */
 	@Override
     protected char finished(Object gui) {
 		String[] options = {"Mirar Tablero", "Terminar"};
@@ -177,11 +198,16 @@ public class PloyModerator extends Moderator {
 	    return newGame;
 	}
     
-    /**
-     * @param hitInfo
-     * @param attackerInfo
-     * @param gameMode
-     */
+	/**
+	 * Removes a player from the match
+	 *
+	 * @param hitInfo the information of the piece that was captured
+	 * @param attackerInfo the information of the piece that made the attack
+	 * @param gameMode the game mode being played
+	 * @param players the players in the game
+	 * @param board instance of the board
+	 * @param gui instance of the gui
+	 */
 	@Override
     protected void playerLost(Object hitInfo, Object attackerInfo, int gameMode, Object[] players, Object board, Object gui) {
         switch(gameMode) {
@@ -238,6 +264,11 @@ public class PloyModerator extends Moderator {
         }
     }
     
+	/**
+	 * Removes the actions from the board's squares, locking the board.
+	 *
+	 * @param gui instance of the gui
+	 */
 	@Override
     protected void removeActions(Object gui) {
 		for (int i = 0; i < 9; i++) {
@@ -276,11 +307,14 @@ public class PloyModerator extends Moderator {
      * |-|-|-|O|-|-|-|				|-|-|-|0|-|0|-|				|-|-|-|-|-|-|-|
      * |-|-|-|-|-|-|-|				|-|-|-|-|-|-|-|				|-|-|-|-|-|-|-|
      */
-    /**
-     * @param i
-     * @param j
-     * @return
-     */
+	/**
+	 * Gets the valid moves for the piece currently in play.
+	 *
+	 * @param i location on the x axis of the board
+	 * @param j location on the y axis of the board
+	 * @param board instance of the board
+	 * @return matrix of valid moves for the piece
+	 */
 	@Override
     protected String[][] getValidMoves(int i, int j, Object board) {
 		String[][] moves = new String[7][7];
@@ -628,11 +662,14 @@ public class PloyModerator extends Moderator {
 		return moves;
     }
     
-    /**
-     * @param moves
-     * @param i
-     * @param j
-     */
+	/**
+	 * Highlights the legal moves for the piece currently in play.
+	 *
+	 * @param moves the valid moves for a piece
+	 * @param i location on the x axis of the board
+	 * @param j location on the y axis of the board
+	 * @param gui instance of the gui
+	 */
 	@Override
     protected void highlightMoves(String[][] moves, int i, int j, Object gui) {
     	
@@ -647,11 +684,14 @@ public class PloyModerator extends Moderator {
 		}
     }
     
-    /**
-     * @param moves
-     * @param i
-     * @param j
-     */
+	/**
+	 * Removes the highlights of available moves.
+	 *
+	 * @param moves the valid moves for a piece
+	 * @param i location on the x axis of the board
+	 * @param j location on the y axis of the board
+	 * @param gui instance of the gui
+	 */
 	@Override
     protected void cancelHighlightMoves(String[][] moves, int i, int j, Object gui) {
     	for (int x = 0; x < 7; x++) {
@@ -666,10 +706,13 @@ public class PloyModerator extends Moderator {
     }
     
     /**
-     * @param moves
-     * @param i
-     * @param j
-     * @return
+     * Rotates the highlights for legal moves for a piece.
+     *
+     * @param moves the valid moves for a piece
+     * @param i location on the x axis of the board
+     * @param j location on the y axis of the board
+     * @param board instance of the board
+     * @return matrix of valid moves for the piece after rotation
      */
     protected String[][] rotateMoves(String[][] moves, int i, int j, Object board) {
     	String[][] rotatedMoves = new String[7][7];

@@ -1,3 +1,4 @@
+
 import javax.swing.JFileChooser;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -5,12 +6,20 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
+
+/**
+ * Abstract class that manages the saving and loading of game files.
+ */
 abstract class FileManager {
+	
+	/** The data contained in a save file. */
 	String[] data;
+	
+	/** Window for choosing a file. */
 	JFileChooser fileChooser;
 	
 	/**
-	 * 
+	 * Instantiates a new file manager.
 	 */
 	public FileManager() {
 		fileChooser = new JFileChooser();
@@ -22,7 +31,9 @@ abstract class FileManager {
 	}
 	
 	/**
-	 * @return
+	 * Loads a file.
+	 *
+	 * @return error code, 0 on success
 	 */
 	public int loadFile() {
 		// Read the content from file
@@ -49,6 +60,11 @@ abstract class FileManager {
 		}
 	}
 	
+	/**
+	 * Brings up a prompt allowing the user to choose a file.
+	 *
+	 * @return the file chosen 
+	 */
 	private File chooseFile() {
 		File selectedFile = null;
 		int result = fileChooser.showOpenDialog(null);
@@ -59,9 +75,41 @@ abstract class FileManager {
 		return selectedFile;
 	}
 	
+	/**
+	 * Saves a file with the current board's status.
+	 *
+	 * @param players array of players in the game
+	 * @param gameMode the game mode being played
+	 * @param board the board object with all its information
+	 * @param fileName the name the save file will have
+	 */
 	abstract void saveFile(Object[] players, int gameMode, Object board, String fileName);
+	
+	/**
+	 * Gets the players from a saved file.
+	 *
+	 * @return the array of players
+	 */
 	abstract Object[] getPlayers();
+	
+	/**
+	 * Gets the game mode from a saved file.
+	 *
+	 * @return the game mode 
+	 */
 	abstract int getGameMode();
+	
+	/**
+	 * Gets the current player from a saved file.
+	 *
+	 * @return the current player
+	 */
 	abstract int getCurrentPlayer();
+	
+	/**
+	 * Gets the board data from a saved file.
+	 *
+	 * @return the board data
+	 */
 	abstract String[][][] getBoardData();
 }
