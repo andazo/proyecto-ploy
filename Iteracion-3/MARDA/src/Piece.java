@@ -1,4 +1,6 @@
-
+/**
+ * Abstract class that represents a piece
+ */
 abstract class Piece {
 	protected int owner;
 	protected String color; 

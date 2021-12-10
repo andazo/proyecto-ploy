@@ -4,7 +4,7 @@
  */
 public class PloyPlayer extends Player {
 	int friend, numPieces;
-	
+
 	/**
 	 * Instantiates a new Ploy player.
 	 *

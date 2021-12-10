@@ -3,9 +3,11 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JOptionPane;
 
+/**
+ * Abstract class that represents the game controller
+ */
 abstract class Controller implements ActionListener {
 
-	// metodo plantilla
 	public char getNewGame() {
 		String[] options = {"Nueva partida", "Cargar partida","Cancelar"};
 		char newGame = ' ';
@@ -21,7 +23,7 @@ abstract class Controller implements ActionListener {
 		return newGame;
 	}
 	
-	// métodos abstractos 
+	// abstract methods
 	abstract void startGame();
 	abstract void loadGame();
 	abstract Object initGUI();
