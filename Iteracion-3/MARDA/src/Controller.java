@@ -1,41 +1,33 @@
-abstract class Controller {
-	Object gui;
-	Object board;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JOptionPane;
+
+abstract class Controller implements ActionListener {
 
 	// metodo plantilla
-	public void startGame() {
-		gui = initGUI();
-		char newGame = getNewGame();
-		int numPlayers = 0;
-		PloyPlayer[] players = initPlayers();
-		int gameMode = 0;
-		
-		if (checkOption(newGame)) {
-			numPlayers = getNumPlayers();
-			players = getPlayers(numPlayers);
-			gameMode = getMode(numPlayers);
+	public char getNewGame() {
+		String[] options = {"Nueva partida", "Cargar partida","Cancelar"};
+		char newGame = ' ';
+		int input = -1;
+		input = JOptionPane.showOptionDialog(null, "Para empezar, seleccione lo que desea hacer", "Bienvenido a Ploy BoardGame", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+		if (input == 0) {
+			newGame = 'Y';
+		} else if (input == 1) {
+			newGame = 'N';
+		} else if (input == 2) {
+			System.exit(0);
 		}
-		
-		board = initBoard();
-		gui.drawBoard();  
+		return newGame;
 	}
 	
 	// métodos abstractos 
-	
+	abstract void startGame();
+	abstract void loadGame();
 	abstract Object initGUI();
-	
-	abstract Object[] initPlayers();
-	
 	abstract Object initBoard();
-	
-	abstract boolean checkOption(char newGame);
-	
 	abstract int getNumPlayers();
-
-	abstract char getNewGame();
-
 	abstract Object[] getPlayers(int numPlayers);
-
 	abstract int getMode(int numPlayers);
-
+	abstract void setActions();
 }

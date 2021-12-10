@@ -1,25 +1,107 @@
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class PloyController extends Controller {
-	PloyGUI gui;
-	PloyBoard board;
+	private PloyGUI gui;
+	private PloyBoard board;
+	private PloyFileManager fm;
+	private PloyModerator mod;
+	private PloyPlayer[] players;
+	private int gameMode;
+	private final String GAME_RULES = "Para 2 jugadores:\nEl objetivo es capturar al "
+			+ "Comandante del oponente o todas sus piezas excepto el Comandante.\n"
+			+ "En el juego de dos jugadores solo se utilizan los conjuntos de color "
+			+ "rojo y verde, ya que los conjuntos amarillo y azul\ntienen un numero "
+			+ "diferente de piezas para adaptarse a la menor cantidad de piezas "
+			+ "utilizadas en el juego de cuatro jugadores.\nEl jugador verde va "
+			+ "primero. En cada turno un jugador, puede realizar un movimiento o "
+			+ "un cambio de direccion.\nEl Comandante se puede desplazar 1 espacio. "
+			+ "Las Lanzas se pueden desplazar 1, 2 o 3 espacios. Las Probes 1 o 2 "
+			+ "espacios.\nLos Escudos 1 espacio.\n\nCon 4 jugadores 1v1v1v1:\nEl "
+			+ "objetivo es ser el ultimo jugador en pie despues de que los demas hayan "
+			+ "sido eliminados.\nEn el turno de un jugador, puede realizar un "
+			+ "movimiento o un cambio de direccion. Si el Comandante de un jugador es "
+			+ "capturado,\nlas piezas restantes quedan bajo el mando del jugador que lo "
+			+ "captura. Si todas las piezas de un jugador, excepto el Comandante,\nhan "
+			+ "sido capturadas, el Comandante se retira del juego y el jugador queda "
+			+ "fuera del juego. El juego continua en el sentido de las\nagujas del reloj "
+			+ "hasta que quede un jugador.\n\nCon 4 jugadores 2v2:\nUna vez que el "
+			+ "comandante de un jugador es absorbido, su companero de equipo se hace "
+			+ "cargo de todas sus piezas restantes.\nEl companero tambien toma el turno "
+			+ "de su companero de equipo y puede usar todas las piezas del equipo para "
+			+ "sus movimientos.";
 	
+	@Override
+	void startGame() {
+		gui = (PloyGUI) initGUI();
+		board = (PloyBoard) initBoard();
+		fm = new PloyFileManager();
+		mod = new PloyModerator();
+		players = null;
+		gameMode = 0;
+		
+		char newGame = getNewGame();
+		int numPlayers = 0;
+		
+		if (newGame == 'Y') {
+			numPlayers = getNumPlayers();
+			players = getPlayers(numPlayers);
+			gameMode = getMode(numPlayers);
+			gui.drawBoard(players, gameMode);
+			gui.populateBoard(players, gameMode);
+			board.populateBoard(players, gameMode);
+			setMenuActions(gameMode);
+			setActions();
+		} else {
+			loadGame();
+		}		
+	}
+	
+	@Override
+	void loadGame() {
+		int gameMode = 0;
+		
+		int loadStatus = fm.loadFile();
+		if (loadStatus == 0) {
+			if (gui.frame != null) {
+				gui.closeWindow();
+			}
+			players = (PloyPlayer[]) fm.getPlayers();
+			gameMode = fm.getGameMode();
+			gui = (PloyGUI) initGUI();
+			gui.drawBoard(players, gameMode);
+			board.loadBoard(players, gameMode, fm.getBoardData());
+			gui.loadBoard(players, gameMode, fm.getBoardData());
+			board.loadHitPiecesIndexes(fm.getHitPiecesIndexes());
+			board.loadHitPieces(gameMode, fm.getHitPieces());
+			board.loadCurrentPlayer(fm.getCurrentPlayer());
+			setMenuActions(gameMode);
+			setActions();
+			gui.showSaveLoadMessage("La partida fue cargada satisfactoriamente", "Partida Cargada");
+		} else if (loadStatus == 1) {
+			gui.showSaveLoadMessage("Error al cargar la partda, puede que el archivo no exista", "Error");
+			if (gui.frame == null) {
+				System.exit(0);
+			}
+		} else {
+			gui.showSaveLoadMessage("El proceso de cargado fue cancelado", "Cargado cancelado");
+			if (gui.frame == null) {
+				System.exit(0);
+			}
+		}
+	}
+	
+	@Override
 	public Object initGUI() {
 		return new PloyGUI(600);
 	}
 	
-	public Object[] initPlayers() {
-		PloyPlayer[] players = null; 
-		return players;
-	}
-	
+	@Override
 	public Object initBoard() {
 		return new PloyBoard();
 	}
 	
-	public boolean checkOption(char newGame) {
-		return newGame == 'Y';
-	}
-	
+	@Override
 	public int getNumPlayers() {
 		// Numero de jugadores en la partida, puede ser de 2 o 4
 		String[] options = {"2", "4"};
@@ -36,21 +118,7 @@ public class PloyController extends Controller {
 		return numPlayers;
 	}
 
-	public char getNewGame() {
-		String[] options = {"Nueva partida", "Cargar partida","Cancelar"};
-		char newGame = ' ';
-		int input = -1;
-		input = gui.inputMessageWithOptions("Para empezar, seleccione lo que desea hacer", "Bienvenido a Ploy BoardGame", options);
-		if (input == 0) {
-			newGame = 'Y';
-		} else if (input == 1) {
-			newGame = 'N';
-		} else if (input == 2) {
-			System.exit(0);
-		}
-		return newGame;
-	}
-
+	@Override
 	public PloyPlayer[] getPlayers(int numPlayers) {
 		//Arreglo de opciones de colores para los jugadores
 		String[] choices = {"Verde", "Rojo", "Azul", "Amarillo"};
@@ -99,6 +167,7 @@ public class PloyController extends Controller {
 		return players;
 	}
 
+	@Override
 	public int getMode(int numPlayers) {
 		int gameMode = 0;
 		if (numPlayers == 4) {
@@ -115,4 +184,91 @@ public class PloyController extends Controller {
 		}
 		return gameMode;
 	}
+	
+	@Override
+	public void setActions() {
+		for(int i = 0; i < 9; i++) {
+			for(int j = 0; j < 9; j++) {
+				final int tempI = i;
+				final int tempJ = j;
+				gui.squaresPanels[i][j].addMouseListener(new java.awt.event.MouseAdapter() {
+					final int myI = tempI;
+					final int myJ = tempJ;
+					public void mouseClicked(java.awt.event.MouseEvent evt) {
+						mod.clickedOn(myI, myJ, players.length, gameMode, players, board, gui);
+					}
+				});
+			}
+		}
+		
+		gui.rotateLeftBut.addActionListener(this);
+		gui.rotateRightBut.addActionListener(this);
+	}
+	
+	/**
+	 * @param gameMode
+	 */
+	private void setMenuActions(int gameMode) {
+		gui.menuBar.getMenu(0).getItem(0).addActionListener(this);  // Opciones / Reglas
+		gui.menuBar.getMenu(0).getItem(1).addActionListener(this);  // Opciones / Guardar Partida
+		gui.menuBar.getMenu(0).getItem(2).addActionListener(this);  // Opciones / Cargar Partida
+		gui.menuBar.getMenu(1).getItem(0).addActionListener(this);  // Piezas Eliminadas / Jugador 1
+		gui.menuBar.getMenu(1).getItem(1).addActionListener(this);  // Piezas Eliminadas / Jugador 2
+		if (gameMode != 0) {
+			gui.menuBar.getMenu(1).getItem(2).addActionListener(this);  // Piezas Eliminadas / Jugador 3
+			gui.menuBar.getMenu(1).getItem(3).addActionListener(this);  // Piezas Eliminadas / Jugador 4
+		}
+	}
+
+	/**
+     * Ejecuta las acciones de los botones.
+     */
+	@Override
+    public void actionPerformed(ActionEvent evento) {
+        if (evento.getActionCommand().equals("Reglas")) {
+            gui.printMessageWithTitle(GAME_RULES, "Reglas del juego");
+        } else if (evento.getActionCommand().equals("Guardar Partida")) {
+        	String fileName = gui.inputMessage("Ingrese el nombre del archivo a guardar");
+        	if (fileName != null) {
+        		fm.saveFile(players, gameMode, board, fileName);
+        		gui.showSaveLoadMessage("La partida fue guardada satisfactoriamente", "Partida guardada");
+        	} else {
+        		gui.showSaveLoadMessage("El proceso de guardado fue cancelado", "Guardado cancelado");
+        	}
+        } else if (evento.getActionCommand().equals("Cargar Partida")) {
+        	loadGame();
+        } else if (evento.getActionCommand().equals("Jugador 1")) {
+        	gui.showLostPieces(board.p1HitPieces, board.getP1HitPiecesIndex());
+        } else if (evento.getActionCommand().equals("Jugador 2")) {
+        	gui.showLostPieces(board.p2HitPieces, board.getP2HitPiecesIndex());
+        } else if (evento.getActionCommand().equals("Jugador 3")) {
+        	gui.showLostPieces(board.p3HitPieces, board.getP3HitPiecesIndex());
+        } else if (evento.getActionCommand().equals("Jugador 4")) {
+        	gui.showLostPieces(board.p4HitPieces, board.getP4HitPiecesIndex());
+        } else if (evento.getActionCommand().equals("Girar izquierda")) {
+        	String[][] moves = mod.getValidMoves(board.getLastI(), board.getLastJ(), board);
+        	mod.cancelHighlightMoves(moves, board.getLastI(), board.getLastJ(), gui);
+        	gui.rotatePiece(board.getLastI(), board.getLastJ(), 315);
+        	board.rotatePiece(board.getLastI(), board.getLastJ(), -45);
+        	int lastI = board.getLastI();
+			int lastJ = board.getLastJ();
+        	int originalDirection = board.getOriginalDirection();
+			if (board.boardSquares[lastI][lastJ].getDirection() == originalDirection || board.boardSquares[lastI][lastJ].getType() == 8) {
+				moves = mod.getValidMoves(board.getLastI(), board.getLastJ(), board);
+				mod.highlightMoves(moves, board.getLastI(), board.getLastJ(), gui);
+			}
+        } else if (evento.getActionCommand().equals("Girar derecha")) {
+        	String[][] moves = mod.getValidMoves(board.getLastI(), board.getLastJ(), board);
+        	mod.cancelHighlightMoves(moves, board.getLastI(), board.getLastJ(), gui);
+        	gui.rotatePiece(board.getLastI(), board.getLastJ(), 45);
+        	board.rotatePiece(board.getLastI(), board.getLastJ(), 45);
+        	int lastI = board.getLastI();
+			int lastJ = board.getLastJ();
+        	int originalDirection = board.getOriginalDirection();
+			if (board.boardSquares[lastI][lastJ].getDirection() == originalDirection || board.boardSquares[lastI][lastJ].getType() == 8) {
+				moves = mod.getValidMoves(board.getLastI(), board.getLastJ(), board);
+				mod.highlightMoves(moves, board.getLastI(), board.getLastJ(), gui);
+			}
+        }
+    }
 }

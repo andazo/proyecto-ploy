@@ -15,6 +15,7 @@ public class PloyGUI extends GUI {
 	Color boardColorPurple = new Color(65, 11, 153);
 	Color boardColorThistle = new Color(200, 184, 219);
 	Color boardColorSnow = new Color(249, 244, 245);
+	Color boardColorHighlight = new Color(129, 92, 173);
 	int smallSquareSize;
 
 	final String chipFolderNames [] = {"chips_red/", "chips_blue/", "chips_green/", "chips_yellow/"};
@@ -52,7 +53,7 @@ public class PloyGUI extends GUI {
 	 * Draws all of the board's components.
 	 */
 	@Override
-	public void drawBoard() {
+	public void drawBoard(Object[] players, int gameMode) {		
 		frame.setTitle("Ploy");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setFocusable(true);
@@ -75,25 +76,17 @@ public class PloyGUI extends GUI {
 		lostPieces.add(hitP1);
 		JMenuItem hitP2 = new JMenuItem("Jugador 2");
 		lostPieces.add(hitP2);
-		JMenuItem hitP3 = new JMenuItem("Jugador 3");
-		lostPieces.add(hitP3);
-		JMenuItem hitP4 = new JMenuItem("Jugador 4");
-		lostPieces.add(hitP4);
+		
+		if (gameMode != 0) {
+	    	JMenuItem hitP3 = new JMenuItem("Jugador 3");
+	    	lostPieces.add(hitP3);
+	        JMenuItem hitP4 = new JMenuItem("Jugador 4");
+	        lostPieces.add(hitP4);
+	    }
 
 		boardPanel.setLayout(new GridLayout(9,9,5,5));
 		boardPanel.setBackground(boardColorThistle);
 		boardPanel.setBorder(BorderFactory.createMatteBorder(30, 30, 30, 30, boardColorThistle));
-
-		/*
-		JLabel squarePanel = new JLabel();
-		squarePanel.setOpaque(true);
-		squarePanel.setSize(new Dimension(60,60));
-		squarePanel.setMinimumSize(new Dimension(60,60));
-		squarePanel.setMaximumSize(new Dimension(60,60));
-		squarePanel.setPreferredSize(new Dimension(60,60));
-		squarePanel.setBackground(boardColorPurple);
-		boardPanel.add(squarePanel);
-		 */
 
 		for(int i = 0; i < 9; i++) {
 			for(int j = 0; j < 9; j++) {
@@ -111,8 +104,6 @@ public class PloyGUI extends GUI {
 				boardPanel.add(squaresPanels[i][j]);
 			}
 		}
-
-
 
 		frame.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
@@ -160,6 +151,21 @@ public class PloyGUI extends GUI {
 		guiPrintLine("Cada pieza se puede mover por el\ntablero la cantidad de espacios de\nacuerdo con la cantidad de rayas\nque posee.");
 		guiPrintLine("En un turno se puede mover una\npieza o cambiar su direccion.");
 		guiPrintLine("Los escudos se pueden mover y\ncambiar de direccion en un mismo\nturno.");
+		guiPrintLine("Modos de juego: 1v1, 1v1v1v1, 2v2" + "\n");
+		
+		String modeString = "";
+		if (gameMode == 0) {
+			modeString = "1v1";
+		} else if (gameMode == 1) {
+			modeString = "1v1v1v1";
+		} else {
+			modeString = "2v2";
+		}
+		
+		guiPrintLine("Modo elegido: " + modeString);
+		for (int i = 0; i < players.length; i++) {
+			guiPrintLine(((PloyPlayer) players[i]).getName() + ": " + ((PloyPlayer) players[i]).getColor());
+		}
 
 		textScroll.paintImmediately(new Rectangle(new Point(0,0),textScroll.getSize()));
 		rotateButtons.paintImmediately(new Rectangle(new Point(0,0),rotateButtons.getSize()));
