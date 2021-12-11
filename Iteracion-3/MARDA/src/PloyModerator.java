@@ -1,6 +1,4 @@
 
-import java.awt.Component;
-
 /**
  * Concrete class for a moderator for Ploy in charge of reviewing the game's state to determine 
  * if a player is out, legal moves and game over conditions. 
@@ -23,42 +21,48 @@ public class PloyModerator extends Moderator {
 	 */
 	@Override
     public void clickedOn(int i, int j, int numPlayers, int gameMode, Object[] players, Object board, Object gui) {
+		PieceFactory pf = new PieceFactory();
+    	PieceInterface piece = (PieceInterface) ((PloyBoard) board).boardSquares[i][j].getPiece();
     	String[][] moves = null;
-    	//if (((PloyBoard) board).boardSquares[i][j].getColor().equals(players[((PloyBoard) board).getCurrentPlayer() - 1].getColor()) && !((PloyBoard) board).getPieceActive()) {
-  		if (((PloyBoard) board).boardSquares[i][j].getOwner() == ((PloyBoard) board).getCurrentPlayer() && !((PloyBoard) board).getPieceActive()) {	
-				if (((PloyBoard) board).boardSquares[i][j].getType() != -1) {
-					((PloyBoard) board).setPieceActive(true);
-			  		((PloyGUI) gui).squaresPanels[i][j].setBackground(((PloyGUI) gui).boardColorHighlight);
-				  	((PloyBoard) board).setLastI(i);
-				  	((PloyBoard) board).setLastJ(j);
-				 	int direction = ((PloyBoard) board).boardSquares[i][j].getDirection();
-				 	((PloyBoard) board).setOriginalDirection(direction);
-			 		((PloyGUI) gui).rotateLeftBut.setEnabled(true);
-					((PloyGUI) gui).rotateRightBut.setEnabled(true);
-			  		((PloyGUI) gui).guiPrintLine("pieza activa");
-			  		moves = getValidMoves(i, j, board);
-			  		highlightMoves(moves, i, j, gui);
-				}
+    	if (piece != null && !((PloyBoard) board).getPieceActive()) {
+	  		if (((PloyPiece) piece).getOwner() == ((PloyBoard) board).getCurrentPlayer()) {	
+				((PloyBoard) board).setPieceActive(true);
+				((PloyGUI) gui).squaresPanels[i][j].setBackground(((PloyGUI) gui).boardColorHighlight);
+				((PloyBoard) board).setLastI(i);
+				((PloyBoard) board).setLastJ(j);
+				int direction = ((PloyPiece) piece).getDirection();
+				((PloyBoard) board).setOriginalDirection(direction);
+			 	((PloyGUI) gui).rotateLeftBut.setEnabled(true);
+				((PloyGUI) gui).rotateRightBut.setEnabled(true);
+				((PloyGUI) gui).guiPrintLine("pieza activa");
+				moves = getValidMoves(i, j, board);
+				highlightMoves(moves, i, j, gui);
+	  		} else {
+		    	((PloyGUI) gui).guiPrintLine("Pieza no pertenece al jugador");
+		    }
 		} else if (((PloyBoard) board).getPieceActive()) {
 			int lastI = ((PloyBoard) board).getLastI();
 			int lastJ = ((PloyBoard) board).getLastJ();
 			if (!(lastI == i && lastJ == j)) {
 				int originalDirection = ((PloyBoard) board).getOriginalDirection();
-				if (((PloyBoard) board).boardSquares[lastI][lastJ].getDirection() == originalDirection || ((PloyBoard) board).boardSquares[lastI][lastJ].getType() == 8) {
-					int targetPieceOwner = ((PloyBoard) board).boardSquares[i][j].getOwner();
+				if (((PloyPiece) ((PloyBoard) board).boardSquares[lastI][lastJ].getPiece()).getDirection() == originalDirection || ((PloyPiece) ((PloyBoard) board).boardSquares[lastI][lastJ].getPiece()).getType() == 8) {
+					int targetPieceOwner = 0;
+					if (((PloyBoard) board).boardSquares[i][j].getPiece() != null) {
+						targetPieceOwner = ((PloyPiece) ((PloyBoard) board).boardSquares[i][j].getPiece()).getOwner();
+					}
 					if (((PloyGUI) gui).squaresPanels[i][j].getBackground() == ((PloyGUI) gui).boardColorHighlight) {
-						
 						moves = getValidMoves(lastI, lastJ, board);
 						cancelHighlightMoves(moves, lastI, lastJ, gui);
-						
 						if (targetPieceOwner != 0) {
 							((PloyPlayer) players[targetPieceOwner - 1]).setNumPieces(((PloyPlayer) players[targetPieceOwner - 1]).getNumPieces() - 1);
 							checkGameOver(((PloyBoard) board).boardSquares[i][j], ((PloyBoard) board).boardSquares[((PloyBoard) board).getLastI()][((PloyBoard) board).getLastJ()], gameMode, players, board, gui);
 						}
-						
-						String targetPieceColor = ((PloyBoard) board).boardSquares[i][j].getColor();
-						String targetPieceType = Integer.toString(((PloyBoard) board).boardSquares[i][j].getType());
-						
+						String targetPieceType = "";
+						String targetPieceColor = "";
+						if (((PloyBoard) board).boardSquares[i][j].getPiece() != null) {
+							targetPieceType = Integer.toString(((PloyPiece) ((PloyBoard) board).boardSquares[i][j].getPiece()).getType());
+							targetPieceColor = ((PloyPiece) ((PloyBoard) board).boardSquares[i][j].getPiece()).getColor();
+						}
 						if (numPlayers == 2) {
 							if (targetPieceColor.equals(((PloyPlayer) players[0]).getColor())) {
 								((PloyBoard) board).p1HitPieces[((PloyBoard) board).getP1HitPiecesIndex()][0] = targetPieceType;
@@ -88,18 +92,14 @@ public class PloyModerator extends Moderator {
 								((PloyBoard) board).setP4HitPiecesIndex(((PloyBoard) board).getP4HitPiecesIndex() + 1);
 							}
 						}
-							
 						((PloyGUI) gui).squaresPanels[i][j].setIcon(((PloyGUI) gui).squaresPanels[lastI][lastJ].getIcon());
 						((PloyGUI) gui).squaresPanels[lastI][lastJ].setIcon(null);
 						((PloyGUI) gui).squaresPanels[lastI][lastJ].setBackground(((PloyGUI) gui).boardColorPurple);
-						((PloyBoard) board).boardSquares[i][j].setType(((PloyBoard) board).boardSquares[lastI][lastJ].getType());
-						((PloyBoard) board).boardSquares[lastI][lastJ].setType(-1);
-						((PloyBoard) board).boardSquares[i][j].setOwner(((PloyBoard) board).boardSquares[lastI][lastJ].getOwner());
-						((PloyBoard) board).boardSquares[lastI][lastJ].setOwner(0);
-						((PloyBoard) board).boardSquares[i][j].setDirection(((PloyBoard) board).boardSquares[lastI][lastJ].getDirection());
-						((PloyBoard) board).boardSquares[lastI][lastJ].setDirection(0);
-						((PloyBoard) board).boardSquares[i][j].setColor(((PloyBoard) board).boardSquares[lastI][lastJ].getColor());
-						((PloyBoard) board).boardSquares[lastI][lastJ].setColor("-");
+						((PloyBoard) board).boardSquares[i][j].setPiece(pf.makePiece(((PloyPiece) ((PloyBoard) board).boardSquares[lastI][lastJ].getPiece()).getType()));
+						((PloyPiece) ((PloyBoard) board).boardSquares[i][j].getPiece()).setOwner(((PloyPiece) ((PloyBoard) board).boardSquares[lastI][lastJ].getPiece()).getOwner());
+						((PloyPiece) ((PloyBoard) board).boardSquares[i][j].getPiece()).setColor(((PloyPiece) ((PloyBoard) board).boardSquares[lastI][lastJ].getPiece()).getColor());
+						((PloyPiece) ((PloyBoard) board).boardSquares[i][j].getPiece()).setDirection(((PloyPiece) ((PloyBoard) board).boardSquares[lastI][lastJ].getPiece()).getDirection());
+						((PloyBoard) board).boardSquares[lastI][lastJ].setPiece(null);;
 						((PloyBoard) board).setPieceActive(false);
 						((PloyGUI) gui).rotateLeftBut.setEnabled(false);
 						((PloyGUI) gui).rotateRightBut.setEnabled(false);
@@ -131,7 +131,7 @@ public class PloyModerator extends Moderator {
 				((PloyBoard) board).setPieceActive(false);
 				((PloyGUI) gui).rotateLeftBut.setEnabled(false);
 				((PloyGUI) gui).rotateRightBut.setEnabled(false);
-				if (((PloyBoard) board).boardSquares[i][j].getDirection() != ((PloyBoard) board).getOriginalDirection()) {
+				if (((PloyPiece) ((PloyBoard) board).boardSquares[i][j].getPiece()).getDirection() != ((PloyBoard) board).getOriginalDirection()) {
 					((PloyGUI) gui).guiPrintLine("Pieza rotada");
 					((PloyBoard) board).setCurrentPlayer(((PloyBoard) board).getCurrentPlayer() + 1);
 					if (numPlayers == 2) {
@@ -155,10 +155,8 @@ public class PloyModerator extends Moderator {
 				moves = getValidMoves(((PloyBoard) board).getLastI(), ((PloyBoard) board).getLastJ(), board);
 				cancelHighlightMoves(moves, ((PloyBoard) board).getLastI(), ((PloyBoard) board).getLastJ(), gui);
 			}
-    	} else {
-    		((PloyGUI) gui).guiPrintLine("Pieza no pertenece al jugador");
-    	}
-	}
+    }
+}
     
 	/**
 	 * Checks if the game is over after a move has been made.
@@ -172,7 +170,7 @@ public class PloyModerator extends Moderator {
 	 */
 	@Override
     protected void checkGameOver(Object hitInfo, Object attackerInfo, int gameMode, Object[] players, Object board, Object gui) {
-    	if (((PloyBoardSquare) hitInfo).getType() == 0 || ((PloyPlayer) players[((PloyBoardSquare) hitInfo).getOwner()-1]).getNumPieces() == 1) {
+    	if (((PloyPiece) ((PloyBoardSquare) hitInfo).getPiece()).getType() == 0 || ((PloyPlayer) players[((PloyPiece) ((PloyBoardSquare) hitInfo).getPiece()).getOwner()-1]).getNumPieces() == 1) {
     		playerLost(hitInfo, attackerInfo, gameMode, players, board, gui);
     	}
     }
@@ -186,16 +184,16 @@ public class PloyModerator extends Moderator {
 	@Override
     protected char finished(Object gui) {
 		String[] options = {"Mirar Tablero", "Terminar"};
-		char newGame = ' ';
+		char checkBoard = ' ';
     	int input = 0;
 	    input = ((PloyGUI) gui).inputMessageWithOptions("Seleccione lo que desea hacer", "Menu Gamer Over", options);
 	    if (input == 0) {
-	    	newGame = 'Y';
+	    	checkBoard = 'Y';
 	    } else if (input == 1) {
 	    	System.exit(0);
 	    }
 	    
-	    return newGame;
+	    return checkBoard;
 	}
     
 	/**
@@ -212,9 +210,9 @@ public class PloyModerator extends Moderator {
     protected void playerLost(Object hitInfo, Object attackerInfo, int gameMode, Object[] players, Object board, Object gui) {
         switch(gameMode) {
         case 0: //1v1
-        	((PloyPlayer) players[((PloyBoardSquare) hitInfo).getOwner()-1]).setLost(true);
+        	((PloyPlayer) players[((PloyPiece) ((PloyBoardSquare) hitInfo).getPiece()).getOwner()-1]).setLost(true);
         	((PloyGUI) gui).guiPrintLine("Game Over, tablero bloqueado"); 
-        	((PloyGUI) gui).printSimpleMessage("Game Over \n" + ((PloyPlayer) players[((PloyBoardSquare) attackerInfo).getOwner()-1]).getName() + " ha ganado");
+        	((PloyGUI) gui).printSimpleMessage("Game Over \n" + ((PloyPlayer) players[((PloyPiece) ((PloyBoardSquare) attackerInfo).getPiece()).getOwner()-1]).getName() + " ha ganado");
         	char finishedGame = finished(gui);
         	if (finishedGame == 'Y' ) {
         		removeActions(gui);
@@ -223,11 +221,11 @@ public class PloyModerator extends Moderator {
         	}
         	break;
         case 1: //1v1v1v1
-            ((PloyPlayer) players[((PloyBoardSquare) hitInfo).getOwner()-1]).setLost(true);
+            ((PloyPlayer) players[((PloyPiece) ((PloyBoardSquare) hitInfo).getPiece()).getOwner()-1]).setLost(true);
             ((PloyBoard) board).setActivePlayers(((PloyBoard) board).getActivePlayers()-1);
             if (((PloyBoard) board).getActivePlayers() == 1) {
             	removeActions(gui);
-            	((PloyGUI) gui).printSimpleMessage("Game Over \n" + ((PloyPlayer) players[((PloyBoardSquare) attackerInfo).getOwner()-1]).getName() + " ha ganado");
+            	((PloyGUI) gui).printSimpleMessage("Game Over \n" + ((PloyPlayer) players[((PloyPiece) ((PloyBoardSquare) attackerInfo).getPiece()).getOwner()-1]).getName() + " ha ganado");
 	            ((PloyGUI) gui).guiPrintLine("Game Over 1v1v1v1, tablero bloqueado");
 	            char finishedGame1 = finished(gui);
 	            if (finishedGame1 == 'Y' ) {
@@ -236,18 +234,18 @@ public class PloyModerator extends Moderator {
 	            	System.exit(0);
 	            }
             } else {
-            	((PloyBoard) board).updateOwner(((PloyBoardSquare) hitInfo).getOwner(), ((PloyBoardSquare) attackerInfo).getOwner()); //jugador controla las piezas ahora
-            	((PloyGUI) gui).printSimpleMessage(((PloyPlayer) players[((PloyBoardSquare) hitInfo).getOwner()-1]).getName() + " ha perdido, ahora "
-            	+ ((PloyPlayer) players[((PloyBoardSquare) hitInfo).getOwner()-1]).getName() + " controla sus piezas.");
+            	((PloyBoard) board).updateOwner(((PloyPiece) ((PloyBoardSquare) hitInfo).getPiece()).getOwner(), ((PloyPiece) ((PloyBoardSquare) attackerInfo).getPiece()).getOwner()); //jugador controla las piezas ahora
+            	((PloyGUI) gui).printSimpleMessage(((PloyPlayer) players[((PloyPiece) ((PloyBoardSquare) hitInfo).getPiece()).getOwner()-1]).getName() + " ha perdido, ahora "
+            	+ ((PloyPlayer) players[((PloyPiece) ((PloyBoardSquare) hitInfo).getPiece()).getOwner()-1]).getName() + " controla sus piezas.");
             }
         	break;
         case 2: //2v2
-        	((PloyPlayer) players[((PloyBoardSquare) hitInfo).getOwner()-1]).setLost(true);
-            int friend = ((PloyPlayer) players[(((PloyBoardSquare) hitInfo).getOwner()-1)]).getFriend()-1;
+        	((PloyPlayer) players[((PloyPiece) ((PloyBoardSquare) hitInfo).getPiece()).getOwner()-1]).setLost(true);
+            int friend = ((PloyPlayer) players[(((PloyPiece) ((PloyBoardSquare) hitInfo).getPiece()).getOwner()-1)]).getFriend()-1;
             if (((PloyPlayer) players[friend]).getLost()) { //si los dos ya perdieron
               removeActions(gui);
-              ((PloyGUI) gui).printSimpleMessage("Game Over \n" + ((PloyPlayer) players[((PloyBoardSquare) attackerInfo).getOwner()-1]).getName()
-            		+ " y " + ((PloyPlayer) players[((PloyPlayer) players[((PloyBoardSquare) attackerInfo).getOwner()-1]).getFriend()-1]).getName() + " han ganado");
+              ((PloyGUI) gui).printSimpleMessage("Game Over \n" + ((PloyPlayer) players[((PloyPiece) ((PloyBoardSquare) attackerInfo).getPiece()).getOwner()-1]).getName()
+            		+ " y " + ((PloyPlayer) players[((PloyPlayer) players[((PloyPiece) ((PloyBoardSquare) attackerInfo).getPiece()).getOwner()-1]).getFriend()-1]).getName() + " han ganado");
               ((PloyGUI) gui).guiPrintLine("Game Over 2v2, tablero bloqueado");
               char finishedGame3 = finished(gui);
               if (finishedGame3 == 'Y' ) {
@@ -256,9 +254,9 @@ public class PloyModerator extends Moderator {
             	System.exit(0);
               }
 	        } else {
-	        	((PloyBoard) board).updateOwner(((PloyBoardSquare) hitInfo).getOwner(), ((PloyPlayer) players[((PloyBoardSquare) hitInfo).getOwner()-1]).getFriend()); //amigo controla las piezas ahora
+	        	((PloyBoard) board).updateOwner(((PloyPiece) ((PloyBoardSquare) hitInfo).getPiece()).getOwner(), ((PloyPlayer) players[((PloyPiece) ((PloyBoardSquare) hitInfo).getPiece()).getOwner()-1]).getFriend()); //amigo controla las piezas ahora
 	        	((PloyBoard) board).setActivePlayers(((PloyBoard) board).getActivePlayers()-1);
-	        	((PloyGUI) gui).printSimpleMessage(((PloyPlayer) players[((PloyBoardSquare) hitInfo).getOwner()-1]).getName() + " ha perdido");
+	        	((PloyGUI) gui).printSimpleMessage(((PloyPlayer) players[((PloyPiece) ((PloyBoardSquare) hitInfo).getPiece()).getOwner()-1]).getName() + " ha perdido");
 	      }
           break;
         }
@@ -280,33 +278,6 @@ public class PloyModerator extends Moderator {
 		}
 	}
     
-    /*
-     * Valid moves
-     * 
-     * |-|-|-|-|-|-|-|				|-|-|-|-|-|-|-|				|-|-|-|O|-|-|-|
-     * |-|-|-|-|-|-|-|				|-|-|-|-|-|-|-|				|-|-|-|O|-|-|-|
-     * |-|-|O|-|O|-|-|				|-|-|-|-|-|-|-|				|-|-|-|O|-|-|-|
-     * |-|-|-|P|-|-|-| commander	|O|O|O|P|O|O|O| lance 1		|-|-|-|P|-|-|-| lance 2
-     * |-|-|O|-|O|-|-|				|-|-|-|O|-|-|-|				|-|-|O|-|O|-|-|
-     * |-|-|-|-|-|-|-|				|-|-|-|O|-|-|-|				|-|O|-|-|-|O|-|
-     * |-|-|-|-|-|-|-|				|-|-|-|O|-|-|-|				|O|-|-|-|-|-|O|
-     * 
-     * |-|-|-|-|-|-|-|				|-|-|-|-|-|-|-|				|-|-|-|-|-|-|-|
-     * |-|-|-|-|-|-|-|				|-|-|-|-|-|-|-|				|-|-|-|-|-|-|-|
-     * |-|-|-|-|-|-|-|				|-|-|-|-|-|-|-|				|-|-|-|-|-|-|-|
-     * |-|-|-|P|-|-|-| lance 3		|-|-|-|P|-|-|-| probe 1		|-|-|-|P|-|-|-| probe 2
-     * |-|-|O|O|O|-|-|				|-|-|O|O|-|-|-|				|-|-|0|-|0|-|-|
-     * |-|O|-|O|-|O|-|				|-|O|-|O|-|-|-|				|-|0|-|-|-|0|-|
-     * |O|-|-|O|-|-|O|				|-|-|-|-|-|-|-|				|-|-|-|-|-|-|-|
-     * 
-     * |-|-|-|-|-|-|-|				|-|-|-|-|-|-|-|				|-|-|-|-|-|-|-|
-     * |-|-|-|O|-|-|-|				|-|-|-|-|-|-|-|				|-|-|-|-|-|-|-|
-     * |-|-|-|O|-|-|-|				|-|-|-|-|-|-|-|				|-|-|-|-|-|-|-|
-     * |-|-|-|P|-|-|-| probe 3		|-|-|-|P|-|-|-| probe 4		|-|-|-|P|-|-|-| shield
-     * |-|-|-|O|-|-|-|				|-|-|-|0|0|-|-|				|-|-|-|0|-|-|-|
-     * |-|-|-|O|-|-|-|				|-|-|-|0|-|0|-|				|-|-|-|-|-|-|-|
-     * |-|-|-|-|-|-|-|				|-|-|-|-|-|-|-|				|-|-|-|-|-|-|-|
-     */
 	/**
 	 * Gets the valid moves for the piece currently in play.
 	 *
@@ -317,219 +288,208 @@ public class PloyModerator extends Moderator {
 	 */
 	@Override
     protected String[][] getValidMoves(int i, int j, Object board) {
-		String[][] moves = new String[7][7];
-		moves[3][3] = "O";
-		int type = ((PloyBoard) board).boardSquares[i][j].getType();
-		if (type == 0) {
-			moves[2][2] = "O";
-			moves[2][4] = "O";
-			moves[4][2] = "O";
-			moves[4][4] = "O";			
-		} else if (type == 1) {
-			moves[3][2] = "O";
-			moves[3][1] = "O";
-			moves[3][0] = "O";
-			moves[4][3] = "O";
-			moves[5][3] = "O";
-			moves[6][3] = "O";
-			moves[3][4] = "O";
-			moves[3][5] = "O";
-			moves[3][6] = "O";
-		} else if (type == 2) {
-			moves[2][3] = "O";
-			moves[1][3] = "O";
-			moves[0][3] = "O";
-			moves[4][2] = "O";
-			moves[5][1] = "O";
-			moves[6][0] = "O";
-			moves[4][4] = "O";
-			moves[5][5] = "O";
-			moves[6][6] = "O";
-		} else if (type == 3) {
-			moves[4][2] = "O";
-			moves[5][1] = "O";
-			moves[6][0] = "O";
-			moves[4][3] = "O";
-			moves[5][3] = "O";
-			moves[6][3] = "O";
-			moves[4][4] = "O";
-			moves[5][5] = "O";
-			moves[6][6] = "O";
-		} else if (type == 4) {
-			moves[4][2] = "O";
-			moves[5][1] = "O";
-			moves[4][3] = "O";
-			moves[5][3] = "O";
-		} else if (type == 5) {
-			moves[4][2] = "O";
-			moves[5][1] = "O";
-			moves[4][4] = "O";
-			moves[5][5] = "O";
-		} else if (type == 6) {
-			moves[2][3] = "O";
-			moves[1][3] = "O";
-			moves[4][3] = "O";
-			moves[5][3] = "O";
-		} else if (type == 7) {
-			moves[4][3] = "O";
-			moves[5][3] = "O";
-			moves[4][4] = "O";
-			moves[5][5] = "O";
-		} else if (type == 8) {
-			moves[4][3] = "O";
-		}
+		PieceInterface piece = (PieceInterface) ((PloyBoard) board).boardSquares[i][j].getPiece();
+		String[][] moves = piece.getMoves();
 		moves = rotateMoves(moves, i, j, board);
-		
+
 		// Exclude other pieces
 		// Allies
 		
 		// -1 | +1
 		if (i - 1 >= 0 && j - 1 >= 0) {
-			if (((PloyBoard) board).boardSquares[i - 1][j - 1].getOwner() == ((PloyBoard) board).boardSquares[i][j].getOwner()) {
-				moves[2][2] = "-";
-				moves[1][1] = "-";
-				moves[0][0] = "-";
+			if (((PloyBoard) board).boardSquares[i - 1][j - 1].getPiece() != null) {
+				if (((PloyPiece) ((PloyBoard) board).boardSquares[i - 1][j - 1].getPiece()).getOwner() == ((PloyPiece) piece).getOwner()) {
+					moves[2][2] = "-";
+					moves[1][1] = "-";
+					moves[0][0] = "-";
+				}
 			}
 		}
 		if (i - 1 >= 0) {
-			if (((PloyBoard) board).boardSquares[i - 1][j].getOwner() == ((PloyBoard) board).boardSquares[i][j].getOwner()) {
-				moves[2][3] = "-";
-				moves[1][3] = "-";
-				moves[0][3] = "-";
+			if (((PloyBoard) board).boardSquares[i - 1][j].getPiece() != null) {
+				if (((PloyPiece) ((PloyBoard) board).boardSquares[i - 1][j].getPiece()).getOwner() == ((PloyPiece) piece).getOwner()) {
+					moves[2][3] = "-";
+					moves[1][3] = "-";
+					moves[0][3] = "-";
+				}
 			}
 		}
 		if (i - 1 >= 0 && j + 1 <= 8) {
-			if (((PloyBoard) board).boardSquares[i - 1][j + 1].getOwner() == ((PloyBoard) board).boardSquares[i][j].getOwner()) {
-				moves[2][4] = "-";
-				moves[1][5] = "-";
-				moves[0][6] = "-";
+			if (((PloyBoard) board).boardSquares[i - 1][j + 1].getPiece() != null) {
+				if (((PloyPiece) ((PloyBoard) board).boardSquares[i - 1][j + 1].getPiece()).getOwner() == ((PloyPiece) piece).getOwner()) {
+					moves[2][4] = "-";
+					moves[1][5] = "-";
+					moves[0][6] = "-";
+				}
 			}
 		}
 		if (j - 1 >= 0) {
-			if (((PloyBoard) board).boardSquares[i][j - 1].getOwner() == ((PloyBoard) board).boardSquares[i][j].getOwner()) {
-				moves[3][2] = "-";
-				moves[3][1] = "-";
-				moves[3][0] = "-";
+			if (((PloyBoard) board).boardSquares[i][j - 1].getPiece() != null) {
+				if (((PloyPiece) ((PloyBoard) board).boardSquares[i][j - 1].getPiece()).getOwner() == ((PloyPiece) piece).getOwner()) {
+					moves[3][2] = "-";
+					moves[3][1] = "-";
+					moves[3][0] = "-";
+				}
 			}
 		}
 		if (j + 1 <= 8) {
-			if (((PloyBoard) board).boardSquares[i][j + 1].getOwner() == ((PloyBoard) board).boardSquares[i][j].getOwner()) {
-				moves[3][4] = "-";
-				moves[3][5] = "-";
-				moves[3][6] = "-";
+			if (((PloyBoard) board).boardSquares[i][j + 1].getPiece() != null) {
+				if (((PloyPiece) ((PloyBoard) board).boardSquares[i][j + 1].getPiece()).getOwner() == ((PloyPiece) piece).getOwner()) {
+					moves[3][4] = "-";
+					moves[3][5] = "-";
+					moves[3][6] = "-";
+				}
 			}
 		}
 		if (i + 1 <= 8 && j - 1 >= 0) {
-			if (((PloyBoard) board).boardSquares[i + 1][j - 1].getOwner() == ((PloyBoard) board).boardSquares[i][j].getOwner()) {
-				moves[4][2] = "-";
-				moves[5][1] = "-";
-				moves[6][0] = "-";
+			if (((PloyBoard) board).boardSquares[i + 1][j - 1].getPiece() != null) {
+				if (((PloyPiece) ((PloyBoard) board).boardSquares[i + 1][j - 1].getPiece()).getOwner() == ((PloyPiece) piece).getOwner()) {
+					moves[4][2] = "-";
+					moves[5][1] = "-";
+					moves[6][0] = "-";
+				}
 			}
 		}
 		if (i + 1 <= 8) {
-			if (((PloyBoard) board).boardSquares[i + 1][j].getOwner() == ((PloyBoard) board).boardSquares[i][j].getOwner()) {
-				moves[4][3] = "-";
-				moves[5][3] = "-";
-				moves[6][3] = "-";
+			if (((PloyBoard) board).boardSquares[i + 1][j].getPiece() != null) {
+				if (((PloyPiece) ((PloyBoard) board).boardSquares[i + 1][j].getPiece()).getOwner() == ((PloyPiece) piece).getOwner()) {
+					moves[4][3] = "-";
+					moves[5][3] = "-";
+					moves[6][3] = "-";
+				}
 			}
 		}
 		if (i + 1 <= 8 && j + 1 <= 8) {
-			if (((PloyBoard) board).boardSquares[i + 1][j + 1].getOwner() == ((PloyBoard) board).boardSquares[i][j].getOwner()) {
-				moves[4][4] = "-";
-				moves[5][5] = "-";
-				moves[6][6] = "-";
+			if (((PloyBoard) board).boardSquares[i + 1][j + 1].getPiece() != null) {
+				if (((PloyPiece) ((PloyBoard) board).boardSquares[i + 1][j + 1].getPiece()).getOwner() == ((PloyPiece) piece).getOwner()) {
+					moves[4][4] = "-";
+					moves[5][5] = "-";
+					moves[6][6] = "-";
+				}
 			}
 		}
 		
 		// -2 | +2
 		if (i - 2 >= 0 && j - 2 >= 0) {
-			if (((PloyBoard) board).boardSquares[i - 2][j - 2].getOwner() == ((PloyBoard) board).boardSquares[i][j].getOwner()) {
-				moves[1][1] = "-";
-				moves[0][0] = "-";
+			if (((PloyBoard) board).boardSquares[i - 2][j - 2].getPiece() != null) {
+				if (((PloyPiece) ((PloyBoard) board).boardSquares[i - 2][j - 2].getPiece()).getOwner() == ((PloyPiece) piece).getOwner()) {
+					moves[1][1] = "-";
+					moves[0][0] = "-";
+				}
 			}
 		}
 		if (i - 2 >= 0) {
-			if (((PloyBoard) board).boardSquares[i - 2][j].getOwner() == ((PloyBoard) board).boardSquares[i][j].getOwner()) {
-				moves[1][3] = "-";
-				moves[0][3] = "-";
+			if (((PloyBoard) board).boardSquares[i - 2][j].getPiece() != null) {
+				if (((PloyPiece) ((PloyBoard) board).boardSquares[i - 2][j].getPiece()).getOwner() == ((PloyPiece) piece).getOwner()) {
+					moves[1][3] = "-";
+					moves[0][3] = "-";
+				}
 			}
 		}
 		if (i - 2 >= 0 && j + 2 <= 8) {
-			if (((PloyBoard) board).boardSquares[i - 2][j + 2].getOwner() == ((PloyBoard) board).boardSquares[i][j].getOwner()) {
-				moves[1][5] = "-";
-				moves[0][6] = "-";
+			if (((PloyBoard) board).boardSquares[i - 2][j + 2].getPiece() != null) {
+				if (((PloyPiece) ((PloyBoard) board).boardSquares[i - 2][j + 2].getPiece()).getOwner() == ((PloyPiece) piece).getOwner()) {
+					moves[1][5] = "-";
+					moves[0][6] = "-";
+				}
 			}
 		}
 		if (j - 2 >= 0) {
-			if (((PloyBoard) board).boardSquares[i][j - 2].getOwner() == ((PloyBoard) board).boardSquares[i][j].getOwner()) {
-				moves[3][1] = "-";
-				moves[3][0] = "-";
+			if (((PloyBoard) board).boardSquares[i][j - 2].getPiece() != null) {
+				if (((PloyPiece) ((PloyBoard) board).boardSquares[i][j - 2].getPiece()).getOwner() == ((PloyPiece) piece).getOwner()) {
+					moves[3][1] = "-";
+					moves[3][0] = "-";
+				}
 			}
 		}
 		if (j + 2 <= 8) {
-			if (((PloyBoard) board).boardSquares[i][j + 2].getOwner() == ((PloyBoard) board).boardSquares[i][j].getOwner()) {
-				moves[3][5] = "-";
-				moves[3][6] = "-";
+			if (((PloyBoard) board).boardSquares[i][j + 2].getPiece() != null) {
+				if (((PloyPiece) ((PloyBoard) board).boardSquares[i][j + 2].getPiece()).getOwner() == ((PloyPiece) piece).getOwner()) {
+					moves[3][5] = "-";
+					moves[3][6] = "-";
+				}
 			}
 		}
 		if (i + 2 <= 8 && j - 2 >= 0) {
-			if (((PloyBoard) board).boardSquares[i + 2][j - 2].getOwner() == ((PloyBoard) board).boardSquares[i][j].getOwner()) {
-				moves[5][1] = "-";
-				moves[6][0] = "-";
+			if (((PloyBoard) board).boardSquares[i + 2][j - 2].getPiece() != null) {
+				if (((PloyPiece) ((PloyBoard) board).boardSquares[i + 2][j - 2].getPiece()).getOwner() == ((PloyPiece) piece).getOwner()) {
+					moves[5][1] = "-";
+					moves[6][0] = "-";
+				}
 			}
 		}
 		if (i + 2 <= 8) {
-			if (((PloyBoard) board).boardSquares[i + 2][j].getOwner() == ((PloyBoard) board).boardSquares[i][j].getOwner()) {
-				moves[5][3] = "-";
-				moves[6][3] = "-";
+			if (((PloyBoard) board).boardSquares[i + 2][j].getPiece() != null) {
+				if (((PloyPiece) ((PloyBoard) board).boardSquares[i + 2][j].getPiece()).getOwner() == ((PloyPiece) piece).getOwner()) {
+					moves[5][3] = "-";
+					moves[6][3] = "-";
+				}
 			}
 		}
 		if (i + 2 <= 8 && j + 2 <= 8) {
-			if (((PloyBoard) board).boardSquares[i + 2][j + 2].getOwner() == ((PloyBoard) board).boardSquares[i][j].getOwner()) {
-				moves[5][5] = "-";
-				moves[6][6] = "-";
+			if (((PloyBoard) board).boardSquares[i + 2][j + 2].getPiece() != null) {
+				if (((PloyPiece) ((PloyBoard) board).boardSquares[i + 2][j + 2].getPiece()).getOwner() == ((PloyPiece) piece).getOwner()) {
+					moves[5][5] = "-";
+					moves[6][6] = "-";
+				}
 			}
 		}
 		
 		// -3 | +3
 		if (i - 3 >= 0 && j - 3 >= 0) {
-			if (((PloyBoard) board).boardSquares[i - 3][j - 3].getOwner() == ((PloyBoard) board).boardSquares[i][j].getOwner()) {
-				moves[0][0] = "-";
+			if (((PloyBoard) board).boardSquares[i - 3][j - 3].getPiece() != null) {
+				if (((PloyPiece) ((PloyBoard) board).boardSquares[i - 3][j - 3].getPiece()).getOwner() == ((PloyPiece) piece).getOwner()) {
+					moves[0][0] = "-";
+				}
 			}
 		}
 		if (i - 3 >= 0) {
-			if (((PloyBoard) board).boardSquares[i - 3][j].getOwner() == ((PloyBoard) board).boardSquares[i][j].getOwner()) {
-				moves[0][3] = "-";
+			if (((PloyBoard) board).boardSquares[i - 3][j].getPiece() != null) {
+				if (((PloyPiece) ((PloyBoard) board).boardSquares[i - 3][j].getPiece()).getOwner() == ((PloyPiece) piece).getOwner()) {
+					moves[0][3] = "-";
+				}
 			}
 		}
 		if (i - 3 >= 0 && j + 3 <= 8) {
-			if (((PloyBoard) board).boardSquares[i - 3][j + 3].getOwner() == ((PloyBoard) board).boardSquares[i][j].getOwner()) {
-				moves[0][6] = "-";
+			if (((PloyBoard) board).boardSquares[i - 3][j + 3].getPiece() != null) {
+				if (((PloyPiece) ((PloyBoard) board).boardSquares[i - 3][j + 3].getPiece()).getOwner() == ((PloyPiece) piece).getOwner()) {
+					moves[0][6] = "-";
+				}
 			}
 		}
 		if (j - 3 >= 0) {
-			if (((PloyBoard) board).boardSquares[i][j - 3].getOwner() == ((PloyBoard) board).boardSquares[i][j].getOwner()) {
-				moves[3][0] = "-";
+			if (((PloyBoard) board).boardSquares[i][j - 3].getPiece() != null) {
+				if (((PloyPiece) ((PloyBoard) board).boardSquares[i][j - 3].getPiece()).getOwner() == ((PloyPiece) piece).getOwner()) {
+					moves[3][0] = "-";
+				}
 			}
 		}
 		if (j + 3 <= 8) {
-			if (((PloyBoard) board).boardSquares[i][j + 3].getOwner() == ((PloyBoard) board).boardSquares[i][j].getOwner()) {
-				moves[3][6] = "-";
+			if (((PloyBoard) board).boardSquares[i][j + 3].getPiece() != null) {
+				if (((PloyPiece) ((PloyBoard) board).boardSquares[i][j + 3].getPiece()).getOwner() == ((PloyPiece) piece).getOwner()) {
+					moves[3][6] = "-";
+				}
 			}
 		}
 		if (i + 3 <= 8 && j - 3 >= 0) {
-			if (((PloyBoard) board).boardSquares[i + 3][j - 3].getOwner() == ((PloyBoard) board).boardSquares[i][j].getOwner()) {
-				moves[6][0] = "-";
+			if (((PloyBoard) board).boardSquares[i + 3][j - 3].getPiece() != null) {
+				if (((PloyPiece) ((PloyBoard) board).boardSquares[i + 3][j - 3].getPiece()).getOwner() == ((PloyPiece) piece).getOwner()) {
+					moves[6][0] = "-";
+				}
 			}
 		}
 		if (i + 3 <= 8) {
-			if (((PloyBoard) board).boardSquares[i + 3][j].getOwner() == ((PloyBoard) board).boardSquares[i][j].getOwner()) {
-				moves[6][3] = "-";
+			if (((PloyBoard) board).boardSquares[i + 3][j].getPiece() != null) {
+				if (((PloyPiece) ((PloyBoard) board).boardSquares[i + 3][j].getPiece()).getOwner() == ((PloyPiece) piece).getOwner()) {
+					moves[6][3] = "-";
+				}
 			}
 		}
 		if (i + 3 <= 8 && j + 3 <= 8) {
-			if (((PloyBoard) board).boardSquares[i + 3][j + 3].getOwner() == ((PloyBoard) board).boardSquares[i][j].getOwner()) {
-				moves[6][6] = "-";
+			if (((PloyBoard) board).boardSquares[i + 3][j + 3].getPiece() != null) {
+				if (((PloyPiece) ((PloyBoard) board).boardSquares[i + 3][j + 3].getPiece()).getOwner() == ((PloyPiece) piece).getOwner()) {
+					moves[6][6] = "-";
+				}
 			}
 		}
 		
@@ -537,124 +497,156 @@ public class PloyModerator extends Moderator {
 		
 		// -2 | +2
 		if (i - 2 >= 0 && j - 2 >= 0) {
-			if (((PloyBoard) board).boardSquares[i - 2][j - 2].getOwner() != ((PloyBoard) board).boardSquares[i][j].getOwner() && ((PloyBoard) board).boardSquares[i - 2][j - 2].getOwner() != 0) {
-				if (moves[1][1] == "O") {
-					moves[0][0] = "-";
+			if (((PloyBoard) board).boardSquares[i - 2][j - 2].getPiece() != null) {
+				if (((PloyPiece) ((PloyBoard) board).boardSquares[i - 2][j - 2].getPiece()).getOwner() != ((PloyPiece) ((PloyBoard) board).boardSquares[i][j].getPiece()).getOwner()) {
+					if (moves[1][1] == "O") {
+						moves[0][0] = "-";
+					}
 				}
 			}
 		}
 		if (i - 2 >= 0) {
-			if (((PloyBoard) board).boardSquares[i - 2][j].getOwner() != ((PloyBoard) board).boardSquares[i][j].getOwner() && ((PloyBoard) board).boardSquares[i - 2][j].getOwner() != 0) {
-				if (moves[1][3] == "O") {
-					moves[0][3] = "-";
+			if (((PloyBoard) board).boardSquares[i - 2][j].getPiece() != null) {
+				if (((PloyPiece) ((PloyBoard) board).boardSquares[i - 2][j].getPiece()).getOwner() != ((PloyPiece) ((PloyBoard) board).boardSquares[i][j].getPiece()).getOwner()) {
+					if (moves[1][3] == "O") {
+						moves[0][3] = "-";
+					}
 				}
 			}
 		}
 		if (i - 2 >= 0 && j + 2 <= 8) {
-			if (((PloyBoard) board).boardSquares[i - 2][j + 2].getOwner() != ((PloyBoard) board).boardSquares[i][j].getOwner() && ((PloyBoard) board).boardSquares[i - 2][j + 2].getOwner() != 0) {
-				if (moves[1][5] == "O") {
-					moves[0][6] = "-";
+			if (((PloyBoard) board).boardSquares[i - 2][j + 2].getPiece() != null) {
+				if (((PloyPiece) ((PloyBoard) board).boardSquares[i - 2][j + 2].getPiece()).getOwner() != ((PloyPiece) ((PloyBoard) board).boardSquares[i][j].getPiece()).getOwner()) {
+					if (moves[1][5] == "O") {
+						moves[0][6] = "-";
+					}
 				}
 			}
 		}
 		if (j - 2 >= 0) {
-			if (((PloyBoard) board).boardSquares[i][j - 2].getOwner() != ((PloyBoard) board).boardSquares[i][j].getOwner() && ((PloyBoard) board).boardSquares[i][j - 2].getOwner() != 0) {
-				if (moves[3][1] == "O") {
-					moves[3][0] = "-";
+			if (((PloyBoard) board).boardSquares[i][j - 2].getPiece() != null) {
+				if (((PloyPiece) ((PloyBoard) board).boardSquares[i][j - 2].getPiece()).getOwner() != ((PloyPiece) ((PloyBoard) board).boardSquares[i][j].getPiece()).getOwner()) {
+					if (moves[3][1] == "O") {
+						moves[3][0] = "-";
+					}
 				}
 			}
 		}
 		if (j + 2 <= 8) {
-			if (((PloyBoard) board).boardSquares[i][j + 2].getOwner() != ((PloyBoard) board).boardSquares[i][j].getOwner() && ((PloyBoard) board).boardSquares[i][j + 2].getOwner() != 0) {
-				if (moves[3][5] == "O") {
-					moves[3][6] = "-";
+			if (((PloyBoard) board).boardSquares[i][j + 2].getPiece() != null) {
+				if (((PloyPiece) ((PloyBoard) board).boardSquares[i][j + 2].getPiece()).getOwner() != ((PloyPiece) ((PloyBoard) board).boardSquares[i][j].getPiece()).getOwner()) {
+					if (moves[3][5] == "O") {
+						moves[3][6] = "-";
+					}
 				}
 			}
 		}
 		if (i + 2 <= 8 && j - 2 >= 0) {
-			if (((PloyBoard) board).boardSquares[i + 2][j - 2].getOwner() != ((PloyBoard) board).boardSquares[i][j].getOwner() && ((PloyBoard) board).boardSquares[i + 2][j - 2].getOwner() != 0) {
-				if (moves[5][1] == "O") {
-					moves[6][0] = "-";
+			if (((PloyBoard) board).boardSquares[i + 2][j - 2].getPiece() != null) {
+				if (((PloyPiece) ((PloyBoard) board).boardSquares[i + 2][j - 2].getPiece()).getOwner() != ((PloyPiece) ((PloyBoard) board).boardSquares[i][j].getPiece()).getOwner()) {
+					if (moves[5][1] == "O") {
+						moves[6][0] = "-";
+					}
 				}
 			}
 		}
 		if (i + 2 <= 8) {
-			if (((PloyBoard) board).boardSquares[i + 2][j].getOwner() != ((PloyBoard) board).boardSquares[i][j].getOwner() && ((PloyBoard) board).boardSquares[i + 2][j].getOwner() != 0) {
-				if (moves[5][3] == "O") {
-					moves[6][3] = "-";
+			if (((PloyBoard) board).boardSquares[i + 2][j].getPiece() != null) {
+				if (((PloyPiece) ((PloyBoard) board).boardSquares[i + 2][j].getPiece()).getOwner() != ((PloyPiece) ((PloyBoard) board).boardSquares[i][j].getPiece()).getOwner()) {
+					if (moves[5][3] == "O") {
+						moves[6][3] = "-";
+					}
 				}
 			}
 		}
 		if (i + 2 <= 8 && j + 2 <= 8) {
-			if (((PloyBoard) board).boardSquares[i + 2][j + 2].getOwner() != ((PloyBoard) board).boardSquares[i][j].getOwner() && ((PloyBoard) board).boardSquares[i + 2][j + 2].getOwner() != 0) {
-				if (moves[5][5] == "O") {
-					moves[6][6] = "-";
+			if (((PloyBoard) board).boardSquares[i + 2][j + 2].getPiece() != null) {
+				if (((PloyPiece) ((PloyBoard) board).boardSquares[i + 2][j + 2].getPiece()).getOwner() != ((PloyPiece) ((PloyBoard) board).boardSquares[i][j].getPiece()).getOwner()) {
+					if (moves[5][5] == "O") {
+						moves[6][6] = "-";
+					}
 				}
 			}
 		}
 		
 		// -1 | +1
 		if (i - 1 >= 0 && j - 1 >= 0) {
-			if (((PloyBoard) board).boardSquares[i - 1][j - 1].getOwner() != ((PloyBoard) board).boardSquares[i][j].getOwner() && ((PloyBoard) board).boardSquares[i - 1][j - 1].getOwner() != 0) {
-				if (moves[2][2] == "O") {
-					moves[1][1] = "-";
-					moves[0][0] = "-";
+			if (((PloyBoard) board).boardSquares[i - 1][j - 1].getPiece() != null) {
+				if (((PloyPiece) ((PloyBoard) board).boardSquares[i - 1][j - 1].getPiece()).getOwner() != ((PloyPiece) ((PloyBoard) board).boardSquares[i][j].getPiece()).getOwner()) {
+					if (moves[2][2] == "O") {
+						moves[1][1] = "-";
+						moves[0][0] = "-";
+					}
 				}
 			}
 		}
 		if (i - 1 >= 0) {
-			if (((PloyBoard) board).boardSquares[i - 1][j].getOwner() != ((PloyBoard) board).boardSquares[i][j].getOwner() && ((PloyBoard) board).boardSquares[i - 1][j].getOwner() != 0) {
-				if (moves[2][3] == "O") {
-					moves[1][3] = "-";
-					moves[0][3] = "-";
+			if (((PloyBoard) board).boardSquares[i - 1][j].getPiece() != null) {
+				if (((PloyPiece) ((PloyBoard) board).boardSquares[i - 1][j].getPiece()).getOwner() != ((PloyPiece) ((PloyBoard) board).boardSquares[i][j].getPiece()).getOwner()) {
+					if (moves[2][3] == "O") {
+						moves[1][3] = "-";
+						moves[0][3] = "-";
+					}
 				}
 			}
 		}
 		if (i - 1 >= 0 && j + 1 <= 8) {
-			if (((PloyBoard) board).boardSquares[i - 1][j + 1].getOwner() != ((PloyBoard) board).boardSquares[i][j].getOwner() && ((PloyBoard) board).boardSquares[i - 1][j + 1].getOwner() != 0) {
-				if (moves[2][4] == "O") {
-					moves[1][5] = "-";
-					moves[0][6] = "-";
+			if (((PloyBoard) board).boardSquares[i - 1][j + 1].getPiece() != null) {
+				if (((PloyPiece) ((PloyBoard) board).boardSquares[i - 1][j + 1].getPiece()).getOwner() != ((PloyPiece) ((PloyBoard) board).boardSquares[i][j].getPiece()).getOwner()) {
+					if (moves[2][4] == "O") {
+						moves[1][5] = "-";
+						moves[0][6] = "-";
+					}
 				}
 			}
 		}
 		if (j - 1 >= 0) {
-			if (((PloyBoard) board).boardSquares[i][j - 1].getOwner() != ((PloyBoard) board).boardSquares[i][j].getOwner() && ((PloyBoard) board).boardSquares[i][j - 1].getOwner() != 0) {
-				if (moves[3][2] == "O") {
-					moves[3][1] = "-";
-					moves[3][0] = "-";
+			if (((PloyBoard) board).boardSquares[i][j - 1].getPiece() != null) {
+				if (((PloyPiece) ((PloyBoard) board).boardSquares[i][j - 1].getPiece()).getOwner() != ((PloyPiece) ((PloyBoard) board).boardSquares[i][j].getPiece()).getOwner()) {
+					if (moves[3][2] == "O") {
+						moves[3][1] = "-";
+						moves[3][0] = "-";
+					}
 				}
 			}
 		}
 		if (j + 1 <= 8) {
-			if (((PloyBoard) board).boardSquares[i][j + 1].getOwner() != ((PloyBoard) board).boardSquares[i][j].getOwner() && ((PloyBoard) board).boardSquares[i][j + 1].getOwner() != 0) {
-				if (moves[3][4] == "O") {
-					moves[3][5] = "-";
-					moves[3][6] = "-";
+			if (((PloyBoard) board).boardSquares[i][j + 1].getPiece() != null) {
+				if (((PloyPiece) ((PloyBoard) board).boardSquares[i][j + 1].getPiece()).getOwner() != ((PloyPiece) ((PloyBoard) board).boardSquares[i][j].getPiece()).getOwner()) {
+					if (moves[3][4] == "O") {
+						moves[3][5] = "-";
+						moves[3][6] = "-";
+					}
 				}
 			}
 		}
 		if (i + 1 <= 8 && j - 1 >= 0) {
-			if (((PloyBoard) board).boardSquares[i + 1][j - 1].getOwner() != ((PloyBoard) board).boardSquares[i][j].getOwner() && ((PloyBoard) board).boardSquares[i + 1][j - 1].getOwner() != 0) {
-				if (moves[4][2] == "O") {
-					moves[5][1] = "-";
-					moves[6][0] = "-";
+			if (((PloyBoard) board).boardSquares[i + 1][j - 1].getPiece() != null) {
+				if (((PloyPiece) ((PloyBoard) board).boardSquares[i + 1][j - 1].getPiece()).getOwner() != ((PloyPiece) ((PloyBoard) board).boardSquares[i][j].getPiece()).getOwner()) {
+					if (moves[4][2] == "O") {
+						moves[5][1] = "-";
+						moves[6][0] = "-";
+					}
 				}
 			}
 		}
 		if (i + 1 <= 8) {
-			if (((PloyBoard) board).boardSquares[i + 1][j].getOwner() != ((PloyBoard) board).boardSquares[i][j].getOwner() && ((PloyBoard) board).boardSquares[i + 1][j].getOwner() != 0) {
-				if (moves[4][3] == "O") {
-					moves[5][3] = "-";
-					moves[6][3] = "-";
+			if (((PloyBoard) board).boardSquares[i + 1][j].getPiece() != null) {
+				if (((PloyPiece) ((PloyBoard) board).boardSquares[i + 1][j].getPiece()).getOwner() != ((PloyPiece) ((PloyBoard) board).boardSquares[i][j].getPiece()).getOwner()) {
+					if (moves[4][3] == "O") {
+						moves[5][3] = "-";
+						moves[6][3] = "-";
+					}
 				}
 			}
 		}
 		if (i + 1 <= 8 && j + 1 <= 8) {
-			if (((PloyBoard) board).boardSquares[i + 1][j + 1].getOwner() != ((PloyBoard) board).boardSquares[i][j].getOwner() && ((PloyBoard) board).boardSquares[i + 1][j + 1].getOwner() != 0) {
-				if (moves[4][4] == "O") {
-					moves[5][5] = "-";
-					moves[6][6] = "-";
+			if (((PloyBoard) board).boardSquares[i + 1][j + 1].getPiece() != null) {
+				if (((PloyPiece) ((PloyBoard) board).boardSquares[i + 1][j + 1].getPiece()).getOwner() != ((PloyPiece) ((PloyBoard) board).boardSquares[i][j].getPiece()).getOwner()) {
+					if (moves[4][4] == "O") {
+						moves[5][5] = "-";
+						moves[6][6] = "-";
+					}
 				}
 			}
 		}
@@ -716,7 +708,7 @@ public class PloyModerator extends Moderator {
      */
     protected String[][] rotateMoves(String[][] moves, int i, int j, Object board) {
     	String[][] rotatedMoves = new String[7][7];
-		int direction = ((PloyBoard) board).boardSquares[i][j].getDirection();
+		int direction = ((PloyPiece) ((PloyBoard) board).boardSquares[i][j].getPiece()).getDirection();
 		while (direction > 0) {
 			for (int x = 0; x < 7; x++) {
 				for (int y = 0; y < 7; y++) {

@@ -77,4 +77,13 @@ abstract class Board {
 	public int getActivePlayers() {
 		return activePlayers;
 	}
+	
+	/**
+	 * Set the player whose turn it is
+	 *
+	 * @param currentPlayer the current player
+	 */
+	public void loadCurrentPlayer(int currentPlayer) {
+		setCurrentPlayer(currentPlayer);
+	}
 }

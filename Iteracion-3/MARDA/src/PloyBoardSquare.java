@@ -4,7 +4,7 @@
  * the information about the piece placed on it.
  */
 public class PloyBoardSquare extends BoardSquare {
-	int direction;
+	PloyPiece piece;
 	
 	/**
 	 * Instantiates a new ploy board square.
@@ -14,18 +14,17 @@ public class PloyBoardSquare extends BoardSquare {
 	 * @param owner the owner of the piece
 	 * @param color the color of the piece
 	 */
-	public PloyBoardSquare(int type, int direction, int owner, String color) {
-        this.type = type;
-        this.direction = direction;
-        this.owner = owner;
-        this.color = color;
+	public PloyBoardSquare(PloyPiece piece) {
+        this.piece = piece;
     }
 	
-    public void setDirection(int direction) {
-    	this.direction = direction;
+	@Override
+    public void setPiece(Object piece) {
+    	this.piece = (PloyPiece) piece;
     }
 
-    public int getDirection() {
-        return direction;
+	@Override
+    public Object getPiece() {
+        return (PloyPiece) piece;
     }
 }

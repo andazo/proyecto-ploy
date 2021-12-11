@@ -568,10 +568,10 @@ public class PloyGUI extends GUI {
 	public void loadBoard(PloyPlayer[] players, int gameMode, String[][][] board) {
 		for (int i = 0; i < 9; i++) {
 			for (int j = 0; j < 9; j++) {
-				if (Integer.parseInt(board[i][j][0]) != -1) {
-					PloyRotateIcon ri = new PloyRotateIcon(getIconArray(board[i][j][3])[Integer.parseInt(board[i][j][0])], Integer.parseInt(board[i][j][1]), true);
+				if (!(board[i][j][0].equals("null"))) {
+					PloyRotateIcon ri = new PloyRotateIcon(getIconArray(board[i][j][2])[Integer.parseInt(board[i][j][0])], Integer.parseInt(board[i][j][3]), true);
 					squaresPanels[i][j].setIcon(ri);
-					squaresPanels[i][j].setName(board[i][j][3]);
+					squaresPanels[i][j].setName(board[i][j][2]);
 				}
 			}
 		}

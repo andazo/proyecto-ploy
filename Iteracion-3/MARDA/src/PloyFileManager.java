@@ -28,10 +28,17 @@ public class PloyFileManager extends FileManager {
 			fileContent = fileContent + "\n" + "board";
 			for (int i = 0; i < 9; i++) {
 				for (int j = 0; j < 9; j++) {
-					fileContent = fileContent + "\n" + ((PloyBoard) board).boardSquares[i][j].getType()
-							+ " " + ((PloyBoard) board).boardSquares[i][j].getDirection()
-							+ " " + ((PloyBoard) board).boardSquares[i][j].getOwner()
-							+ " " + ((PloyBoard) board).boardSquares[i][j].getColor();
+					if (((PloyBoard) board).boardSquares[i][j].getPiece() != null) {
+						fileContent = fileContent + "\n" + ((PloyPiece) ((PloyBoard) board).boardSquares[i][j].getPiece()).getType()
+								+ " " + ((PloyPiece) ((PloyBoard) board).boardSquares[i][j].getPiece()).getOwner()
+								+ " " + ((PloyPiece) ((PloyBoard) board).boardSquares[i][j].getPiece()).getColor()
+								+ " " + ((PloyPiece) ((PloyBoard) board).boardSquares[i][j].getPiece()).getDirection();
+					} else {
+						fileContent = fileContent + "\n" + "null"
+								+ " " + "null"
+								+ " " + "null"
+								+ " " + "null";
+					}
 				}
 			}
 			fileContent = fileContent + "\n" + "p1HitPiecesIndex " + ((PloyBoard) board).getP1HitPiecesIndex();

@@ -32,7 +32,7 @@ public class PloyBoard extends Board {
 		boardSquares = new PloyBoardSquare[9][9];
 		for (int i = 0; i < 9; i++) {
 			for (int j = 0; j < 9; j++) {
-				boardSquares[i][j] = new PloyBoardSquare(-1, 0, 0, "-");
+				boardSquares[i][j] = new PloyBoardSquare(null);
 			}
 		}
 		pieceActive = false;
@@ -96,8 +96,10 @@ public class PloyBoard extends Board {
 	public void updateOwner(int currentOwner, int newOwner) {
 		for (int i = 0; i < 9; i++) {
 			for (int j = 0; j < 9; j++) {
-				if(boardSquares[i][j].getOwner() == currentOwner) {
-					boardSquares[i][j].setOwner(newOwner);
+				if (boardSquares[i][j].getPiece() != null) {
+					if(((PloyPiece) boardSquares[i][j].getPiece()).getOwner() == currentOwner) {
+						((PloyPiece) boardSquares[i][j].getPiece()).setOwner(newOwner);
+					}
 				}
 			}
 		}
@@ -111,8 +113,8 @@ public class PloyBoard extends Board {
 	 * @param direction the new direction the piece will face
 	 */
 	public void rotatePiece(int x, int y, int direction) {
-		int newDirection = boardSquares[x][y].getDirection() + direction;
-		int type = boardSquares[x][y].getType();
+		int newDirection = ((PloyPiece) boardSquares[x][y].getPiece()).getDirection() + direction;
+		int type = ((PloyPiece) boardSquares[x][y].getPiece()).getType();
 		if (type == 0) {
 			if (newDirection < 0) {
 				newDirection = newDirection + 90;
@@ -132,7 +134,7 @@ public class PloyBoard extends Board {
 				newDirection = newDirection - 360;
 			}
 		}
-		boardSquares[x][y].setDirection(newDirection);
+		((PloyPiece) boardSquares[x][y].getPiece()).setDirection(newDirection);
 	}
 
 	/**
@@ -187,62 +189,59 @@ public class PloyBoard extends Board {
 	 * @param playerNum the player whose chips are being placed
 	 */
 	private void populateBoard1v1(String color, int playerNum) {
+		PieceFactory pf = new PieceFactory();
 		int orderArrayIndex = 0;
 
 		if (playerNum == 1) {
 			for (int i = 1; i < 8; i++) {
-				boardSquares[8][i].setType(pieceOrder1v1P1[orderArrayIndex]);
-				boardSquares[8][i].setOwner(1);
-				boardSquares[8][i].setColor(color);
-
-				if (boardSquares[8][i].getType() == 0) {
-					boardSquares[8][i].setDirection(0);					
+				boardSquares[8][i].setPiece(pf.makePiece(pieceOrder1v1P1[orderArrayIndex]));
+				((PloyPiece) boardSquares[8][i].getPiece()).setOwner(1);
+				((PloyPiece) boardSquares[8][i].getPiece()).setColor(color);
+				if (((PloyPiece) boardSquares[8][i].getPiece()).getType() == 0) {
+					((PloyPiece) boardSquares[8][i].getPiece()).setDirection(0);					
 				} else {
-					boardSquares[8][i].setDirection(180);
+					((PloyPiece) boardSquares[8][i].getPiece()).setDirection(180);
 				}
-
 				orderArrayIndex++;
 			}
 			for (int i = 2; i < 7; i++) {
-				boardSquares[7][i].setType(pieceOrder1v1P1[orderArrayIndex]);
-				boardSquares[7][i].setOwner(1);
-				boardSquares[7][i].setColor(color);
-
-				if (boardSquares[7][i].getType() == 6) {
-					boardSquares[7][i].setDirection(0);					
+				boardSquares[7][i].setPiece(pf.makePiece(pieceOrder1v1P1[orderArrayIndex]));
+				((PloyPiece) boardSquares[7][i].getPiece()).setOwner(1);
+				((PloyPiece) boardSquares[7][i].getPiece()).setColor(color);
+				if (((PloyPiece) boardSquares[7][i].getPiece()).getType() == 0) {
+					((PloyPiece) boardSquares[7][i].getPiece()).setDirection(0);					
 				} else {
-					boardSquares[7][i].setDirection(180);
+					((PloyPiece) boardSquares[7][i].getPiece()).setDirection(180);
 				}
-
 				orderArrayIndex++;
 			}
 			for (int i = 3; i < 6; i++) {
-				boardSquares[6][i].setType(8);
-				boardSquares[6][i].setDirection(180);
-				boardSquares[6][i].setOwner(1);
-				boardSquares[6][i].setColor(color);
+				boardSquares[6][i].setPiece(pf.makePiece(8));
+				((PloyPiece) boardSquares[6][i].getPiece()).setOwner(1);
+				((PloyPiece) boardSquares[6][i].getPiece()).setColor(color);
+				((PloyPiece) boardSquares[6][i].getPiece()).setDirection(180);
 			}
 			p1HitPieces = new String[15][2];
 		} else {
 			for (int i = 1; i < 8; i++) {
-				boardSquares[0][i].setType(pieceOrder1v1P2[orderArrayIndex]);
-				boardSquares[0][i].setDirection(0);
-				boardSquares[0][i].setOwner(2);
-				boardSquares[0][i].setColor(color);
+				boardSquares[0][i].setPiece(pf.makePiece(pieceOrder1v1P2[orderArrayIndex]));
+				((PloyPiece) boardSquares[0][i].getPiece()).setOwner(2);
+				((PloyPiece) boardSquares[0][i].getPiece()).setColor(color);
+				((PloyPiece) boardSquares[0][i].getPiece()).setDirection(0);
 				orderArrayIndex++;
 			}
 			for (int i = 2; i < 7; i++) {
-				boardSquares[1][i].setType(pieceOrder1v1P2[orderArrayIndex]);
-				boardSquares[1][i].setDirection(0);
-				boardSquares[1][i].setOwner(2);
-				boardSquares[1][i].setColor(color);
+				boardSquares[1][i].setPiece(pf.makePiece(pieceOrder1v1P2[orderArrayIndex]));
+				((PloyPiece) boardSquares[1][i].getPiece()).setOwner(2);
+				((PloyPiece) boardSquares[1][i].getPiece()).setColor(color);
+				((PloyPiece) boardSquares[1][i].getPiece()).setDirection(0);
 				orderArrayIndex++;
 			}
 			for (int i = 3; i < 6; i++) {
-				boardSquares[2][i].setType(8);
-				boardSquares[2][i].setDirection(0);
-				boardSquares[2][i].setOwner(2);
-				boardSquares[2][i].setColor(color);
+				boardSquares[2][i].setPiece(pf.makePiece(8));
+				((PloyPiece) boardSquares[2][i].getPiece()).setOwner(2);
+				((PloyPiece) boardSquares[2][i].getPiece()).setColor(color);
+				((PloyPiece) boardSquares[2][i].getPiece()).setDirection(0);
 			}
 			p2HitPieces = new String[15][2];
 		}
@@ -255,7 +254,9 @@ public class PloyBoard extends Board {
 	 * @param playerNum the player whose chips are being placed
 	 */
 	private void populateBoard1v1v1v1(String color, int playerNum) {
+		PieceFactory pf = new PieceFactory();
 		int orderArrayIndex = 0;
+		
 		if (playerNum == 1) {
 			for (int i = 0; i < 3; i++) {
 				int direction = 0;
@@ -266,17 +267,17 @@ public class PloyBoard extends Board {
 				} else {
 					direction = 225;
 				}
-				boardSquares[8][i].setType(pieceOrder1v1v1v1[orderArrayIndex]);
-				boardSquares[8][i].setDirection(direction);
-				boardSquares[8][i].setOwner(1);
-				boardSquares[8][i].setColor(color);
+				boardSquares[8][i].setPiece(pf.makePiece(pieceOrder1v1v1v1[orderArrayIndex]));
+				((PloyPiece) boardSquares[8][i].getPiece()).setOwner(1);
+				((PloyPiece) boardSquares[8][i].getPiece()).setColor(color);
+				((PloyPiece) boardSquares[8][i].getPiece()).setDirection(direction);
 				orderArrayIndex++;
 			}
 			for (int i = 0; i < 3; i++) {
-				boardSquares[7][i].setType(pieceOrder1v1v1v1[orderArrayIndex]);
-				boardSquares[7][i].setDirection(225);
-				boardSquares[7][i].setOwner(1);
-				boardSquares[7][i].setColor(color);
+				boardSquares[7][i].setPiece(pf.makePiece(pieceOrder1v1v1v1[orderArrayIndex]));
+				((PloyPiece) boardSquares[7][i].getPiece()).setOwner(1);
+				((PloyPiece) boardSquares[7][i].getPiece()).setColor(color);
+				((PloyPiece) boardSquares[7][i].getPiece()).setDirection(225);
 				orderArrayIndex++;
 			}
 			for (int i = 0; i < 3; i++) {
@@ -286,13 +287,14 @@ public class PloyBoard extends Board {
 				} else {
 					direction = 225;
 				}
-				boardSquares[6][i].setType(pieceOrder1v1v1v1[orderArrayIndex]);
-				boardSquares[6][i].setDirection(direction);
-				boardSquares[6][i].setOwner(1);
-				boardSquares[6][i].setColor(color);
+				boardSquares[6][i].setPiece(pf.makePiece(pieceOrder1v1v1v1[orderArrayIndex]));
+				((PloyPiece) boardSquares[6][i].getPiece()).setOwner(1);
+				((PloyPiece) boardSquares[6][i].getPiece()).setColor(color);
+				((PloyPiece) boardSquares[6][i].getPiece()).setDirection(direction);
 				orderArrayIndex++;
 			}
 			p1HitPieces = new String[9][2];
+			
 		} else if (playerNum == 2) {
 			for (int i = 0; i < 3; i++) {
 				int direction = 0;
@@ -303,17 +305,17 @@ public class PloyBoard extends Board {
 				} else {
 					direction = 315;
 				}
-				boardSquares[i][0].setType(pieceOrder1v1v1v1[orderArrayIndex]);
-				boardSquares[i][0].setDirection(direction);
-				boardSquares[i][0].setOwner(2);
-				boardSquares[i][0].setColor(color);
+				boardSquares[i][0].setPiece(pf.makePiece(pieceOrder1v1v1v1[orderArrayIndex]));
+				((PloyPiece) boardSquares[i][0].getPiece()).setOwner(2);
+				((PloyPiece) boardSquares[i][0].getPiece()).setColor(color);
+				((PloyPiece) boardSquares[i][0].getPiece()).setDirection(direction);
 				orderArrayIndex++;
 			}
 			for (int i = 0; i < 3; i++) {
-				boardSquares[i][1].setType(pieceOrder1v1v1v1[orderArrayIndex]);
-				boardSquares[i][1].setDirection(315);
-				boardSquares[i][1].setOwner(2);
-				boardSquares[i][1].setColor(color);
+				boardSquares[i][1].setPiece(pf.makePiece(pieceOrder1v1v1v1[orderArrayIndex]));
+				((PloyPiece) boardSquares[i][1].getPiece()).setOwner(2);
+				((PloyPiece) boardSquares[i][1].getPiece()).setColor(color);
+				((PloyPiece) boardSquares[i][1].getPiece()).setDirection(315);
 				orderArrayIndex++;
 			}
 			for (int i = 0; i < 3; i++) {
@@ -323,13 +325,14 @@ public class PloyBoard extends Board {
 				} else {
 					direction = 315;
 				}
-				boardSquares[i][2].setType(pieceOrder1v1v1v1[orderArrayIndex]);
-				boardSquares[i][2].setDirection(direction);
-				boardSquares[i][2].setOwner(2);
-				boardSquares[i][2].setColor(color);
+				boardSquares[i][2].setPiece(pf.makePiece(pieceOrder1v1v1v1[orderArrayIndex]));
+				((PloyPiece) boardSquares[i][2].getPiece()).setOwner(2);
+				((PloyPiece) boardSquares[i][2].getPiece()).setColor(color);
+				((PloyPiece) boardSquares[i][2].getPiece()).setDirection(direction);
 				orderArrayIndex++;
 			}
 			p2HitPieces = new String[9][2];
+			
 		} else if (playerNum == 3) {
 			for (int i = 8; i > 5; i--) {
 				int direction = 0;
@@ -340,17 +343,17 @@ public class PloyBoard extends Board {
 				} else {
 					direction = 45;
 				}
-				boardSquares[0][i].setType(pieceOrder1v1v1v1[orderArrayIndex]);
-				boardSquares[0][i].setDirection(direction);
-				boardSquares[0][i].setOwner(3);
-				boardSquares[0][i].setColor(color);
+				boardSquares[0][i].setPiece(pf.makePiece(pieceOrder1v1v1v1[orderArrayIndex]));
+				((PloyPiece) boardSquares[0][i].getPiece()).setOwner(3);
+				((PloyPiece) boardSquares[0][i].getPiece()).setColor(color);
+				((PloyPiece) boardSquares[0][i].getPiece()).setDirection(direction);
 				orderArrayIndex++;
 			}
 			for (int i = 8; i > 5; i--) {
-				boardSquares[1][i].setType(pieceOrder1v1v1v1[orderArrayIndex]);
-				boardSquares[1][i].setDirection(45);
-				boardSquares[1][i].setOwner(3);
-				boardSquares[1][i].setColor(color);
+				boardSquares[1][i].setPiece(pf.makePiece(pieceOrder1v1v1v1[orderArrayIndex]));
+				((PloyPiece) boardSquares[1][i].getPiece()).setOwner(3);
+				((PloyPiece) boardSquares[1][i].getPiece()).setColor(color);
+				((PloyPiece) boardSquares[1][i].getPiece()).setDirection(45);
 				orderArrayIndex++;
 			}
 			for (int i = 8; i > 5; i--) {
@@ -360,13 +363,14 @@ public class PloyBoard extends Board {
 				} else {
 					direction = 45;
 				}
-				boardSquares[2][i].setType(pieceOrder1v1v1v1[orderArrayIndex]);
-				boardSquares[2][i].setDirection(direction);
-				boardSquares[2][i].setOwner(3);
-				boardSquares[2][i].setColor(color);
+				boardSquares[2][i].setPiece(pf.makePiece(pieceOrder1v1v1v1[orderArrayIndex]));
+				((PloyPiece) boardSquares[2][i].getPiece()).setOwner(3);
+				((PloyPiece) boardSquares[2][i].getPiece()).setColor(color);
+				((PloyPiece) boardSquares[2][i].getPiece()).setDirection(direction);
 				orderArrayIndex++;
 			}
 			p3HitPieces = new String[9][2];
+			
 		} else {
 			for (int i = 8; i > 5; i--) {
 				int direction = 0;				
@@ -377,17 +381,17 @@ public class PloyBoard extends Board {
 				} else {
 					direction = 135;
 				}
-				boardSquares[i][8].setType(pieceOrder1v1v1v1[orderArrayIndex]);
-				boardSquares[i][8].setDirection(direction);
-				boardSquares[i][8].setOwner(4);
-				boardSquares[i][8].setColor(color);
+				boardSquares[i][8].setPiece(pf.makePiece(pieceOrder1v1v1v1[orderArrayIndex]));
+				((PloyPiece) boardSquares[i][8].getPiece()).setOwner(4);
+				((PloyPiece) boardSquares[i][8].getPiece()).setColor(color);
+				((PloyPiece) boardSquares[i][8].getPiece()).setDirection(direction);
 				orderArrayIndex++;
 			}
 			for (int i = 8; i > 5; i--) {
-				boardSquares[i][7].setType(pieceOrder1v1v1v1[orderArrayIndex]);
-				boardSquares[i][7].setDirection(135);
-				boardSquares[i][7].setOwner(4);
-				boardSquares[i][7].setColor(color);
+				boardSquares[i][7].setPiece(pf.makePiece(pieceOrder1v1v1v1[orderArrayIndex]));
+				((PloyPiece) boardSquares[i][7].getPiece()).setOwner(4);
+				((PloyPiece) boardSquares[i][7].getPiece()).setColor(color);
+				((PloyPiece) boardSquares[i][7].getPiece()).setDirection(135);
 				orderArrayIndex++;
 			}
 			for (int i = 8; i > 5; i--) {
@@ -397,10 +401,10 @@ public class PloyBoard extends Board {
 				} else {
 					direction = 135;
 				}
-				boardSquares[i][6].setType(pieceOrder1v1v1v1[orderArrayIndex]);
-				boardSquares[i][6].setDirection(direction);
-				boardSquares[i][6].setOwner(4);
-				boardSquares[i][6].setColor(color);
+				boardSquares[i][6].setPiece(pf.makePiece(pieceOrder1v1v1v1[orderArrayIndex]));
+				((PloyPiece) boardSquares[i][6].getPiece()).setOwner(4);
+				((PloyPiece) boardSquares[i][6].getPiece()).setColor(color);
+				((PloyPiece) boardSquares[i][6].getPiece()).setDirection(direction);
 				orderArrayIndex++;
 			}
 			p4HitPieces = new String[9][2];
@@ -414,105 +418,106 @@ public class PloyBoard extends Board {
 	 * @param playerNum the player whose chips are being placed
 	 */
 	private void populateBoard2v2(String color, int playerNum) {
+		PieceFactory pf = new PieceFactory();
 		int orderArrayIndex = 0;
+		
 		if (playerNum == 1) {
 			for(int i = 1; i < 4; i++) {
-				boardSquares[8][i].setType(pieceOrder2v2[orderArrayIndex]);
-				boardSquares[8][i].setOwner(1);
-				boardSquares[8][i].setColor(color);
-
-				if (boardSquares[8][i].getType() == 0) {
-					boardSquares[8][i].setDirection(0);					
+				boardSquares[8][i].setPiece(pf.makePiece(pieceOrder2v2[orderArrayIndex]));
+				((PloyPiece) boardSquares[8][i].getPiece()).setOwner(1);
+				((PloyPiece) boardSquares[8][i].getPiece()).setColor(color);
+				if (((PloyPiece) boardSquares[8][i].getPiece()).getType() == 0) {
+					((PloyPiece) boardSquares[8][i].getPiece()).setDirection(0);					
 				} else {
-					boardSquares[8][i].setDirection(180);
+					((PloyPiece) boardSquares[8][i].getPiece()).setDirection(180);
 				}
-
 				orderArrayIndex++;
 			}
 			for(int i = 1; i < 4; i++) {
-				boardSquares[7][i].setType(pieceOrder2v2[orderArrayIndex]);
-				boardSquares[7][i].setDirection(180);
-				boardSquares[7][i].setOwner(1);
-				boardSquares[7][i].setColor(color);
+				boardSquares[7][i].setPiece(pf.makePiece(pieceOrder2v2[orderArrayIndex]));
+				((PloyPiece) boardSquares[7][i].getPiece()).setOwner(1);
+				((PloyPiece) boardSquares[7][i].getPiece()).setColor(color);
+				((PloyPiece) boardSquares[7][i].getPiece()).setDirection(180);
 				orderArrayIndex++;
 			}
 			for(int i = 1; i < 4; i++) {
-				boardSquares[6][i].setType(8);
-				boardSquares[6][i].setDirection(180);
-				boardSquares[6][i].setOwner(1);
-				boardSquares[6][i].setColor(color);
+				boardSquares[6][i].setPiece(pf.makePiece(8));
+				((PloyPiece) boardSquares[6][i].getPiece()).setOwner(1);
+				((PloyPiece) boardSquares[6][i].getPiece()).setColor(color);
+				((PloyPiece) boardSquares[6][i].getPiece()).setDirection(180);
 			}
 			p1HitPieces = new String[9][2];
+			
 		} else if (playerNum == 2) {
 			for(int i = 1; i < 4; i++) {
-				boardSquares[0][i].setType(pieceOrder2v2[orderArrayIndex]);
-				boardSquares[0][i].setDirection(0);
-				boardSquares[0][i].setOwner(2);
-				boardSquares[0][i].setColor(color);
+				boardSquares[0][i].setPiece(pf.makePiece(pieceOrder2v2[orderArrayIndex]));
+				((PloyPiece) boardSquares[0][i].getPiece()).setOwner(2);
+				((PloyPiece) boardSquares[0][i].getPiece()).setColor(color);
+				((PloyPiece) boardSquares[0][i].getPiece()).setDirection(0);
 				orderArrayIndex++;
 			}
 			for(int i = 3; i > 0; i--) {
-				boardSquares[1][i].setType(pieceOrder2v2[orderArrayIndex]);
-				boardSquares[1][i].setDirection(0);
-				boardSquares[1][i].setOwner(2);
-				boardSquares[1][i].setColor(color);
+				boardSquares[1][i].setPiece(pf.makePiece(pieceOrder2v2[orderArrayIndex]));
+				((PloyPiece) boardSquares[1][i].getPiece()).setOwner(2);
+				((PloyPiece) boardSquares[1][i].getPiece()).setColor(color);
+				((PloyPiece) boardSquares[1][i].getPiece()).setDirection(0);
 				orderArrayIndex++;
 			}
 			for(int i = 1; i < 4; i++) {
-				boardSquares[2][i].setType(8);
-				boardSquares[2][i].setDirection(0);
-				boardSquares[2][i].setOwner(2);
-				boardSquares[2][i].setColor(color);
+				boardSquares[2][i].setPiece(pf.makePiece(8));
+				((PloyPiece) boardSquares[2][i].getPiece()).setOwner(2);
+				((PloyPiece) boardSquares[2][i].getPiece()).setColor(color);
+				((PloyPiece) boardSquares[2][i].getPiece()).setDirection(0);
 			}
 			p2HitPieces = new String[9][2];
+			
 		} else if (playerNum == 3) {
-			for(int i = 7; i > 4; i--) {
-				boardSquares[8][i].setType(pieceOrder2v2[orderArrayIndex]);
-				boardSquares[8][i].setOwner(3);
-				boardSquares[8][i].setColor(color);
-
-				if (boardSquares[8][i].getType() == 0) {
-					boardSquares[8][i].setDirection(0);					
+			for (int i = 7; i > 4; i--) {
+				boardSquares[8][i].setPiece(pf.makePiece(pieceOrder2v2[orderArrayIndex]));
+				((PloyPiece) boardSquares[8][i].getPiece()).setOwner(3);
+				((PloyPiece) boardSquares[8][i].getPiece()).setColor(color);
+				if (((PloyPiece) boardSquares[8][i].getPiece()).getType() == 0) {
+					((PloyPiece) boardSquares[8][i].getPiece()).setDirection(0);					
 				} else {
-					boardSquares[8][i].setDirection(180);
+					((PloyPiece) boardSquares[8][i].getPiece()).setDirection(180);
 				}
-
 				orderArrayIndex++;
 			}
-			for(int i = 5; i < 8; i++) {
-				boardSquares[7][i].setType(pieceOrder2v2[orderArrayIndex]);
-				boardSquares[7][i].setDirection(180);
-				boardSquares[7][i].setOwner(3);
-				boardSquares[7][i].setColor(color);
+			for (int i = 5; i < 8; i++) {
+				boardSquares[7][i].setPiece(pf.makePiece(pieceOrder2v2[orderArrayIndex]));
+				((PloyPiece) boardSquares[7][i].getPiece()).setOwner(3);
+				((PloyPiece) boardSquares[7][i].getPiece()).setColor(color);
+				((PloyPiece) boardSquares[7][i].getPiece()).setDirection(180);
 				orderArrayIndex++;
 			}
-			for(int i = 5; i < 8; i++) {
-				boardSquares[6][i].setType(8);
-				boardSquares[6][i].setDirection(180);
-				boardSquares[6][i].setOwner(3);
-				boardSquares[6][i].setColor(color);
+			for (int i = 5; i < 8; i++) {
+				boardSquares[6][i].setPiece(pf.makePiece(8));
+				((PloyPiece) boardSquares[6][i].getPiece()).setOwner(3);
+				((PloyPiece) boardSquares[6][i].getPiece()).setColor(color);
+				((PloyPiece) boardSquares[6][i].getPiece()).setDirection(180);
 			}
 			p3HitPieces = new String[9][2];
+			
 		} else {
 			for(int i = 7; i > 4; i--) {
-				boardSquares[0][i].setType(pieceOrder2v2[orderArrayIndex]);
-				boardSquares[0][i].setDirection(0);
-				boardSquares[0][i].setOwner(4);
-				boardSquares[0][i].setColor(color);
+				boardSquares[0][i].setPiece(pf.makePiece(pieceOrder2v2[orderArrayIndex]));
+				((PloyPiece) boardSquares[0][i].getPiece()).setOwner(4);
+				((PloyPiece) boardSquares[0][i].getPiece()).setColor(color);
+				((PloyPiece) boardSquares[0][i].getPiece()).setDirection(0);
 				orderArrayIndex++;
 			}
 			for(int i = 7; i > 4; i--) {
-				boardSquares[1][i].setType(pieceOrder2v2[orderArrayIndex]);
-				boardSquares[1][i].setDirection(0);
-				boardSquares[1][i].setOwner(4);
-				boardSquares[1][i].setColor(color);
+				boardSquares[1][i].setPiece(pf.makePiece(pieceOrder2v2[orderArrayIndex]));
+				((PloyPiece) boardSquares[1][i].getPiece()).setOwner(4);
+				((PloyPiece) boardSquares[1][i].getPiece()).setColor(color);
+				((PloyPiece) boardSquares[1][i].getPiece()).setDirection(0);
 				orderArrayIndex++;
 			}
 			for(int i = 5; i < 8; i++) {
-				boardSquares[2][i].setType(8);
-				boardSquares[2][i].setDirection(0);
-				boardSquares[2][i].setOwner(4);
-				boardSquares[2][i].setColor(color);
+				boardSquares[2][i].setPiece(pf.makePiece(8));
+				((PloyPiece) boardSquares[2][i].getPiece()).setOwner(4);
+				((PloyPiece) boardSquares[2][i].getPiece()).setColor(color);
+				((PloyPiece) boardSquares[2][i].getPiece()).setDirection(0);
 			}
 			p4HitPieces = new String[9][2];
 		}
@@ -526,12 +531,17 @@ public class PloyBoard extends Board {
 	 * @param board the board data
 	 */
 	public void loadBoard(PloyPlayer[] players, int gameMode, String[][][] board) {
+		PieceFactory pf = new PieceFactory();
 		for (int i = 0; i < 9; i++) {
 			for (int j = 0; j < 9; j++) {
-				boardSquares[i][j].setType(Integer.parseInt(board[i][j][0]));
-				boardSquares[i][j].setDirection(Integer.parseInt(board[i][j][1]));
-				boardSquares[i][j].setOwner(Integer.parseInt(board[i][j][2]));
-				boardSquares[i][j].setColor(board[i][j][3]);
+				if (!(board[i][j][0].equals("null"))) {
+					boardSquares[i][j].setPiece(pf.makePiece(Integer.parseInt(board[i][j][0])));
+					((PloyPiece) boardSquares[i][j].getPiece()).setOwner(Integer.parseInt(board[i][j][1]));
+					((PloyPiece) boardSquares[i][j].getPiece()).setColor(board[i][j][2]);
+					((PloyPiece) boardSquares[i][j].getPiece()).setDirection(Integer.parseInt(board[i][j][3]));
+				} else {
+					boardSquares[i][j].setPiece(null);
+				}
 			}
 		}
 	}
@@ -594,14 +604,5 @@ public class PloyBoard extends Board {
 				}
 			}
 		}
-	}
-
-	/**
-	 * Set the player whose turn it is
-	 *
-	 * @param currentPlayer the current player
-	 */
-	public void loadCurrentPlayer(int currentPlayer) {
-		setCurrentPlayer(currentPlayer);
 	}
 }

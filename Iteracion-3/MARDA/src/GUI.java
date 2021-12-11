@@ -1,4 +1,3 @@
-import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.Rectangle;
 

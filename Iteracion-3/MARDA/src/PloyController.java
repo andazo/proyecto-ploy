@@ -1,6 +1,4 @@
-
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * Concrete controller class for Ploy 
@@ -300,7 +298,7 @@ public class PloyController extends Controller {
 			int lastI = board.getLastI();
 			int lastJ = board.getLastJ();
 			int originalDirection = board.getOriginalDirection();
-			if (board.boardSquares[lastI][lastJ].getDirection() == originalDirection || board.boardSquares[lastI][lastJ].getType() == 8) {
+			if (((PloyPiece) board.boardSquares[lastI][lastJ].getPiece()).getDirection() == originalDirection || ((PloyPiece) board.boardSquares[lastI][lastJ].getPiece()).getType() == 8) {
 				moves = mod.getValidMoves(board.getLastI(), board.getLastJ(), board);
 				mod.highlightMoves(moves, board.getLastI(), board.getLastJ(), gui);
 			}
@@ -312,7 +310,7 @@ public class PloyController extends Controller {
 			int lastI = board.getLastI();
 			int lastJ = board.getLastJ();
 			int originalDirection = board.getOriginalDirection();
-			if (board.boardSquares[lastI][lastJ].getDirection() == originalDirection || board.boardSquares[lastI][lastJ].getType() == 8) {
+			if (((PloyPiece) board.boardSquares[lastI][lastJ].getPiece()).getDirection() == originalDirection || ((PloyPiece) board.boardSquares[lastI][lastJ].getPiece()).getType() == 8) {
 				moves = mod.getValidMoves(board.getLastI(), board.getLastJ(), board);
 				mod.highlightMoves(moves, board.getLastI(), board.getLastJ(), gui);
 			}
