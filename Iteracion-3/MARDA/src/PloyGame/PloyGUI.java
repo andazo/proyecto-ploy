@@ -80,13 +80,13 @@ public class PloyGUI extends GUI {
 		lostPieces.add(hitP1);
 		JMenuItem hitP2 = new JMenuItem("Jugador 2");
 		lostPieces.add(hitP2);
-		
+
 		if (gameMode != 0) {
-	    	JMenuItem hitP3 = new JMenuItem("Jugador 3");
-	    	lostPieces.add(hitP3);
-	        JMenuItem hitP4 = new JMenuItem("Jugador 4");
-	        lostPieces.add(hitP4);
-	    }
+			JMenuItem hitP3 = new JMenuItem("Jugador 3");
+			lostPieces.add(hitP3);
+			JMenuItem hitP4 = new JMenuItem("Jugador 4");
+			lostPieces.add(hitP4);
+		}
 
 		boardPanel.setLayout(new GridLayout(9,9,5,5));
 		boardPanel.setBackground(boardColorThistle);
@@ -156,7 +156,7 @@ public class PloyGUI extends GUI {
 		guiPrintLine("En un turno se puede mover una\npieza o cambiar su direccion.");
 		guiPrintLine("Los escudos se pueden mover y\ncambiar de direccion en un mismo\nturno.");
 		guiPrintLine("Modos de juego: 1v1, 1v1v1v1, 2v2" + "\n");
-		
+
 		String modeString = "";
 		if (gameMode == 0) {
 			modeString = "1v1";
@@ -165,7 +165,7 @@ public class PloyGUI extends GUI {
 		} else {
 			modeString = "2v2";
 		}
-		
+
 		guiPrintLine("Modo elegido: " + modeString);
 		for (int i = 0; i < players.length; i++) {
 			guiPrintLine(((PloyPlayer) players[i]).getName() + ": " + ((PloyPlayer) players[i]).getColor());

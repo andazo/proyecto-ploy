@@ -68,7 +68,7 @@ public class PloyController extends Controller {
 	}
 
 	/**
-	 * Loads in a saved game.
+	 * Loads a saved game.
 	 */
 	@Override
 	protected void loadGame() {

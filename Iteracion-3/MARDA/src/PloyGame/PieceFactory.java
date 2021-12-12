@@ -1,33 +1,43 @@
 package PloyGame;
 
-
+/**
+ * Class that creates the requested type of piece.
+ * The type determines the valid moves of each piece.
+ */
 public class PieceFactory {
-	//use getShape method to get object of type shape 
+	/**
+	 * Creates and returns a new piece of a requested type.
+	 *
+	 * @return the newly created piece
+	 */
 	public PieceInterface makePiece(int PieceType) {
 		PieceInterface piece = null;
 		if (PieceType == 0) {
 			piece = new Commander();
-	    } else if (PieceType == 1) {
-	    	piece = new Lance1();
-	    } else if (PieceType == 2) {
-	    	piece = new Lance2();
-	    } else if (PieceType == 3) {
-	    	piece = new Lance3();
-	    } else if (PieceType == 4) {
-	    	piece = new Probe1();
-	    } else if (PieceType == 5) {
-	    	piece = new Probe2();
-	    } else if (PieceType == 6) {
-	    	piece = new Probe3();
-	    } else if (PieceType == 7) {
-	    	piece = new Probe4();
-	    } else if (PieceType == 8) {
-	    	piece = new Shield();
-	    }
+		} else if (PieceType == 1) {
+			piece = new Lance1();
+		} else if (PieceType == 2) {
+			piece = new Lance2();
+		} else if (PieceType == 3) {
+			piece = new Lance3();
+		} else if (PieceType == 4) {
+			piece = new Probe1();
+		} else if (PieceType == 5) {
+			piece = new Probe2();
+		} else if (PieceType == 6) {
+			piece = new Probe3();
+		} else if (PieceType == 7) {
+			piece = new Probe4();
+		} else if (PieceType == 8) {
+			piece = new Shield();
+		}
 		return piece;
 	}
 }
 
+/**
+ * Class that represents a Commander piece.
+ */
 class Commander extends PloyPiece implements PieceInterface {
 
 	/**
@@ -36,7 +46,7 @@ class Commander extends PloyPiece implements PieceInterface {
 	Commander() {
 		this.type = 0;
 	}
-	
+
 	/*
 	 * Valid moves
 	 * 
@@ -60,6 +70,9 @@ class Commander extends PloyPiece implements PieceInterface {
 	}
 }
 
+/**
+ * Class that represents a Lance1 piece.
+ */
 class Lance1 extends PloyPiece implements PieceInterface {
 
 	/**
@@ -68,7 +81,7 @@ class Lance1 extends PloyPiece implements PieceInterface {
 	Lance1() {
 		this.type = 1;
 	}
-	
+
 	/*
 	 * Valid moves
 	 * 
@@ -97,6 +110,9 @@ class Lance1 extends PloyPiece implements PieceInterface {
 	}
 }
 
+/**
+ * Class that represents a Lance2 piece.
+ */
 class Lance2 extends PloyPiece implements PieceInterface {
 
 	/**
@@ -105,7 +121,7 @@ class Lance2 extends PloyPiece implements PieceInterface {
 	Lance2() {
 		this.type = 2;
 	}
-	
+
 	/*
 	 * Valid moves
 	 * 
@@ -134,6 +150,9 @@ class Lance2 extends PloyPiece implements PieceInterface {
 	}
 }
 
+/**
+ * Class that represents a Lance3 piece.
+ */
 class Lance3 extends PloyPiece implements PieceInterface {
 
 	/**
@@ -142,7 +161,7 @@ class Lance3 extends PloyPiece implements PieceInterface {
 	Lance3() {
 		this.type = 3;
 	}
-	
+
 	/*
 	 * Valid moves
 	 * 
@@ -171,6 +190,9 @@ class Lance3 extends PloyPiece implements PieceInterface {
 	}
 }
 
+/**
+ * Class that represents a Probe1 piece.
+ */
 class Probe1 extends PloyPiece implements PieceInterface {
 
 	/**
@@ -179,7 +201,7 @@ class Probe1 extends PloyPiece implements PieceInterface {
 	Probe1() {
 		this.type = 4;
 	}
-	
+
 	/*
 	 * Valid moves
 	 * 
@@ -203,6 +225,9 @@ class Probe1 extends PloyPiece implements PieceInterface {
 	}
 }
 
+/**
+ * Class that represents a Probe2 piece.
+ */
 class Probe2 extends PloyPiece implements PieceInterface {
 
 	/**
@@ -211,7 +236,7 @@ class Probe2 extends PloyPiece implements PieceInterface {
 	Probe2() {
 		this.type = 5;
 	}
-	
+
 	/*
 	 * Valid moves
 	 * 
@@ -235,6 +260,9 @@ class Probe2 extends PloyPiece implements PieceInterface {
 	}
 }
 
+/**
+ * Class that represents a Probe3 piece.
+ */
 class Probe3 extends PloyPiece implements PieceInterface {
 
 	/**
@@ -243,7 +271,7 @@ class Probe3 extends PloyPiece implements PieceInterface {
 	Probe3() {
 		this.type = 6;
 	}
-	
+
 	/*
 	 * Valid moves
 	 * 
@@ -267,6 +295,9 @@ class Probe3 extends PloyPiece implements PieceInterface {
 	}
 }
 
+/**
+ * Class that represents a Probe4 piece.
+ */
 class Probe4 extends PloyPiece implements PieceInterface {
 
 	/**
@@ -275,7 +306,7 @@ class Probe4 extends PloyPiece implements PieceInterface {
 	Probe4() {
 		this.type = 7;
 	}
-	
+
 	/*
 	 * Valid moves
 	 * 
@@ -299,6 +330,9 @@ class Probe4 extends PloyPiece implements PieceInterface {
 	}
 }
 
+/**
+ * Class that represents a Shield piece.
+ */
 class Shield extends PloyPiece implements PieceInterface {
 
 	/**
@@ -307,7 +341,7 @@ class Shield extends PloyPiece implements PieceInterface {
 	Shield() {
 		this.type = 8;
 	}
-	
+
 	/*
 	 * Valid moves
 	 * 

@@ -7,7 +7,7 @@ import javax.swing.JOptionPane;
  * Abstract class that represents the game controller.
  */
 public abstract class Controller implements ActionListener {
-  /**
+	/**
 	 * Obtains user input to determine whether to start a new game or load an old one.
 	 *
 	 * @return character representing if a new or saved game will be played 
@@ -26,41 +26,40 @@ public abstract class Controller implements ActionListener {
 		}
 		return newGame;
 	}
-	
+
 	/**
 	 * Instantiates all the classes needed for the game and gets all the user's input
 	 * such as user information, game mode and player amount.
 	 */ 
 	// abstract methods
 	public abstract void startGame();
-	
+
 	/**
 	 * Loads a game from a saved file.
 	 */
 	protected abstract void loadGame();
-	
+
 	/**
 	 * Initializes the GUI.
 	 *
 	 * @return the GUI object
 	 */
 	protected abstract Object initGUI();
-	
+
 	/**
 	 * Initializes the board.
 	 *
 	 * @return the board object
 	 */
 	protected abstract Object initBoard();
-	
-	
+
 	/**
 	 * Brings up a prompt allowing the user to select the amount of players that will be in the game.
 	 *
 	 * @return the number of players that will play
 	 */
 	protected abstract int getNumPlayers();
-	
+
 	/**
 	 * Generates prompts to get all the players' information such as name and color of the pieces.
 	 *
@@ -68,7 +67,7 @@ public abstract class Controller implements ActionListener {
 	 * @return the array of initialized players with all their information 
 	 */
 	protected abstract Object[] getPlayers(int numPlayers);
-	
+
 	/**
 	 * Gets the game mode the user wishes to play. 
 	 *
@@ -76,7 +75,7 @@ public abstract class Controller implements ActionListener {
 	 * @return the game mode chosen by the user
 	 */
 	protected abstract int getMode(int numPlayers);
-	
+
 	/**
 	 * Adds mouse listeners for every square on the board.
 	 */

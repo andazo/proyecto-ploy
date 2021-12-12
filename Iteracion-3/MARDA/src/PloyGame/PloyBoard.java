@@ -258,7 +258,7 @@ public class PloyBoard extends Board {
 	private void populateBoard1v1v1v1(String color, int playerNum) {
 		PieceFactory pf = new PieceFactory();
 		int orderArrayIndex = 0;
-		
+
 		if (playerNum == 1) {
 			for (int i = 0; i < 3; i++) {
 				int direction = 0;
@@ -296,7 +296,7 @@ public class PloyBoard extends Board {
 				orderArrayIndex++;
 			}
 			p1HitPieces = new String[9][2];
-			
+
 		} else if (playerNum == 2) {
 			for (int i = 0; i < 3; i++) {
 				int direction = 0;
@@ -334,7 +334,7 @@ public class PloyBoard extends Board {
 				orderArrayIndex++;
 			}
 			p2HitPieces = new String[9][2];
-			
+
 		} else if (playerNum == 3) {
 			for (int i = 8; i > 5; i--) {
 				int direction = 0;
@@ -372,7 +372,7 @@ public class PloyBoard extends Board {
 				orderArrayIndex++;
 			}
 			p3HitPieces = new String[9][2];
-			
+
 		} else {
 			for (int i = 8; i > 5; i--) {
 				int direction = 0;				
@@ -422,7 +422,7 @@ public class PloyBoard extends Board {
 	private void populateBoard2v2(String color, int playerNum) {
 		PieceFactory pf = new PieceFactory();
 		int orderArrayIndex = 0;
-		
+
 		if (playerNum == 1) {
 			for(int i = 1; i < 4; i++) {
 				boardSquares[8][i].setPiece(pf.makePiece(pieceOrder2v2[orderArrayIndex]));
@@ -449,7 +449,7 @@ public class PloyBoard extends Board {
 				((PloyPiece) boardSquares[6][i].getPiece()).setDirection(180);
 			}
 			p1HitPieces = new String[9][2];
-			
+
 		} else if (playerNum == 2) {
 			for(int i = 1; i < 4; i++) {
 				boardSquares[0][i].setPiece(pf.makePiece(pieceOrder2v2[orderArrayIndex]));
@@ -472,7 +472,7 @@ public class PloyBoard extends Board {
 				((PloyPiece) boardSquares[2][i].getPiece()).setDirection(0);
 			}
 			p2HitPieces = new String[9][2];
-			
+
 		} else if (playerNum == 3) {
 			for (int i = 7; i > 4; i--) {
 				boardSquares[8][i].setPiece(pf.makePiece(pieceOrder2v2[orderArrayIndex]));
@@ -499,7 +499,7 @@ public class PloyBoard extends Board {
 				((PloyPiece) boardSquares[6][i].getPiece()).setDirection(180);
 			}
 			p3HitPieces = new String[9][2];
-			
+
 		} else {
 			for(int i = 7; i > 4; i--) {
 				boardSquares[0][i].setPiece(pf.makePiece(pieceOrder2v2[orderArrayIndex]));

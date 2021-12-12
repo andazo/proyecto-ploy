@@ -5,7 +5,7 @@ package MARDA;
  * if a player is out, legal moves and game over conditions. 
  */
 public abstract class Moderator {
-	
+
 	/**
 	 * Handles the clicking of a piece in case it is not currently active. This includes
 	 * checking whose turn it is, highlighting legal moves and enabling rotation buttons.
@@ -21,7 +21,7 @@ public abstract class Moderator {
 	 * @param gui current instance of the gui
 	 */
 	protected abstract void clickedOn(int i, int j, int numPlayers, int gameMode, Object[] players, Object board, Object gui);
-	
+
 	/**
 	 * Checks if the game is over after a move has been made.
 	 *
@@ -33,7 +33,7 @@ public abstract class Moderator {
 	 * @param gui instance of the gui
 	 */
 	protected abstract void checkGameOver(Object hitInfo, Object attackerInfo, int gameMode, Object[] players, Object board, Object gui);
-	
+
 	/**
 	 * Shows a prompt allowing the user to decide what to do after a game is finished.
 	 *
@@ -41,7 +41,7 @@ public abstract class Moderator {
 	 * @return variable indicating if the user wants a new game
 	 */
 	protected abstract char finished(Object gui);
-	
+
 	/**
 	 * Removes a player from the match
 	 *
@@ -53,14 +53,14 @@ public abstract class Moderator {
 	 * @param gui instance of the gui
 	 */
 	protected abstract void playerLost(Object hitInfo, Object attackerInfo, int gameMode, Object[] players, Object board, Object gui);
-	
+
 	/**
 	 * Removes the actions from the board's squares, locking the board.
 	 *
 	 * @param gui instance of the gui
 	 */
 	protected abstract void removeActions(Object gui);
-	
+
 	/**
 	 * Gets the valid moves for the piece currently in play.
 	 *
@@ -70,7 +70,7 @@ public abstract class Moderator {
 	 * @return matrix of valid moves for the piece
 	 */
 	protected abstract String[][] getValidMoves(int i, int j, Object board);
-	
+
 	/**
 	 * Highlights the legal moves for the piece currently in play.
 	 *
@@ -80,7 +80,7 @@ public abstract class Moderator {
 	 * @param gui instance of the gui
 	 */
 	protected abstract void highlightMoves(String[][] moves, int i, int j, Object gui);
-	
+
 	/**
 	 * Removes the highlights of available moves.
 	 *

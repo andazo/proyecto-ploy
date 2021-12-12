@@ -1,7 +1,7 @@
 package PloyGame;
 
 /**
- * Interface for the piece factory
+ * Interface to be used along the piece factory
  */
 public interface PieceInterface {
 	String[][] getMoves();

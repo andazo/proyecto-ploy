@@ -20,19 +20,19 @@ public class PloyPlayer extends Player {
 		this.color = color;
 		this.lost = false;
 	}
-	
+
 	public int getFriend() {
 		return friend;
 	}
-	
+
 	public void setFriend(int friend) {
 		this.friend = friend;
 	}
-	
+
 	public int getNumPieces() {
 		return numPieces;
 	}
-	
+
 	public void setNumPieces(int numPieces) {
 		this.numPieces = numPieces;
 	}

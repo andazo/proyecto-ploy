@@ -4,22 +4,22 @@ package MARDA;
  * Abstract class that represents the logic aspects of the game board.
  */
 public abstract class Board {	
-	
+
 	/** True if a piece is selected and ready to move. */
 	protected boolean pieceActive;
-	
+
 	/** True if the game is currently over. */
 	protected boolean gameOver;
-	
+
 	/** The player whose turn it is. */
 	protected int currentPlayer;
-	
+
 	/** The location on the x axis of the piece previously selected. */
 	protected int lastI;
-	
+
 	/** The location on the y axis of the piece previously selected. */
 	protected int lastJ;
-	
+
 	/** The number of players still in the game */
 	protected int activePlayers;
 
@@ -78,7 +78,7 @@ public abstract class Board {
 	public int getActivePlayers() {
 		return activePlayers;
 	}
-	
+
 	/**
 	 * Set the player whose turn it is
 	 *

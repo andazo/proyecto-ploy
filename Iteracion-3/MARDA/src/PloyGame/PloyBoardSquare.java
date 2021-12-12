@@ -7,26 +7,23 @@ import MARDA.BoardSquare;
  */
 public class PloyBoardSquare extends BoardSquare {
 	PloyPiece piece;
-	
+
 	/**
 	 * Instantiates a new ploy board square.
 	 *
-	 * @param type the type of piece in the square
-	 * @param direction the direction the piece is facing
-	 * @param owner the owner of the piece
-	 * @param color the color of the piece
+	 * @param piece the piece to set in the square
 	 */
 	public PloyBoardSquare(PloyPiece piece) {
-        this.piece = piece;
-    }
-	
-	@Override
-    public void setPiece(Object piece) {
-    	this.piece = (PloyPiece) piece;
-    }
+		this.piece = piece;
+	}
 
 	@Override
-    public Object getPiece() {
-        return (PloyPiece) piece;
-    }
+	public void setPiece(Object piece) {
+		this.piece = (PloyPiece) piece;
+	}
+
+	@Override
+	public Object getPiece() {
+		return (PloyPiece) piece;
+	}
 }

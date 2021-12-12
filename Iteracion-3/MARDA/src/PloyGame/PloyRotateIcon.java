@@ -141,16 +141,16 @@ public class PloyRotateIcon implements Icon
 	 *  Set the Icon as circular or rectangular. Only used for Rotate.ABOUT_CENTER.
 	 *  When true, the icon width/height will not change as the Icon is rotated.
 	 *
-	 *  @param true for a circular Icon, false otherwise
+	 *  @param circularIcon true for a circular Icon, false otherwise
 	 */
 	public void setCircularIcon(boolean circularIcon)
 	{
 		this.circularIcon = circularIcon;
 	}
 
-//
-//  Implement the Icon Interface
-//
+	//
+	//  Implement the Icon Interface
+	//
 
 	/**
 	 *  Gets the width of this icon.
@@ -206,14 +206,14 @@ public class PloyRotateIcon implements Icon
 			return icon.getIconWidth();
 	}
 
-   /**
-	*  Paint the icons of this compound icon at the specified location
-	*
-	*  @param c The component on which the icon is painted
-	*  @param g the graphics context
-	*  @param x the X coordinate of the icon's top-left corner
-	*  @param y the Y coordinate of the icon's top-left corner
-	*/
+	/**
+	 *  Paint the icons of this compound icon at the specified location
+	 *
+	 *  @param c The component on which the icon is painted
+	 *  @param g the graphics context
+	 *  @param x the X coordinate of the icon's top-left corner
+	 *  @param y the Y coordinate of the icon's top-left corner
+	 */
 	@Override
 	public void paintIcon(Component c, Graphics g, int x, int y)
 	{

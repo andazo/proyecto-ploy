@@ -7,11 +7,11 @@ import MARDA.Piece;
 abstract class PloyPiece extends Piece {
 	// The direction of the piece
 	protected int direction;
-	
+
 	public int getDirection() {
 		return direction;
 	}
-	
+
 	public void setDirection(int direction) {
 		this.direction = direction;
 	}
