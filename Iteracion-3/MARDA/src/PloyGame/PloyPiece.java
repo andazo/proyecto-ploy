@@ -1,3 +1,5 @@
+package PloyGame;
+import MARDA.Piece;
 
 /**
  * Concrete class representing a piece of Ploy.

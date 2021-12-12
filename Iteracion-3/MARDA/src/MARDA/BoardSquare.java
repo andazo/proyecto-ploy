@@ -1,8 +1,9 @@
+package MARDA;
 
 /**
  * Abstract class for representing the information of the pieces placed on squares.
  */
-abstract class BoardSquare {
-	abstract void setPiece(Object piece);
-    abstract Object getPiece();
+public abstract class BoardSquare {
+	protected abstract void setPiece(Object piece);
+	protected abstract Object getPiece();
 }

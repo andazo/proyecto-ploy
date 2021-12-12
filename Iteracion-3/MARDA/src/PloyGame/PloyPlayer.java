@@ -1,3 +1,5 @@
+package PloyGame;
+import MARDA.Player;
 
 /**
  * Concrete class representing a player for Ploy.

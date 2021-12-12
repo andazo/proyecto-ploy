@@ -1,3 +1,4 @@
+package MARDA;
 
 import javax.swing.JFileChooser;
 import java.io.File;
@@ -9,18 +10,18 @@ import java.io.IOException;
 /**
  * Abstract class that manages the saving and loading of game files.
  */
-abstract class FileManager {
+public abstract class FileManager {
 	
 	/** The data contained in a save file. */
-	String[] data;
+	protected String[] data;
 	
 	/** Window for choosing a file. */
-	JFileChooser fileChooser;
+	protected JFileChooser fileChooser;
 	
 	/**
 	 * Instantiates a new file manager.
 	 */
-	public FileManager() {
+	protected FileManager() {
 		fileChooser = new JFileChooser();
 		File directory = new File("Saves");
 		if (!directory.exists()) {
@@ -82,33 +83,33 @@ abstract class FileManager {
 	 * @param board the board object with all its information
 	 * @param fileName the name the save file will have
 	 */
-	abstract void saveFile(Object[] players, int gameMode, Object board, String fileName);
+	protected abstract void saveFile(Object[] players, int gameMode, Object board, String fileName);
 	
 	/**
 	 * Gets the players from a saved file.
 	 *
 	 * @return the array of players
 	 */
-	abstract Object[] getPlayers();
+	protected abstract Object[] getPlayers();
 	
 	/**
 	 * Gets the game mode from a saved file.
 	 *
 	 * @return the game mode 
 	 */
-	abstract int getGameMode();
+	protected abstract int getGameMode();
 	
 	/**
 	 * Gets the current player from a saved file.
 	 *
 	 * @return the current player
 	 */
-	abstract int getCurrentPlayer();
+	protected abstract int getCurrentPlayer();
 	
 	/**
 	 * Gets the board data from a saved file.
 	 *
 	 * @return the board data
 	 */
-	abstract String[][][] getBoardData();
+	protected abstract String[][][] getBoardData();
 }

@@ -1,0 +1,8 @@
+Compilación y ejecución (Consola en carpeta proyecto-ploy\Iteracion-3\MARDA)
+
+javac -d bin src/PloyGame/*.java src/MARDA/*.java
+
+Copiar carpeta img en la nueva carpeta bin
+
+cd bin
+java PloyGame/main

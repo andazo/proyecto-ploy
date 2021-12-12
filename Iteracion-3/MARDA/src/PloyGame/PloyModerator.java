@@ -1,3 +1,5 @@
+package PloyGame;
+import MARDA.Moderator;
 
 /**
  * Concrete class for a moderator for Ploy in charge of reviewing the game's state to determine 
@@ -21,7 +23,6 @@ public class PloyModerator extends Moderator {
 	 */
 	@Override
     public void clickedOn(int i, int j, int numPlayers, int gameMode, Object[] players, Object board, Object gui) {
-		PieceFactory pf = new PieceFactory();
     	PieceInterface piece = (PieceInterface) ((PloyBoard) board).boardSquares[i][j].getPiece();
     	String[][] moves = null;
     	if (piece != null && !((PloyBoard) board).getPieceActive()) {
@@ -95,10 +96,7 @@ public class PloyModerator extends Moderator {
 						((PloyGUI) gui).squaresPanels[i][j].setIcon(((PloyGUI) gui).squaresPanels[lastI][lastJ].getIcon());
 						((PloyGUI) gui).squaresPanels[lastI][lastJ].setIcon(null);
 						((PloyGUI) gui).squaresPanels[lastI][lastJ].setBackground(((PloyGUI) gui).boardColorPurple);
-						((PloyBoard) board).boardSquares[i][j].setPiece(pf.makePiece(((PloyPiece) ((PloyBoard) board).boardSquares[lastI][lastJ].getPiece()).getType()));
-						((PloyPiece) ((PloyBoard) board).boardSquares[i][j].getPiece()).setOwner(((PloyPiece) ((PloyBoard) board).boardSquares[lastI][lastJ].getPiece()).getOwner());
-						((PloyPiece) ((PloyBoard) board).boardSquares[i][j].getPiece()).setColor(((PloyPiece) ((PloyBoard) board).boardSquares[lastI][lastJ].getPiece()).getColor());
-						((PloyPiece) ((PloyBoard) board).boardSquares[i][j].getPiece()).setDirection(((PloyPiece) ((PloyBoard) board).boardSquares[lastI][lastJ].getPiece()).getDirection());
+						((PloyBoard) board).boardSquares[i][j].setPiece((PloyPiece) ((PloyBoard) board).boardSquares[lastI][lastJ].getPiece());
 						((PloyBoard) board).boardSquares[lastI][lastJ].setPiece(null);;
 						((PloyBoard) board).setPieceActive(false);
 						((PloyGUI) gui).rotateLeftBut.setEnabled(false);

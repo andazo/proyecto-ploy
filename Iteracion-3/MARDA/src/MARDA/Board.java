@@ -1,8 +1,9 @@
+package MARDA;
 
 /**
  * Abstract class that represents the logic aspects of the game board.
  */
-abstract class Board {	
+public abstract class Board {	
 	
 	/** True if a piece is selected and ready to move. */
 	protected boolean pieceActive;
@@ -28,7 +29,7 @@ abstract class Board {
 	 * @param players array of players in the game
 	 * @param gameMode the game mode being played
 	 */
-	abstract void populateBoard(Object[] players, int gameMode);
+	protected abstract void populateBoard(Object[] players, int gameMode);
 
 	public void setPieceActive(boolean pieceActive) {
 		this.pieceActive = pieceActive;
@@ -38,11 +39,11 @@ abstract class Board {
 		return pieceActive;
 	}
 
-	public void setGameOver(boolean gameOver) {
+	protected void setGameOver(boolean gameOver) {
 		this.gameOver = gameOver;
 	}
 
-	public boolean getGameOver() {
+	protected boolean getGameOver() {
 		return gameOver;
 	}
 

@@ -1,8 +1,9 @@
+package MARDA;
 
 /**
  * Abstract class that represents a player
  */
-abstract class Player {
+public abstract class Player {
 	protected int id;
 	protected String name, color;
 	protected boolean lost;

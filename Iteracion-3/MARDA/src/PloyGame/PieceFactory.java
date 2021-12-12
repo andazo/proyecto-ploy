@@ -1,3 +1,5 @@
+package PloyGame;
+
 
 public class PieceFactory {
 	//use getShape method to get object of type shape 

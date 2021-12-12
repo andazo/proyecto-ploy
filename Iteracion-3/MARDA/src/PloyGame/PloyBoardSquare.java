@@ -1,3 +1,5 @@
+package PloyGame;
+import MARDA.BoardSquare;
 
 /**
  * Concrete class for representing a board square, contains all

@@ -1,3 +1,5 @@
+package PloyGame;
+import MARDA.Board;
 
 /**
  * Concrete class representing the logic aspects of the game board

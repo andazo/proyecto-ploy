@@ -1,3 +1,4 @@
+package MARDA;
 import java.awt.event.ActionListener;
 
 import javax.swing.JOptionPane;
@@ -5,7 +6,7 @@ import javax.swing.JOptionPane;
 /**
  * Abstract class that represents the game controller.
  */
-abstract class Controller implements ActionListener {
+public abstract class Controller implements ActionListener {
   /**
 	 * Obtains user input to determine whether to start a new game or load an old one.
 	 *
@@ -31,26 +32,26 @@ abstract class Controller implements ActionListener {
 	 * such as user information, game mode and player amount.
 	 */ 
 	// abstract methods
-	abstract void startGame();
+	public abstract void startGame();
 	
 	/**
 	 * Loads a game from a saved file.
 	 */
-	abstract void loadGame();
+	protected abstract void loadGame();
 	
 	/**
 	 * Initializes the GUI.
 	 *
 	 * @return the GUI object
 	 */
-	abstract Object initGUI();
+	protected abstract Object initGUI();
 	
 	/**
 	 * Initializes the board.
 	 *
 	 * @return the board object
 	 */
-	abstract Object initBoard();
+	protected abstract Object initBoard();
 	
 	
 	/**
@@ -58,7 +59,7 @@ abstract class Controller implements ActionListener {
 	 *
 	 * @return the number of players that will play
 	 */
-	abstract int getNumPlayers();
+	protected abstract int getNumPlayers();
 	
 	/**
 	 * Generates prompts to get all the players' information such as name and color of the pieces.
@@ -66,7 +67,7 @@ abstract class Controller implements ActionListener {
 	 * @param numPlayers the number of players in the game
 	 * @return the array of initialized players with all their information 
 	 */
-	abstract Object[] getPlayers(int numPlayers);
+	protected abstract Object[] getPlayers(int numPlayers);
 	
 	/**
 	 * Gets the game mode the user wishes to play. 
@@ -74,10 +75,10 @@ abstract class Controller implements ActionListener {
 	 * @param numPlayers number of players in the game
 	 * @return the game mode chosen by the user
 	 */
-	abstract int getMode(int numPlayers);
+	protected abstract int getMode(int numPlayers);
 	
 	/**
 	 * Adds mouse listeners for every square on the board.
 	 */
-	abstract void setActions();
+	protected abstract void setActions();
 }

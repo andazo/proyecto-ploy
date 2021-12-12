@@ -1,3 +1,4 @@
+package MARDA;
 import java.awt.Point;
 import java.awt.Rectangle;
 
@@ -13,29 +14,28 @@ import javax.swing.SwingConstants;
 /**
  * Abstract class representing the GUI for a boardgame
  */
-abstract class GUI {
+public abstract class GUI {
 	
 	/** The window that will contain all the boardgame's elements. */
-	JFrame frame;
+	public JFrame frame;
 	
 	/** The panel that will contain the game. */
-	JPanel boardPanel;
+	protected JPanel boardPanel;
 	
 	/** The menu bar that will contain options to see the rules, save games and see lost pieces . */
-	JMenuBar menuBar;
+	public JMenuBar menuBar;
 	
 	/** Text window used to display messages about the state of the game. */
-	JTextArea textOutput;
-	
-	JScrollPane textScroll;
+	protected JTextArea textOutput;
+	protected JScrollPane textScroll;
 	
 	/** The board dimensions. */
-	int boardSize;
+	protected int boardSize;
   
   /**
    * Draw board.
    */
-  abstract void drawBoard(Object[] players, int gameMode);
+	protected abstract void drawBoard(Object[] players, int gameMode);
   
   /**
    * Shows a player's lost pieces.
@@ -43,7 +43,7 @@ abstract class GUI {
    * @param hitPiecesData a player's lost pieces
    * @param hitPiecesIndex the amount of pieces lost
    */
-  abstract void showLostPieces(String[][] hitPiecesData, int hitPiecesIndex);
+	protected abstract void showLostPieces(String[][] hitPiecesData, int hitPiecesIndex);
   
   /**
    * Draws all the pieces on the board
@@ -51,25 +51,25 @@ abstract class GUI {
    * @param players array of players in the game
    * @param gameMode the game mode being played
    */
-  abstract void populateBoard(Object[] players, int gameMode);
+	protected abstract void populateBoard(Object[] players, int gameMode);
   
   /**
    * Prints a message.
    *
    * @param message the message
    */
-  public void printMessage(Object message) {
-  	JOptionPane.showMessageDialog(null, message);
-  }
+	public void printMessage(Object message) {
+		JOptionPane.showMessageDialog(null, message);
+	}
 
   /**
    * Prints a simple message.
    *
    * @param message the message
    */
-  public void printSimpleMessage(String message) {
-  	JOptionPane.showMessageDialog(null, message);
-  }
+	public void printSimpleMessage(String message) {
+		JOptionPane.showMessageDialog(null, message);
+	}
 
   /**
    * Prints a message in a window with a title.
@@ -77,9 +77,9 @@ abstract class GUI {
    * @param message the message
    * @param title the title of the window
    */
-  public void printMessageWithTitle(Object message, String title) {
-  	JOptionPane.showMessageDialog(null, message, title, -1, null);
-  }
+	public void printMessageWithTitle(Object message, String title) {
+		JOptionPane.showMessageDialog(null, message, title, -1, null);
+	}
 
   /**
    * Brings up a dialogue used to obtain input from the user.
@@ -87,9 +87,9 @@ abstract class GUI {
    * @param showMessage the query being shown on the window
    * @return the user's input
    */
-  public String inputMessage(String showMessage) {
-  	return JOptionPane.showInputDialog(showMessage);
-  }
+	public String inputMessage(String showMessage) {
+		return JOptionPane.showInputDialog(showMessage);
+	}
 
   /**
    * Brings up a dialogue with a question to obtain input from the user.
@@ -100,9 +100,9 @@ abstract class GUI {
    * @param obj the object
    * @return the user's input
    */
-  public String inputQuestionMessage(String showMessage, String title, Object[] object, Object obj) {
-  	return (String) JOptionPane.showInputDialog(null, showMessage, title, JOptionPane.QUESTION_MESSAGE, null, object, obj);
-  }
+	public String inputQuestionMessage(String showMessage, String title, Object[] object, Object obj) {
+		return (String) JOptionPane.showInputDialog(null, showMessage, title, JOptionPane.QUESTION_MESSAGE, null, object, obj);
+	}
 
   /**
    * Displays a dialogue with several options for the user to choose
@@ -112,16 +112,16 @@ abstract class GUI {
    * @param options the options being given to the user
    * @return the user's choice
    */
-  public int inputMessageWithOptions(String showMessage, String title, String[] options) {
-  	return JOptionPane.showOptionDialog(null, showMessage, title, JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
-  }
+	public int inputMessageWithOptions(String showMessage, String title, String[] options) {
+		return JOptionPane.showOptionDialog(null, showMessage, title, JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+	}
   
   /**
    * Prints a line on the text box next to the game board
    *
    * @param str the message to print
    */
-  public void guiPrintLine(String str) {
+	public void guiPrintLine(String str) {
 		System.out.println(str);
 		textOutput.append(str+"\n");
 		textOutput.setCaretPosition(textOutput.getDocument().getLength());
@@ -134,7 +134,7 @@ abstract class GUI {
    * @param message the message that will appear in the window
    * @param title the title of the window
    */
-  public void showSaveLoadMessage(String message, String title) {
+	public void showSaveLoadMessage(String message, String title) {
 		JLabel label = new JLabel(message);
 		label.setHorizontalAlignment(SwingConstants.CENTER);
 		JOptionPane.showMessageDialog(null, label, title, JOptionPane.PLAIN_MESSAGE, null);
@@ -143,7 +143,7 @@ abstract class GUI {
   /**
    * Closes the window.
    */
-  public void closeWindow() {
+	public void closeWindow() {
 		frame.dispose();
 	}
 }

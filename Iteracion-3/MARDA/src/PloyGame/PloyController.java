@@ -1,4 +1,7 @@
+package PloyGame;
 import java.awt.event.ActionEvent;
+
+import MARDA.Controller;
 
 /**
  * Concrete controller class for Ploy 
@@ -39,7 +42,7 @@ public class PloyController extends Controller {
 	 * this function is executed.
 	 */ 
 	@Override
-	void startGame() {
+	public void startGame() {
 		gui = (PloyGUI) initGUI();
 		board = (PloyBoard) initBoard();
 		fm = new PloyFileManager();
@@ -68,7 +71,7 @@ public class PloyController extends Controller {
 	 * Loads in a saved game.
 	 */
 	@Override
-	void loadGame() {
+	protected void loadGame() {
 		int gameMode = 0;
 
 		int loadStatus = fm.loadFile();

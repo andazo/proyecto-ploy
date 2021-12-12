@@ -1,3 +1,4 @@
+package PloyGame;
 
 /**
  * Interface for the piece factory

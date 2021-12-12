@@ -1,7 +1,8 @@
+package MARDA;
 /**
  * Abstract class that represents a piece
  */
-abstract class Piece {
+public abstract class Piece {
 	// The type of piece
 	protected int type;
 	// The owner of the piece
